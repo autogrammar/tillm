@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import shlex
-from typing import Any
+from typing import Any, Callable
 
 
 def _flag(rest: list[str], name: str) -> str | None:
@@ -123,6 +123,23 @@ def _parse_drive_matrix(rest: list[str], default_file: str | None) -> dict[str, 
 
 
 # ---------------------------------------------------------------------------
+# Verb → parser dispatch table
+# ---------------------------------------------------------------------------
+
+_VERB_PARSERS: dict[str, Callable[[list[str], str | None], dict[str, Any]]] = {
+    "HEALTH": lambda rest, df: {"verb": "HEALTH"},
+    "CLIENTS": lambda rest, df: {"verb": "CLIENTS"},
+    "ORIENT": lambda rest, df: {"verb": "ORIENT"},
+    "ACTIONS": lambda rest, df: {"verb": "ACTIONS"},
+    "DOCKER_STATUS": lambda rest, df: {"verb": "DOCKER_STATUS"},
+    "VALIDATE": lambda rest, df: {"verb": "VALIDATE", **_parse_validate(rest)},
+    "RESOLVE": lambda rest, df: {"verb": "RESOLVE", "prompt": _quoted_or_tail(rest)},
+    "DRIVE": lambda rest, df: {"verb": "DRIVE", **_parse_drive(rest, df)},
+    "DRIVE_MATRIX": lambda rest, df: {"verb": "DRIVE_MATRIX", **_parse_drive_matrix(rest, df)},
+}
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -138,27 +155,9 @@ def parse_line(line: str, *, default_file: str | None = None) -> dict[str, Any]:
     verb = tokens[0].upper()
     rest = tokens[1:]
 
-    SIMPLE_VERBS = {"HEALTH", "CLIENTS", "ORIENT", "ACTIONS", "DOCKER_STATUS"}
-    if verb in SIMPLE_VERBS:
-        return {"verb": verb}
-
-    if verb == "VALIDATE":
-        payload = {"verb": verb}
-        payload.update(_parse_validate(rest))
-        return payload
-
-    if verb == "RESOLVE":
-        return {"verb": verb, "prompt": _quoted_or_tail(rest)}
-
-    if verb == "DRIVE":
-        payload = {"verb": verb}
-        payload.update(_parse_drive(rest, default_file))
-        return payload
-
-    if verb == "DRIVE_MATRIX":
-        payload = {"verb": verb}
-        payload.update(_parse_drive_matrix(rest, default_file))
-        return payload
+    parser = _VERB_PARSERS.get(verb)
+    if parser is not None:
+        return parser(rest, default_file)
 
     return {"verb": verb, "raw": rest}
 
