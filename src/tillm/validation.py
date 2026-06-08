@@ -6,13 +6,13 @@ import importlib.util
 from dataclasses import dataclass
 from typing import Any
 
-from sillm.nlp import ShellIntent
-from sillm.registry import get_client_spec, normalize_client_id
+from tillm.nlp import ShellIntent
+from tillm.registry import get_client_spec, normalize_client_id
 
-SLLM_DRIVE_ACTIONS = frozenset({"sllm.drive", "shell_llm_drive", "drive_shell_llm"})
+SLLM_DRIVE_ACTIONS = frozenset({"tillm.drive", "shell_llm_drive", "drive_shell_llm"})
 SLLM_INTENT_CONTRACTS = (
     (
-        "# @intract.v1 id:sllm.shell_drive scope:block "
+        "# @intract.v1 id:tillm.shell_drive scope:block "
         "intent:drive:shell_llm domain:shell "
         "input:client,prompt output:shell_invocation effect:process "
         "validate:known_client,prompt_presence,allowed_action "
@@ -56,7 +56,7 @@ def _validate_raw_dsl(raw_dsl: dict[str, Any], client_id: str) -> list[str]:
         if normalize_client_id(raw_client) != client_id:
             return [f"raw_dsl client mismatch: {raw_client} != {client_id}"]
         return []
-    return ["raw_dsl has no sllm drive action"]
+    return ["raw_dsl has no tillm drive action"]
 
 
 def intent_contracts() -> tuple[str, ...]:

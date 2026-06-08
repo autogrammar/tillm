@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-clear
+clear 2>/dev/null || true
 
 if [ -d ".venv" ]; then
     VENV=".venv"
@@ -9,11 +9,17 @@ elif [ -d "venv" ]; then
 else
     VENV=".venv"
 fi
+
 PIP="$VENV/bin/pip"
 PYTHON="$VENV/bin/python3"
 
-if [ ! -f "$PIP" ]; then
-    echo "Creating virtual environment..."
+venv_is_usable() {
+    [ -x "$PIP" ] && "$PIP" --version >/dev/null 2>&1
+}
+
+if ! venv_is_usable; then
+    echo "Creating virtual environment in $VENV..."
+    rm -rf "$VENV"
     python3 -m venv "$VENV"
 fi
 

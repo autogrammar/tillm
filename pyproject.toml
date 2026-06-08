@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tillm"
-version = "0.1.31"
+version = "0.1.32"
 description = "Shell LLM client control plane for semcod/coru automation."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -26,15 +26,15 @@ dev = [
 ]
 
 [project.scripts]
-sillm = "sillm.cli:main"
-sllm = "sillm.cli:main"
+tillm = "tillm.cli:main"
+sllm = "tillm.cli:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["sillm"]
+include = ["tillm"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

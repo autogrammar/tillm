@@ -1,13 +1,13 @@
-# sillm
+# tillm
 
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.31-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$1.48-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-6.7h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fdeep%2Fdeep--v4--pro-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.32-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$1.48-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-7.0h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fdeep%2Fdeep--v4--pro-lightgrey)
 
-- 🤖 **LLM usage:** $1.4754 (31 commits)
-- 👤 **Human dev:** ~$667 (6.7h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $1.4788 (32 commits)
+- 👤 **Human dev:** ~$701 (7.0h @ $100/h, 30min dedup)
 
 Generated on 2026-06-08 using [openrouter/deep/deep-v4-pro](https://openrouter.ai/deep/deep-v4-pro)
 
@@ -22,14 +22,14 @@ chat control stays in `koruide` and the existing Koru autopilot socket path.
 ## Commands
 
 ```bash
-sillm clients
-sillm drive --client aider --prompt "Refactor ticket PLF-1"          # dry-run
-sillm drive --client aider --prompt "Refactor ticket PLF-1" --execute
-sillm nlp "aider: napraw testy dla kolejki"                          # NLP -> DSL
-sillm validate                                                       # ecosystem hooks + intents
+tillm clients
+tillm drive --client aider --prompt "Refactor ticket PLF-1"          # dry-run
+tillm drive --client aider --prompt "Refactor ticket PLF-1" --execute
+tillm nlp "aider: napraw testy dla kolejki"                          # NLP -> DSL
+tillm validate                                                       # ecosystem hooks + intents
 ```
 
-`sillm drive` always saves the prompt under `.koru/sillm/prompts/` before it
+`tillm drive` always saves the prompt under `.koru/tillm/prompts/` before it
 executes or prints a dry-run plan.
 
 Client notes:
@@ -53,13 +53,13 @@ The `nlp2dsl` bridge is opt-in at runtime:
 ```bash
 export SILLM_NLP2DSL=1
 export NLP2DSL_BACKEND_URL=http://localhost:8010
-sillm nlp "uruchom claude dla ticketu PLF-123"
+tillm nlp "uruchom claude dla ticketu PLF-123"
 ```
 
 Without the service, SILLM falls back to a deterministic local parser.
 
-`sillm validate` reports optional package availability and exposes the
-`@intract.v1` intent contract used to validate `sillm.drive` DSL before shell
+`tillm validate` reports optional package availability and exposes the
+`@intract.v1` intent contract used to validate `tillm.drive` DSL before shell
 execution.
 
 

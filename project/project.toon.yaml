@@ -1,8 +1,8 @@
-# sllm | 46 func | 6f | 1776L | python | 2026-06-08
+# tillm | 47 func | 7f | 1623L | python | 2026-06-08
 # generated in 0.00s
 
 HEALTH:
-  CC̄=3.4  critical=2 (limit:10)  dup=0  cycles=0
+  CC̄=3.3  critical=2 (limit:10)  dup=0  cycles=0
 
 ALERTS[6]:
   !   cc_exceeded      _intent_from_nlp2dsl = 15 (limit:15)
@@ -14,18 +14,18 @@ ALERTS[6]:
 
 MODULES[13] (top by size):
   M[goal.yaml] 511L C:0 F:0 CC↑0 D:0 (yaml)
-  M[src/sillm/controller.py] 248L C:6 F:11 CC↑10 D:2 (python)
-  M[src/sillm/compat.py] 205L C:0 F:11 CC↑8 D:0 (python)
-  M[src/sillm/registry.py] 168L C:1 F:6 CC↑4 D:5 (python)
-  M[src/sillm/cli.py] 167L C:0 F:7 CC↑6 D:0 (python)
-  M[src/sillm/validation.py] 127L C:1 F:6 CC↑9 D:1 (python)
-  M[src/sillm/nlp.py] 104L C:1 F:5 CC↑15 D:1 (python)
-  M[pyproject.toml] 76L C:0 F:0 CC↑0 D:0 (toml)
-  M[tree.txt] 57L C:0 F:0 CC↑0 D:0 (txt)
-  M[project.sh] 50L C:0 F:0 CC↑0 D:0 (shell)
-  M[src/sillm/__init__.py] 36L C:0 F:0 CC↑0 D:0 (python)
-  M[testql-scenarios/generated-cli-tests.testql.toon.yaml] 20L C:0 F:0 CC↑0 D:0 (yaml)
-  M[src/sillm/__main__.py] 7L C:0 F:0 CC↑0 D:0 (python)
+  M[src/tillm/controller.py] 248L C:6 F:11 CC↑10 D:2 (python)
+  M[src/tillm/compat.py] 205L C:0 F:11 CC↑8 D:0 (python)
+  M[src/tillm/cli.py] 167L C:0 F:7 CC↑6 D:0 (python)
+  M[src/tillm/validation.py] 127L C:1 F:6 CC↑9 D:1 (python)
+  M[src/tillm/nlp.py] 104L C:1 F:5 CC↑15 D:1 (python)
+  M[tree.txt] 79L C:0 F:0 CC↑0 D:0 (txt)
+  M[pyproject.toml] 77L C:0 F:0 CC↑0 D:0 (toml)
+  M[project.sh] 62L C:0 F:1 CC↑0 D:0 (shell)
+  M[src/tillm/__init__.py] 36L C:0 F:0 CC↑0 D:0 (python)
+  M[src/tillm/__main__.py] 7L C:0 F:0 CC↑0 D:0 (python)
+  M[/home/tom/github/semcod/sllm/src/sillm/registry.py] 0L C:1 F:6 CC↑4 D:5 (python)
+  M[/home/tom/github/semcod/sllm/testql-scenarios/generated-cli-tests.testql.toon.yaml] 0L C:0 F:0 CC↑0 D:0 (yaml)
   LANGS: python:8/yaml:2/shell:1/toml:1/txt:1
 
 HOTSPOTS[5]:
@@ -42,4 +42,4 @@ REFACTOR[2]:
   [2] M/L Split _intent_from_nlp2dsl (CC=15)
 
 EVOLUTION:
-  2026-06-08 CC̄=3.4 crit=2 1776L // Automated analysis
+  2026-06-08 CC̄=3.3 crit=2 1623L // Automated analysis

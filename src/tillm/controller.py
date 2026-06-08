@@ -11,21 +11,21 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from sillm.registry import ShellClientSpec, get_client_spec
+from tillm.registry import ShellClientSpec, get_client_spec
 
 
-class SllmError(RuntimeError):
+class TillmError(RuntimeError):
     """Base error for SLLM control failures."""
 
 
-SillmError = SllmError
+TillmError = TillmError
 
 
-class UnknownClientError(SllmError):
+class UnknownClientError(TillmError):
     """Requested client is not registered."""
 
 
-class ClientUnavailableError(SllmError):
+class ClientUnavailableError(TillmError):
     """Registered client command is not available in PATH."""
 
 
@@ -89,20 +89,20 @@ class ShellDriveResult:
             "stdout": self.stdout,
             "stderr": self.stderr,
             "message": self.message,
-            "backend": "sllm_shell",
+            "backend": "tillm_shell",
         }
 
 
 def _prompt_root(project: Path, prompt_dir: Path | None = None) -> Path:
     if prompt_dir is not None:
         return prompt_dir.expanduser().resolve()
-    return project.resolve() / ".koru" / "sllm" / "prompts"
+    return project.resolve() / ".koru" / "tillm" / "prompts"
 
 
 def save_prompt(prompt: str, *, project: Path, prompt_dir: Path | None = None) -> Path:
     text = prompt.strip()
     if not text:
-        raise SllmError("refusing to drive an empty prompt")
+        raise TillmError("refusing to drive an empty prompt")
     root = _prompt_root(project, prompt_dir)
     root.mkdir(parents=True, exist_ok=True)
     path = root / f"prompt-{time.strftime('%Y%m%d-%H%M%S')}-{time.monotonic_ns():x}.md"
@@ -227,7 +227,7 @@ def result_from_error(client_id: str, exc: Exception) -> dict[str, Any]:
     return {
         "ok": False,
         "client_id": client_id,
-        "backend": "sllm_shell",
+        "backend": "tillm_shell",
         "error": type(exc).__name__,
         "message": str(exc),
     }
@@ -235,11 +235,11 @@ def result_from_error(client_id: str, exc: Exception) -> dict[str, Any]:
 
 __all__ = [
     "ClientUnavailableError",
-    "SillmError",
+    "TillmError",
     "ShellDrivePlan",
     "ShellDriveRequest",
     "ShellDriveResult",
-    "SllmError",
+    "TillmError",
     "UnknownClientError",
     "build_drive_plan",
     "drive_shell_llm",

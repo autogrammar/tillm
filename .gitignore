@@ -168,7 +168,7 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
-
+.testql
 # Rope project settings
 .ropeproject
 

@@ -7,10 +7,10 @@ import json
 import sys
 from pathlib import Path
 
-from sillm.controller import ShellDriveRequest, drive_shell_llm, result_from_error
-from sillm.nlp import intent_from_text
-from sillm.registry import detect_clients
-from sillm.validation import ecosystem_status, validate_intent
+from tillm.controller import ShellDriveRequest, drive_shell_llm, result_from_error
+from tillm.nlp import intent_from_text
+from tillm.registry import detect_clients
+from tillm.validation import ecosystem_status, validate_intent
 
 _EXTRA_ARG_OPTION = "--extra-arg"
 
@@ -29,7 +29,7 @@ def _print(payload: dict[str, object] | list[dict[str, object]], output_format: 
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="sillm")
+    parser = argparse.ArgumentParser(prog="tillm")
     sub = parser.add_subparsers(dest="action", required=True)
 
     clients = sub.add_parser("clients", help="List registered shell LLM clients.")

@@ -30,7 +30,7 @@ versioning:
 git:
   commit:
     strategy: conventional
-    scope: sllm
+    scope: tillm
     abstraction_level: auto
     abstraction_levels:
       high: '{type}({domain}): {benefit}'

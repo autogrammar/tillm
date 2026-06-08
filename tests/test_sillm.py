@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from sillm.cli import main
-from sillm.compat import (
+from tillm.cli import main
+from tillm.compat import (
     agent_backend_aliases,
     agent_backend_profiles,
     autopilot_backend_for_client,
@@ -14,10 +14,10 @@ from sillm.compat import (
     shell_process_patterns,
     tool_registry_entries,
 )
-from sillm.controller import ShellDriveRequest, build_drive_plan
-from sillm.nlp import ShellIntent, intent_from_text
-from sillm.registry import detect_clients, get_client_spec, normalize_client_id
-from sillm.validation import (
+from tillm.controller import ShellDriveRequest, build_drive_plan
+from tillm.nlp import ShellIntent, intent_from_text
+from tillm.registry import detect_clients, get_client_spec, normalize_client_id
+from tillm.validation import (
     ecosystem_status,
     intent_contracts,
     validate_intent,
@@ -64,17 +64,17 @@ def test_compat_exports_koru_agent_rows() -> None:
         registry = {str(row["id"]): row for row in tool_registry_entries()}
         assert registry["aider"]["category"] == "cli_agent"
         assert registry["aider"]["invoke"] == (
-            "koru sllm drive --client aider --prompt '<prompt>' --execute"
+            "koru tillm drive --client aider --prompt '<prompt>' --execute"
         )
         assert registry["codex-cli"]["invoke"] == (
-            "koru sllm drive --client codex --prompt '<prompt>' --execute"
+            "koru tillm drive --client codex --prompt '<prompt>' --execute"
         )
 
         # Get backend profile info dynamically
         aliases = agent_backend_aliases()
         profiles = agent_backend_profiles()
-        if aliases and "sllm_shell" in aliases and profiles:
-            backend_profile_id = aliases["sllm_shell"]
+        if aliases and "tillm_shell" in aliases and profiles:
+            backend_profile_id = aliases["tillm_shell"]
             assert profiles[0]["id"] == backend_profile_id
 
 
@@ -144,7 +144,7 @@ def test_nlp_rules_select_client_and_prompt() -> None:
     assert validate_intent(intent).ok is True
 
 
-def test_validate_intent_rejects_raw_dsl_without_sllm_drive() -> None:
+def test_validate_intent_rejects_raw_dsl_without_tillm_drive() -> None:
     intent = ShellIntent(
         client_id="aider",
         prompt="Fix tests",
@@ -152,7 +152,7 @@ def test_validate_intent_rejects_raw_dsl_without_sllm_drive() -> None:
     )
     result = validate_intent(intent)
     assert result.ok is False
-    assert "raw_dsl has no sllm drive action" in result.errors
+    assert "raw_dsl has no tillm drive action" in result.errors
 
 
 def test_intent_contracts_are_exposed_for_ecosystem_validation() -> None:
@@ -160,5 +160,5 @@ def test_intent_contracts_are_exposed_for_ecosystem_validation() -> None:
     contracts = validate_intent_contracts()
     assert contracts["ok"] is True
     status = ecosystem_status()
-    assert "sllm.drive" in status["expected_actions"]
+    assert "tillm.drive" in status["expected_actions"]
     assert "intent_contracts" in status

@@ -1,11 +1,11 @@
 source: code2llm
 # generated in 0.00s
 schema: code2llm.planfile_tickets.v1
-project_root: /home/tom/github/semcod/sllm
+project_root: /home/tom/github/semcod/tillm
 tickets:
 - signal: code2llm_cc
-  title: 'Reduce cyclomatic complexity: src.sillm.nlp._intent_from_nlp2dsl (CC=15)'
-  description: 'code2llm reports `src.sillm.nlp._intent_from_nlp2dsl` at `src/sillm/nlp.py:62`
+  title: 'Reduce cyclomatic complexity: src.tillm.nlp._intent_from_nlp2dsl (CC=15)'
+  description: 'code2llm reports `src.tillm.nlp._intent_from_nlp2dsl` at `src/tillm/nlp.py:62`
     with cyclomatic complexity 15 (limit 15).
 
 
@@ -18,11 +18,11 @@ tickets:
   - complexity
   - refactor
   files:
-  - src/sillm/nlp.py
-  dedupe_key: code2llm:cc:src/sillm/nlp.py:src.sillm.nlp._intent_from_nlp2dsl
+  - src/tillm/nlp.py
+  dedupe_key: code2llm:cc:src/tillm/nlp.py:src.tillm.nlp._intent_from_nlp2dsl
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: _build_parser'
-  description: 'code2llm reports `God Function: _build_parser` in `src/sillm/cli.py:31`.
+  description: 'code2llm reports `God Function: _build_parser` in `src/tillm/cli.py:31`.
 
 
     Function ''_build_parser'' is oversized: CC=1, fan-out=8, mutations=28.
@@ -36,11 +36,11 @@ tickets:
   - code-smell
   - god-function
   files:
-  - src/sillm/cli.py
-  dedupe_key: 'code2llm:smell:god_function:src/sillm/cli.py:31:God Function: _build_parser'
+  - src/tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:31:God Function: _build_parser'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: _normalize_extra_arg_tokens'
-  description: 'code2llm reports `God Function: _normalize_extra_arg_tokens` in `src/sillm/cli.py:75`.
+  description: 'code2llm reports `God Function: _normalize_extra_arg_tokens` in `src/tillm/cli.py:75`.
 
 
     Function ''_normalize_extra_arg_tokens'' is oversized: CC=5, fan-out=3, mutations=7.
@@ -54,11 +54,11 @@ tickets:
   - code-smell
   - god-function
   files:
-  - src/sillm/cli.py
-  dedupe_key: 'code2llm:smell:god_function:src/sillm/cli.py:75:God Function: _normalize_extra_arg_tokens'
+  - src/tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:75:God Function: _normalize_extra_arg_tokens'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: _strip_drive_prefix'
-  description: 'code2llm reports `God Function: _strip_drive_prefix` in `src/sillm/nlp.py:50`.
+  description: 'code2llm reports `God Function: _strip_drive_prefix` in `src/tillm/nlp.py:50`.
 
 
     Function ''_strip_drive_prefix'' is oversized: CC=5, fan-out=5, mutations=7.
@@ -72,11 +72,11 @@ tickets:
   - code-smell
   - god-function
   files:
-  - src/sillm/nlp.py
-  dedupe_key: 'code2llm:smell:god_function:src/sillm/nlp.py:50:God Function: _strip_drive_prefix'
+  - src/tillm/nlp.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/nlp.py:50:God Function: _strip_drive_prefix'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: build_drive_plan'
-  description: 'code2llm reports `God Function: build_drive_plan` in `src/sillm/controller.py:128`.
+  description: 'code2llm reports `God Function: build_drive_plan` in `src/tillm/controller.py:128`.
 
 
     Function ''build_drive_plan'' is oversized: CC=3, fan-out=10, mutations=7.
@@ -90,12 +90,12 @@ tickets:
   - code-smell
   - god-function
   files:
-  - src/sillm/controller.py
-  dedupe_key: 'code2llm:smell:god_function:src/sillm/controller.py:128:God Function:
+  - src/tillm/controller.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/controller.py:128:God Function:
     build_drive_plan'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: detect_koru_agent_rows'
-  description: 'code2llm reports `God Function: detect_koru_agent_rows` in `src/sillm/compat.py:95`.
+  description: 'code2llm reports `God Function: detect_koru_agent_rows` in `src/tillm/compat.py:95`.
 
 
     Function ''detect_koru_agent_rows'' is oversized: CC=5, fan-out=6, mutations=7.
@@ -109,11 +109,11 @@ tickets:
   - code-smell
   - god-function
   files:
-  - src/sillm/compat.py
-  dedupe_key: 'code2llm:smell:god_function:src/sillm/compat.py:95:God Function: detect_koru_agent_rows'
+  - src/tillm/compat.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/compat.py:95:God Function: detect_koru_agent_rows'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: launch_koru_agent'
-  description: 'code2llm reports `God Function: launch_koru_agent` in `src/sillm/compat.py:145`.
+  description: 'code2llm reports `God Function: launch_koru_agent` in `src/tillm/compat.py:145`.
 
 
     Function ''launch_koru_agent'' is oversized: CC=8, fan-out=10, mutations=8.
@@ -127,7 +127,7 @@ tickets:
   - code-smell
   - god-function
   files:
-  - src/sillm/compat.py
-  dedupe_key: 'code2llm:smell:god_function:src/sillm/compat.py:145:God Function: launch_koru_agent'
+  - src/tillm/compat.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/compat.py:145:God Function: launch_koru_agent'
 applied: []
 skipped: []

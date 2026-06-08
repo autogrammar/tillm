@@ -8,11 +8,11 @@ through a single plugin boundary.
 
 | Scenario | SLLM command |
 |---|---|
-| Dry-run a task prompt | `sllm drive --client claude-code --prompt "Fix PLF-21"` |
-| Execute a task prompt | `sllm drive --client claude-code --prompt "Fix PLF-21" --execute` |
-| Natural-language intent | `sllm nlp "claude: napraw importy"` |
+| Dry-run a task prompt | `tillm drive --client claude-code --prompt "Fix PLF-21"` |
+| Execute a task prompt | `tillm drive --client claude-code --prompt "Fix PLF-21" --execute` |
+| Natural-language intent | `tillm nlp "claude: napraw importy"` |
 
-For explicit `sllm drive`, Claude Code is treated conservatively as a stdin
+For explicit `tillm drive`, Claude Code is treated conservatively as a stdin
 client. Koru launch compatibility keeps TTY behavior for interactive sessions.
 
 ## Environment

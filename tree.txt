@@ -28,29 +28,22 @@
 ├── pyproject.toml
 ├── README.md
 ├── src
-│   ├── clilm.egg-info
-│   │   ├── dependency_links.txt
-│   │   ├── entry_points.txt
-│   │   ├── PKG-INFO
-│   │   ├── requires.txt
-│   │   ├── SOURCES.txt
-│   │   └── top_level.txt
-│   ├── fullm.egg-info
-│   │   ├── dependency_links.txt
-│   │   ├── entry_points.txt
-│   │   ├── PKG-INFO
-│   │   ├── requires.txt
-│   │   ├── SOURCES.txt
-│   │   └── top_level.txt
-│   └── sillm
-│       ├── cli.py
-│       ├── compat.py
-│       ├── controller.py
-│       ├── __init__.py
-│       ├── __main__.py
-│       ├── nlp.py
-│       ├── registry.py
-│       └── validation.py
+│   ├── tillm
+│   │   ├── cli.py
+│   │   ├── compat.py
+│   │   ├── controller.py
+│   │   ├── __init__.py
+│   │   ├── __main__.py
+│   │   ├── nlp.py
+│   │   ├── registry.py
+│   │   └── validation.py
+│   └── tillm.egg-info
+│       ├── dependency_links.txt
+│       ├── entry_points.txt
+│       ├── PKG-INFO
+│       ├── requires.txt
+│       ├── SOURCES.txt
+│       └── top_level.txt
 ├── SUMD.md
 ├── SUMR.md
 ├── testql-scenarios
@@ -62,4 +55,4 @@
 ├── uv.lock
 └── VERSION
 
-8 directories, 55 files
+7 directories, 49 files

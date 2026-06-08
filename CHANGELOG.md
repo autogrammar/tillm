@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.32] - 2026-06-08
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update SUMD.md
+- Update SUMR.md
+- Update docs/clients/aider.md
+- Update docs/clients/claude-code.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_sillm.py
+
+### Other
+- Update .gitignore
+- Update .goal_test_report.xml
+- Update app.doql.less
+- Update project.sh
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/calls.toon.yaml
+- Update project/calls.yaml
+- Update project/compact_flow.mmd
+- ... and 13 more files
+
 ## [0.1.31] - 2026-06-08
 
 ### Docs
@@ -236,7 +264,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update docs/clients/aider-docker-autoloop.md
 
 ### Test
-- Update tests/test_sllm.py
+- Update tests/test_tillm.py
 
 ### Other
 - Update uv.lock
@@ -252,7 +280,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update README.md
 
 ### Test
-- Update tests/test_sllm.py
+- Update tests/test_tillm.py
 
 ### Other
 - Update uv.lock
@@ -265,7 +293,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update docs/clients/claude-code.md
 
 ### Test
-- Update tests/test_sllm.py
+- Update tests/test_tillm.py
 
 ### Other
 - Update uv.lock
@@ -276,7 +304,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update README.md
 
 ### Test
-- Update tests/test_sllm.py
+- Update tests/test_tillm.py
 
 ### Other
 - Update .gitignore

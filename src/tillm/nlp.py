@@ -11,7 +11,7 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
-from sillm.registry import get_client_spec, iter_client_specs, normalize_client_id
+from tillm.registry import get_client_spec, iter_client_specs, normalize_client_id
 
 
 @dataclass(frozen=True)
@@ -24,10 +24,10 @@ class ShellIntent:
 
     def to_dsl(self) -> dict[str, Any]:
         return {
-            "name": "sillm_shell_drive",
+            "name": "tillm_shell_drive",
             "steps": [
                 {
-                    "action": "sillm.drive",
+                    "action": "tillm.drive",
                     "config": {
                         "client": self.client_id,
                         "prompt": self.prompt,
@@ -79,7 +79,7 @@ def _intent_from_nlp2dsl(text: str, default_client: str | None) -> ShellIntent |
         if not isinstance(step, dict):
             continue
         action = str(step.get("action") or "")
-        if action not in {"sillm.drive", "shell_llm_drive", "drive_shell_llm"}:
+        if action not in {"tillm.drive", "shell_llm_drive", "drive_shell_llm"}:
             continue
         config = step.get("config") if isinstance(step.get("config"), dict) else {}
         client_id = normalize_client_id(str(config.get("client") or default_client or "aider"))

@@ -7,11 +7,11 @@ through SLLM instead of Koru keeping a separate launcher.
 
 | Scenario | SLLM command |
 |---|---|
-| Dry-run a task prompt | `sllm drive --client aider --prompt "Fix tests"` |
-| Execute a task prompt | `sllm drive --client aider --prompt "Fix tests" --execute` |
-| Natural-language intent | `sllm nlp "aider: napraw testy"` |
+| Dry-run a task prompt | `tillm drive --client aider --prompt "Fix tests"` |
+| Execute a task prompt | `tillm drive --client aider --prompt "Fix tests" --execute` |
+| Natural-language intent | `tillm nlp "aider: napraw testy"` |
 
-SLLM saves every prompt under `.koru/sllm/prompts/` before invoking the client.
+SLLM saves every prompt under `.koru/tillm/prompts/` before invoking the client.
 For `aider`, SLLM uses the stable `--message-file` prompt contract.
 
 ## Environment

@@ -1,52 +1,57 @@
-# code2llm call graph | /home/tom/github/semcod/sllm
+# code2llm call graph | /home/tom/github/semcod/tillm
 # generated in 0.02s
 # nodes: 36 | edges: 46 | modules: 6
-# CC̄=3.4
+# CC̄=3.3
 
 HUBS[20]:
-  src.sillm.nlp._intent_from_nlp2dsl
+  src.tillm.nlp._intent_from_nlp2dsl
     CC=15  in:1  out:25  total:26
-  src.sillm.cli._build_parser
+  src.tillm.cli._build_parser
     CC=1  in:1  out:25  total:26
-  src.sillm.compat.launch_koru_agent
+  src.tillm.compat.launch_koru_agent
     CC=8  in:0  out:17  total:17
-  src.sillm.cli._print
+  src.tillm.cli._print
     CC=6  in:7  out:10  total:17
-  src.sillm.cli._nlp
+  src.tillm.cli._nlp
     CC=5  in:1  out:13  total:14
-  src.sillm.controller.build_drive_plan
+  src.tillm.controller.build_drive_plan
     CC=3  in:2  out:11  total:13
-  src.sillm.controller.drive_shell_llm
+  src.tillm.controller.drive_shell_llm
     CC=10  in:3  out:10  total:13
-  src.sillm.cli._drive
+  src.tillm.cli._drive
     CC=5  in:1  out:11  total:12
-  src.sillm.validation._validate_raw_dsl
+  src.tillm.validation._validate_raw_dsl
     CC=9  in:1  out:11  total:12
-  src.sillm.cli.main
+  src.tillm.cli.main
     CC=6  in:0  out:11  total:11
   src.sillm.registry.normalize_client_id
     CC=1  in:6  out:4  total:10
-  src.sillm.controller.save_prompt
-    CC=2  in:2  out:7  total:9
-  src.sillm.validation.validate_intent
+  src.tillm.validation.validate_intent
     CC=4  in:1  out:8  total:9
-  src.sillm.compat.detect_koru_agent_rows
+  src.tillm.compat.detect_koru_agent_rows
     CC=5  in:0  out:9  total:9
-  src.sillm.validation.validate_intent_contracts
+  src.tillm.controller.save_prompt
+    CC=2  in:2  out:7  total:9
+  src.tillm.nlp._client_from_text
+    CC=6  in:1  out:6  total:7
+  src.tillm.validation.validate_intent_contracts
     CC=4  in:1  out:6  total:7
   src.sillm.registry.get_client_spec
     CC=3  in:6  out:1  total:7
-  src.sillm.nlp._client_from_text
-    CC=6  in:1  out:6  total:7
-  src.sillm.cli._normalize_extra_arg_tokens
-    CC=5  in:1  out:5  total:6
-  src.sillm.nlp.intent_from_text
+  src.tillm.nlp.intent_from_text
     CC=3  in:1  out:5  total:6
-  src.sillm.nlp._strip_drive_prefix
+  src.tillm.nlp._strip_drive_prefix
+    CC=5  in:1  out:5  total:6
+  src.tillm.cli._normalize_extra_arg_tokens
     CC=5  in:1  out:5  total:6
 
 MODULES:
-  src.sillm.cli  [7 funcs]
+  src.sillm.registry  [4 funcs]
+    detect_clients  CC=4  out:3
+    get_client_spec  CC=3  out:1
+    iter_client_specs  CC=1  out:0
+    normalize_client_id  CC=1  out:4
+  src.tillm.cli  [7 funcs]
     _build_parser  CC=1  out:25
     _drive  CC=5  out:11
     _nlp  CC=5  out:13
@@ -54,7 +59,7 @@ MODULES:
     _print  CC=6  out:10
     _read_prompt  CC=4  out:4
     main  CC=6  out:11
-  src.sillm.compat  [9 funcs]
+  src.tillm.compat  [9 funcs]
     autopilot_backend_for_client  CC=2  out:1
     detect_koru_agent_rows  CC=5  out:9
     drive_koru_chat  CC=1  out:3
@@ -64,7 +69,7 @@ MODULES:
     shell_client_ids  CC=2  out:2
     shell_process_patterns  CC=2  out:2
     tool_registry_entries  CC=4  out:4
-  src.sillm.controller  [8 funcs]
+  src.tillm.controller  [8 funcs]
     _prompt_root  CC=2  out:3
     _resolve_command  CC=2  out:3
     _resolve_spec  CC=2  out:2
@@ -73,66 +78,61 @@ MODULES:
     drive_shell_llm  CC=10  out:10
     result_from_error  CC=1  out:2
     save_prompt  CC=2  out:7
-  src.sillm.nlp  [4 funcs]
+  src.tillm.nlp  [4 funcs]
     _client_from_text  CC=6  out:6
     _intent_from_nlp2dsl  CC=15  out:25
     _strip_drive_prefix  CC=5  out:5
     intent_from_text  CC=3  out:5
-  src.sillm.registry  [4 funcs]
-    detect_clients  CC=4  out:3
-    get_client_spec  CC=3  out:1
-    iter_client_specs  CC=1  out:0
-    normalize_client_id  CC=1  out:4
-  src.sillm.validation  [4 funcs]
+  src.tillm.validation  [4 funcs]
     _validate_raw_dsl  CC=9  out:11
     ecosystem_status  CC=2  out:4
     validate_intent  CC=4  out:8
     validate_intent_contracts  CC=4  out:6
 
 EDGES:
-  src.sillm.cli._drive → src.sillm.cli._print
-  src.sillm.cli._drive → src.sillm.controller.drive_shell_llm
-  src.sillm.cli._drive → src.sillm.controller.result_from_error
-  src.sillm.cli._drive → src.sillm.cli._read_prompt
-  src.sillm.cli._nlp → src.sillm.nlp.intent_from_text
-  src.sillm.cli._nlp → src.sillm.validation.validate_intent
-  src.sillm.cli._nlp → src.sillm.controller.drive_shell_llm
-  src.sillm.cli._nlp → src.sillm.cli._print
-  src.sillm.cli.main → src.sillm.cli._normalize_extra_arg_tokens
-  src.sillm.cli.main → src.sillm.cli._print
-  src.sillm.cli.main → src.sillm.cli._drive
-  src.sillm.cli.main → src.sillm.cli._nlp
-  src.sillm.cli.main → src.sillm.cli._build_parser
-  src.sillm.cli.main → src.sillm.registry.detect_clients
-  src.sillm.controller.save_prompt → src.sillm.controller._prompt_root
-  src.sillm.controller._resolve_spec → src.sillm.registry.get_client_spec
-  src.sillm.controller.build_drive_plan → src.sillm.controller._resolve_spec
-  src.sillm.controller.build_drive_plan → src.sillm.controller._resolve_command
-  src.sillm.controller.build_drive_plan → src.sillm.controller.save_prompt
-  src.sillm.controller.drive_shell_llm → src.sillm.controller.build_drive_plan
-  src.sillm.controller.drive_shell_llm → src.sillm.controller._timeout_value
+  src.tillm.cli._drive → src.tillm.cli._print
+  src.tillm.cli._drive → src.tillm.controller.drive_shell_llm
+  src.tillm.cli._drive → src.tillm.controller.result_from_error
+  src.tillm.cli._drive → src.tillm.cli._read_prompt
+  src.tillm.cli._nlp → src.tillm.nlp.intent_from_text
+  src.tillm.cli._nlp → src.tillm.validation.validate_intent
+  src.tillm.cli._nlp → src.tillm.controller.drive_shell_llm
+  src.tillm.cli._nlp → src.tillm.cli._print
+  src.tillm.cli.main → src.tillm.cli._normalize_extra_arg_tokens
+  src.tillm.cli.main → src.tillm.cli._print
+  src.tillm.cli.main → src.tillm.cli._drive
+  src.tillm.cli.main → src.tillm.cli._nlp
+  src.tillm.cli.main → src.tillm.cli._build_parser
+  src.tillm.cli.main → src.sillm.registry.detect_clients
+  src.tillm.controller.save_prompt → src.tillm.controller._prompt_root
+  src.tillm.controller._resolve_spec → src.sillm.registry.get_client_spec
+  src.tillm.controller.build_drive_plan → src.tillm.controller._resolve_spec
+  src.tillm.controller.build_drive_plan → src.tillm.controller._resolve_command
+  src.tillm.controller.build_drive_plan → src.tillm.controller.save_prompt
+  src.tillm.controller.drive_shell_llm → src.tillm.controller.build_drive_plan
+  src.tillm.controller.drive_shell_llm → src.tillm.controller._timeout_value
   src.sillm.registry.get_client_spec → src.sillm.registry.normalize_client_id
   src.sillm.registry.detect_clients → src.sillm.registry.normalize_client_id
-  src.sillm.validation.validate_intent → src.sillm.registry.get_client_spec
-  src.sillm.validation.validate_intent → src.sillm.validation._validate_raw_dsl
-  src.sillm.validation._validate_raw_dsl → src.sillm.registry.normalize_client_id
-  src.sillm.validation.ecosystem_status → src.sillm.validation.validate_intent_contracts
-  src.sillm.nlp._client_from_text → src.sillm.registry.iter_client_specs
-  src.sillm.nlp._client_from_text → src.sillm.registry.normalize_client_id
-  src.sillm.nlp._intent_from_nlp2dsl → src.sillm.registry.normalize_client_id
-  src.sillm.nlp.intent_from_text → src.sillm.nlp._client_from_text
-  src.sillm.nlp.intent_from_text → src.sillm.nlp._intent_from_nlp2dsl
-  src.sillm.nlp.intent_from_text → src.sillm.registry.get_client_spec
-  src.sillm.nlp.intent_from_text → src.sillm.nlp._strip_drive_prefix
-  src.sillm.compat.is_shell_llm_client → src.sillm.registry.get_client_spec
-  src.sillm.compat.is_client_available → src.sillm.registry.get_client_spec
-  src.sillm.compat.shell_client_ids → src.sillm.registry.iter_client_specs
-  src.sillm.compat.shell_process_patterns → src.sillm.registry.iter_client_specs
-  src.sillm.compat.tool_registry_entries → src.sillm.registry.iter_client_specs
-  src.sillm.compat.autopilot_backend_for_client → src.sillm.compat.is_shell_llm_client
-  src.sillm.compat.detect_koru_agent_rows → src.sillm.registry.detect_clients
-  src.sillm.compat.drive_koru_chat → src.sillm.controller.drive_shell_llm
-  src.sillm.compat.launch_koru_agent → src.sillm.registry.normalize_client_id
-  src.sillm.compat.launch_koru_agent → src.sillm.registry.get_client_spec
-  src.sillm.compat.launch_koru_agent → src.sillm.controller.save_prompt
-  src.sillm.compat.launch_koru_agent → src.sillm.controller.build_drive_plan
+  src.tillm.validation.validate_intent → src.sillm.registry.get_client_spec
+  src.tillm.validation.validate_intent → src.tillm.validation._validate_raw_dsl
+  src.tillm.validation._validate_raw_dsl → src.sillm.registry.normalize_client_id
+  src.tillm.validation.ecosystem_status → src.tillm.validation.validate_intent_contracts
+  src.tillm.nlp._client_from_text → src.sillm.registry.iter_client_specs
+  src.tillm.nlp._client_from_text → src.sillm.registry.normalize_client_id
+  src.tillm.nlp._intent_from_nlp2dsl → src.sillm.registry.normalize_client_id
+  src.tillm.nlp.intent_from_text → src.tillm.nlp._client_from_text
+  src.tillm.nlp.intent_from_text → src.tillm.nlp._intent_from_nlp2dsl
+  src.tillm.nlp.intent_from_text → src.sillm.registry.get_client_spec
+  src.tillm.nlp.intent_from_text → src.tillm.nlp._strip_drive_prefix
+  src.tillm.compat.is_shell_llm_client → src.sillm.registry.get_client_spec
+  src.tillm.compat.is_client_available → src.sillm.registry.get_client_spec
+  src.tillm.compat.shell_client_ids → src.sillm.registry.iter_client_specs
+  src.tillm.compat.shell_process_patterns → src.sillm.registry.iter_client_specs
+  src.tillm.compat.tool_registry_entries → src.sillm.registry.iter_client_specs
+  src.tillm.compat.autopilot_backend_for_client → src.tillm.compat.is_shell_llm_client
+  src.tillm.compat.detect_koru_agent_rows → src.sillm.registry.detect_clients
+  src.tillm.compat.drive_koru_chat → src.tillm.controller.drive_shell_llm
+  src.tillm.compat.launch_koru_agent → src.sillm.registry.normalize_client_id
+  src.tillm.compat.launch_koru_agent → src.sillm.registry.get_client_spec
+  src.tillm.compat.launch_koru_agent → src.tillm.controller.save_prompt
+  src.tillm.compat.launch_koru_agent → src.tillm.controller.build_drive_plan

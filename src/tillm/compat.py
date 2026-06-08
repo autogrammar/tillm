@@ -7,16 +7,16 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
-from sillm.controller import (
+from tillm.controller import (
     ClientUnavailableError,
     ShellDriveRequest,
     build_drive_plan,
     drive_shell_llm,
     save_prompt,
 )
-from sillm.registry import detect_clients, get_client_spec, iter_client_specs, normalize_client_id
+from tillm.registry import detect_clients, get_client_spec, iter_client_specs, normalize_client_id
 
-SHELL_AUTOPILOT_BACKEND = "sllm_shell"
+SHELL_AUTOPILOT_BACKEND = "tillm_shell"
 SHELL_BACKEND_PROFILE_ID = "vendor_agent_cli"
 
 
@@ -25,12 +25,12 @@ def agent_backend_profiles() -> tuple[dict[str, object], ...]:
     return (
         {
             "id": SHELL_BACKEND_PROFILE_ID,
-            "transport": "sllm shell subprocess",
+            "transport": "tillm shell subprocess",
             "can_push_chat": True,
             "can_pull_chat_text": False,
             "needs_gui_session": False,
             "mcp_tools_only": False,
-            "primary_code": "/home/tom/github/semcod/sllm",
+            "primary_code": "/home/tom/github/semcod/tillm",
         },
     )
 
@@ -38,7 +38,7 @@ def agent_backend_profiles() -> tuple[dict[str, object], ...]:
 def agent_backend_aliases() -> dict[str, str]:
     """Return Koru backend aliases owned by SLLM."""
     return {
-        "sllm_shell": SHELL_BACKEND_PROFILE_ID,
+        "tillm_shell": SHELL_BACKEND_PROFILE_ID,
         "cursor_cli": SHELL_BACKEND_PROFILE_ID,
         "vendor_cli": SHELL_BACKEND_PROFILE_ID,
     }
@@ -79,10 +79,10 @@ def tool_registry_entries() -> tuple[dict[str, object], ...]:
                     "env": [],
                 },
                 "invoke": (
-                    f"koru sllm drive --client {spec.id} "
+                    f"koru tillm drive --client {spec.id} "
                     "--prompt '<prompt>' --execute"
                 ),
-                "notes": "Shell agent lane delegated to the external sllm plugin.",
+                "notes": "Shell agent lane delegated to the external tillm plugin.",
             }
         )
     return tuple(entries)
@@ -166,25 +166,25 @@ def launch_koru_agent(
         argv = list(plan.argv)
         if command:
             argv[0] = command
-        print(f"sllm: launching {spec.label}")
+        print(f"tillm: launching {spec.label}")
         print(f"Prompt saved: {plan.prompt_path}")
         try:
             return subprocess.call(argv, cwd=project)
         except OSError as exc:
-            print(f"sillm: failed to launch {spec.label}: {exc}")
+            print(f"tillm: failed to launch {spec.label}: {exc}")
             return 1
 
     prompt_path = save_prompt(prompt, project=project)
     command_path = command or spec.command_path()
     if not command_path:
         raise ClientUnavailableError(f"{client_id}: command not found")
-    print(f"sllm: launching {spec.label}")
+    print(f"tillm: launching {spec.label}")
     print(f"Prompt saved: {prompt_path}")
     print("Open that prompt in the agent if its CLI starts an interactive session.")
     try:
         return subprocess.call([command_path], cwd=project)
     except OSError as exc:
-        print(f"sillm: failed to launch {spec.label}: {exc}")
+        print(f"tillm: failed to launch {spec.label}: {exc}")
         return 1
 
 
