@@ -29,91 +29,138 @@ def _quoted_or_tail(rest: list[str]) -> str:
     return " ".join(rest)
 
 
+# ---------------------------------------------------------------------------
+# Parsing helpers for individual verb types
+# ---------------------------------------------------------------------------
+
+def _parse_validate(rest: list[str]) -> dict[str, Any]:
+    payload: dict[str, Any] = {}
+    client = _flag(rest, "CLIENT")
+    if client:
+        payload["client"] = client
+    return payload
+
+
+def _parse_drive(rest: list[str], default_file: str | None) -> dict[str, Any]:
+    payload: dict[str, Any] = {}
+    payload["client"] = _flag(rest, "CLIENT") or ""
+    prompt = _flag(rest, "PROMPT")
+    if prompt is None and rest:
+        prompt = _quoted_or_tail(rest)
+    payload["prompt"] = prompt or ""
+
+    execute = _bool_flag(rest, "EXECUTE")
+    if execute is not None:
+        payload["execute"] = execute
+
+    dry_run = _bool_flag(rest, "DRY_RUN")
+    if dry_run is not None:
+        payload["dry_run"] = dry_run
+
+    profile = _flag(rest, "PROFILE")
+    if profile:
+        payload["profile"] = profile
+
+    backend = _flag(rest, "BACKEND")
+    if backend:
+        payload["backend"] = backend
+
+    project = _flag(rest, "PROJECT") or default_file
+    if project:
+        payload["project"] = project
+
+    return payload
+
+
+def _parse_drive_matrix(rest: list[str], default_file: str | None) -> dict[str, Any]:
+    payload: dict[str, Any] = {}
+    clients = _flag(rest, "CLIENTS")
+    if clients:
+        payload["clients"] = clients
+
+    # ALL flag can appear as "ALL <value>" or just "ALL" at start of tokens.
+    if _flag(rest, "ALL") is not None or (rest and rest[0].upper() == "ALL"):
+        payload["all_clients"] = True
+
+    prompt = _flag(rest, "PROMPT")
+    if prompt is None:
+        prompt = _quoted_or_tail(rest)
+    payload["prompt"] = prompt or ""
+
+    execute = _bool_flag(rest, "EXECUTE")
+    if execute is not None:
+        payload["execute"] = execute
+
+    dry_run = _bool_flag(rest, "DRY_RUN")
+    if dry_run is not None:
+        payload["dry_run"] = dry_run
+
+    profile = _flag(rest, "PROFILE")
+    if profile:
+        payload["profile"] = profile
+
+    parallel = _flag(rest, "PARALLEL")
+    if parallel:
+        payload["parallel"] = int(parallel)
+
+    fail_fast = _bool_flag(rest, "FAIL_FAST")
+    if fail_fast is not None:
+        payload["fail_fast"] = fail_fast
+
+    quorum = _flag(rest, "QUORUM")
+    if quorum:
+        payload["quorum"] = int(quorum)
+
+    available_only = _bool_flag(rest, "AVAILABLE_ONLY")
+    if available_only is not None:
+        payload["available_only"] = available_only
+
+    project = _flag(rest, "PROJECT") or default_file
+    if project:
+        payload["project"] = project
+
+    return payload
+
+
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
 def parse_line(line: str, *, default_file: str | None = None) -> dict[str, Any]:
     line = line.strip()
     if not line or line.startswith("#"):
         return {}
+
     tokens = shlex.split(line, posix=True)
     if not tokens:
         return {}
+
     verb = tokens[0].upper()
     rest = tokens[1:]
-    payload: dict[str, Any] = {"verb": verb}
 
-    if verb in {"HEALTH", "CLIENTS", "ORIENT", "ACTIONS", "DOCKER_STATUS"}:
-        return payload
+    SIMPLE_VERBS = {"HEALTH", "CLIENTS", "ORIENT", "ACTIONS", "DOCKER_STATUS"}
+    if verb in SIMPLE_VERBS:
+        return {"verb": verb}
 
     if verb == "VALIDATE":
-        client = _flag(rest, "CLIENT")
-        if client:
-            payload["client"] = client
+        payload = {"verb": verb}
+        payload.update(_parse_validate(rest))
         return payload
 
     if verb == "RESOLVE":
-        payload["prompt"] = _quoted_or_tail(rest)
-        return payload
+        return {"verb": verb, "prompt": _quoted_or_tail(rest)}
 
     if verb == "DRIVE":
-        payload["client"] = _flag(rest, "CLIENT") or ""
-        prompt = _flag(rest, "PROMPT")
-        if prompt is None and rest:
-            prompt = _quoted_or_tail(rest)
-        payload["prompt"] = prompt or ""
-        execute = _bool_flag(rest, "EXECUTE")
-        if execute is not None:
-            payload["execute"] = execute
-        dry_run = _bool_flag(rest, "DRY_RUN")
-        if dry_run is not None:
-            payload["dry_run"] = dry_run
-        profile = _flag(rest, "PROFILE")
-        if profile:
-            payload["profile"] = profile
-        backend = _flag(rest, "BACKEND")
-        if backend:
-            payload["backend"] = backend
-        project = _flag(rest, "PROJECT") or default_file
-        if project:
-            payload["project"] = project
+        payload = {"verb": verb}
+        payload.update(_parse_drive(rest, default_file))
         return payload
 
     if verb == "DRIVE_MATRIX":
-        clients = _flag(rest, "CLIENTS")
-        if clients:
-            payload["clients"] = clients
-        if _flag(rest, "ALL") is not None or (rest and rest[0].upper() == "ALL"):
-            payload["all_clients"] = True
-        prompt = _flag(rest, "PROMPT")
-        if prompt is None:
-            prompt = _quoted_or_tail(rest)
-        payload["prompt"] = prompt or ""
-        execute = _bool_flag(rest, "EXECUTE")
-        if execute is not None:
-            payload["execute"] = execute
-        dry_run = _bool_flag(rest, "DRY_RUN")
-        if dry_run is not None:
-            payload["dry_run"] = dry_run
-        profile = _flag(rest, "PROFILE")
-        if profile:
-            payload["profile"] = profile
-        parallel = _flag(rest, "PARALLEL")
-        if parallel:
-            payload["parallel"] = int(parallel)
-        fail_fast = _bool_flag(rest, "FAIL_FAST")
-        if fail_fast is not None:
-            payload["fail_fast"] = fail_fast
-        quorum = _flag(rest, "QUORUM")
-        if quorum:
-            payload["quorum"] = int(quorum)
-        available_only = _bool_flag(rest, "AVAILABLE_ONLY")
-        if available_only is not None:
-            payload["available_only"] = available_only
-        project = _flag(rest, "PROJECT") or default_file
-        if project:
-            payload["project"] = project
+        payload = {"verb": verb}
+        payload.update(_parse_drive_matrix(rest, default_file))
         return payload
 
-    payload["raw"] = rest
-    return payload
+    return {"verb": verb, "raw": rest}
 
 
 def to_text(payload: dict[str, Any]) -> str:
