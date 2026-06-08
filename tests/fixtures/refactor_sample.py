@@ -1,15 +1,11 @@
 """Throwaway sample for aider refactor smoke test."""
 
 
-def calc(x, y):
-    r = 0
-    for i in range(x):
-        r = r + y
-    return r
+def multiply_by_repeat(x, y):
+    if x < 0:
+        return 0
+    return x * y
 
 
-def greet(name):
-    if name == "":
-        return "Hello, world!"
-    else:
-        return "Hello, " + name + "!"
+def format_greeting(name):
+    return f"Hello, {name}!" if name else "Hello, world!"
