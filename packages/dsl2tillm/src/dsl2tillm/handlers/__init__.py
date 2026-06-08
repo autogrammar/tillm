@@ -80,9 +80,9 @@ def _orient() -> HandlerResult:
 
 
 def _actions() -> HandlerResult:
-    from tillm.validation import SLLM_DRIVE_ACTIONS
+    from tillm.validation import TILLM_DRIVE_ACTIONS
 
-    data = {"actions": sorted(SLLM_DRIVE_ACTIONS), "verbs": ["DRIVE", "DRIVE_MATRIX"]}
+    data = {"actions": sorted(TILLM_DRIVE_ACTIONS), "verbs": ["DRIVE", "DRIVE_MATRIX"]}
     return HandlerResult(ok=True, output=json.dumps(data, indent=2), data=data)
 
 

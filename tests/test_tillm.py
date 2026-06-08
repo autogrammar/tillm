@@ -683,6 +683,55 @@ def test_drive_without_prompt_on_empty_stdin_fails_fast(
     assert "missing prompt" in payload["message"]
 
 
+def test_drive_summary_format_omits_full_stdout(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    from pathlib import Path as PathType
+
+    from tillm.controller import ShellDriveResult
+
+    prompt_path = tmp_path / "prompt.md"
+    prompt_path.write_text("Fix tests\n", encoding="utf-8")
+    huge_stdout = ("x" * 5000) + "\nApplied edit to grammar.py\n"
+    fake = ShellDriveResult(
+        ok=True,
+        client_id="aider",
+        command=("/usr/bin/aider", "--message-file", str(prompt_path)),
+        prompt_path=PathType(prompt_path),
+        executed=True,
+        dry_run=False,
+        exit_code=0,
+        stdout=huge_stdout,
+        stderr="",
+        message="completed",
+    )
+    monkeypatch.setattr("tillm.cli.drive_shell_llm", lambda _req: fake)
+
+    rc = main(
+        [
+            "drive",
+            "--client",
+            "aider",
+            "--project",
+            str(tmp_path),
+            "--prompt",
+            "Fix tests",
+            "--execute",
+            "--format",
+            "summary",
+        ]
+    )
+
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "x" * 100 not in out
+    assert "Applied edit to grammar.py" in out
+    assert "stdout_chars=" in out
+    assert "stdout_preview=" in out
+
+
 def test_drive_without_prompt_writes_tillm_log(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,

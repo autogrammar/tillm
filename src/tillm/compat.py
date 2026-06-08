@@ -36,7 +36,7 @@ def agent_backend_profiles() -> tuple[dict[str, object], ...]:
 
 
 def agent_backend_aliases() -> dict[str, str]:
-    """Return Koru backend aliases owned by SLLM."""
+    """Return Koru backend aliases owned by TILLM."""
     return {
         "tillm_shell": SHELL_BACKEND_PROFILE_ID,
         "cursor_cli": SHELL_BACKEND_PROFILE_ID,
@@ -96,7 +96,7 @@ def detect_koru_agent_rows(
     *,
     project_hint_ids: Iterable[str] = (),
 ) -> list[dict[str, Any]]:
-    """Return SLLM clients in Koru ``AgentOption.to_dict`` shape."""
+    """Return TILLM clients in Koru ``AgentOption.to_dict`` shape."""
     rows: list[dict[str, Any]] = []
     for row in detect_clients(project_hint_ids=project_hint_ids):
         command = row.get("command_path")

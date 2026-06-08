@@ -26,7 +26,7 @@ from tillm.validation import validate_client_readiness
 
 
 class TillmError(RuntimeError):
-    """Base error for SLLM control failures."""
+    """Base error for TILLM control failures."""
 
 
 TillmError = TillmError

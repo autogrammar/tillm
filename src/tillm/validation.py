@@ -13,8 +13,8 @@ from tillm.nlp import ShellIntent
 from tillm.project_env import bootstrap_project_env
 from tillm.registry import detect_clients, get_client_spec, iter_client_specs, normalize_client_id
 
-SLLM_DRIVE_ACTIONS = frozenset({"tillm.drive", "shell_llm_drive", "drive_shell_llm"})
-SLLM_INTENT_CONTRACTS = (
+TILLM_DRIVE_ACTIONS = frozenset({"tillm.drive", "shell_llm_drive", "drive_shell_llm"})
+TILLM_INTENT_CONTRACTS = (
     (
         "# @intract.v1 id:tillm.shell_drive scope:block "
         "intent:drive:shell_llm domain:shell "
@@ -80,7 +80,7 @@ def validate_raw_dsl(raw_dsl: dict[str, Any], client_id: str) -> list[str]:
         if not isinstance(step, dict):
             continue
         action = str(step.get("action") or "")
-        if action not in SLLM_DRIVE_ACTIONS:
+        if action not in TILLM_DRIVE_ACTIONS:
             continue
         config = step.get("config") if isinstance(step.get("config"), dict) else {}
         raw_client = str(config.get("client") or client_id)
@@ -102,7 +102,7 @@ def client_status_rows() -> list[dict[str, object]]:
 
 
 def intent_contracts() -> tuple[str, ...]:
-    return SLLM_INTENT_CONTRACTS
+    return TILLM_INTENT_CONTRACTS
 
 
 def validate_intent_contracts() -> dict[str, object]:
@@ -112,12 +112,12 @@ def validate_intent_contracts() -> dict[str, object]:
         return {
             "available": False,
             "ok": True,
-            "contracts": list(SLLM_INTENT_CONTRACTS),
+            "contracts": list(TILLM_INTENT_CONTRACTS),
             "parsed": [],
         }
     parsed = []
     errors = []
-    for line in SLLM_INTENT_CONTRACTS:
+    for line in TILLM_INTENT_CONTRACTS:
         contract = parse_contract_line(line)
         if contract is None:
             errors.append(line)
@@ -133,7 +133,7 @@ def validate_intent_contracts() -> dict[str, object]:
     return {
         "available": True,
         "ok": not errors,
-        "contracts": list(SLLM_INTENT_CONTRACTS),
+        "contracts": list(TILLM_INTENT_CONTRACTS),
         "parsed": parsed,
         "errors": errors,
     }
@@ -168,14 +168,14 @@ def ecosystem_status(*, project: Path | str | None = None) -> dict[str, object]:
             "rows": clients,
             "errors": client_errors,
         },
-        "expected_actions": sorted(SLLM_DRIVE_ACTIONS),
+        "expected_actions": sorted(TILLM_DRIVE_ACTIONS),
         "intent_contracts": validate_intent_contracts(),
     }
 
 
 __all__ = [
-    "SLLM_DRIVE_ACTIONS",
-    "SLLM_INTENT_CONTRACTS",
+    "TILLM_DRIVE_ACTIONS",
+    "TILLM_INTENT_CONTRACTS",
     "ValidationResult",
     "client_status_rows",
     "ecosystem_status",

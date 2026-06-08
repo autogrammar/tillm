@@ -3,18 +3,18 @@
 # GENERATED: true
 
 CONFIG[2]{key, value}:
-  cli_command, python -m sllm
+  cli_command, python -m tillm
   timeout_ms, 10000
 
 # Test 1: CLI help command
-SHELL "python -m sllm --help" 5000
+SHELL "python -m tillm --help" 5000
 ASSERT_EXIT_CODE 0
 ASSERT_STDOUT_CONTAINS "usage"
 
 # Test 2: CLI version command
-SHELL "python -m sllm --version" 5000
+SHELL "python -m tillm --version" 5000
 ASSERT_EXIT_CODE 0
 
 # Test 3: CLI main workflow (dry-run)
-SHELL "python -m sllm --help" 10000
+SHELL "python -m tillm --help" 10000
 ASSERT_EXIT_CODE 0

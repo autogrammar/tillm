@@ -60,7 +60,132 @@ def _format_matrix_row(result: dict[str, object]) -> str:
     )
 
 
+_SUMMARY_PREVIEW_CHARS = 200
+
+
+def _output_stats(text: str) -> tuple[int, str]:
+    raw = text or ""
+    cleaned = raw.strip()
+    if not cleaned:
+        return len(raw), ""
+    lines = [line.strip() for line in cleaned.splitlines() if line.strip()]
+    preview = lines[-1] if lines else cleaned
+    if len(preview) > _SUMMARY_PREVIEW_CHARS:
+        preview = preview[: _SUMMARY_PREVIEW_CHARS - 1] + "…"
+    return len(raw), preview
+
+
+def _summarize_drive_result(row: dict[str, object]) -> dict[str, object]:
+    stdout_chars, stdout_preview = _output_stats(str(row.get("stdout") or ""))
+    stderr_chars, stderr_preview = _output_stats(str(row.get("stderr") or ""))
+    summary: dict[str, object] = {
+        key: row[key]
+        for key in (
+            "ok",
+            "client_id",
+            "exit_code",
+            "message",
+            "executed",
+            "dry_run",
+            "execute_profile",
+            "prompt_path",
+            "backend",
+            "error",
+        )
+        if key in row
+    }
+    command = row.get("command")
+    if command:
+        summary["command"] = command
+    if stdout_chars:
+        summary["stdout_chars"] = stdout_chars
+        if stdout_preview:
+            summary["stdout_preview"] = stdout_preview
+    if stderr_chars:
+        summary["stderr_chars"] = stderr_chars
+        if stderr_preview:
+            summary["stderr_preview"] = stderr_preview
+    return summary
+
+
+def _summarize_drive_payload(payload: dict[str, object]) -> dict[str, object]:
+    if "results" in payload and isinstance(payload["results"], list):
+        summarized = dict(payload)
+        summarized["results"] = [
+            _summarize_drive_result(row) for row in payload["results"] if isinstance(row, dict)
+        ]
+        return summarized
+    if "result" in payload and isinstance(payload["result"], dict):
+        summarized = dict(payload)
+        summarized["result"] = _summarize_drive_result(payload["result"])
+        return summarized
+    if "client_id" in payload or "command" in payload:
+        return _summarize_drive_result(payload)
+    return payload
+
+
+def _format_drive_summary_line(row: dict[str, object]) -> str:
+    status = "ok" if row.get("ok") else "fail"
+    exit_code = row.get("exit_code")
+    exit_text = "-" if exit_code is None else str(exit_code)
+    line = (
+        f"{status:<4} {str(row.get('client_id', '?')):<14} "
+        f"exit={exit_text:<4} message={row.get('message', '')}"
+    )
+    extras: list[str] = []
+    if row.get("stdout_chars"):
+        extras.append(f"stdout_chars={row['stdout_chars']}")
+    if row.get("stdout_preview"):
+        extras.append(f"stdout_preview={row['stdout_preview']!r}")
+    if row.get("stderr_preview"):
+        extras.append(f"stderr_preview={row['stderr_preview']!r}")
+    if row.get("prompt_path"):
+        extras.append(f"prompt_path={row['prompt_path']}")
+    if row.get("error"):
+        extras.append(f"error={row['error']}")
+    if extras:
+        line = f"{line} {' '.join(extras)}"
+    return line
+
+
+def _print_summary(payload: dict[str, object] | list[dict[str, object]]) -> None:
+    if isinstance(payload, list):
+        for row in payload:
+            if isinstance(row, dict):
+                print(_format_client_row(row))
+        return
+
+    summarized = _summarize_drive_payload(payload)
+    if "results" in summarized and isinstance(summarized["results"], list):
+        print(
+            f"matrix ok={summarized.get('ok')} succeeded={summarized.get('succeeded')} "
+            f"failed={summarized.get('failed')} message={summarized.get('message')}"
+        )
+        for row in summarized["results"]:
+            if isinstance(row, dict):
+                print(_format_drive_summary_line(row))
+        return
+
+    if "result" in summarized and isinstance(summarized["result"], dict):
+        print(_format_drive_summary_line(summarized["result"]))
+        if summarized.get("source"):
+            print(f"source={summarized['source']}")
+        return
+
+    if isinstance(summarized, dict) and (
+        "client_id" in summarized or "command" in summarized or "error" in summarized
+    ):
+        print(_format_drive_summary_line(summarized))
+        return
+
+    for key, value in summarized.items():
+        print(f"{key}: {value}")
+
+
 def _print(payload: dict[str, object] | list[dict[str, object]], output_format: str) -> None:
+    if output_format == "summary":
+        _print_summary(payload)
+        return
     if output_format == "json":
         print(json.dumps(payload, indent=2, sort_keys=True))
         return
@@ -162,7 +287,12 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="ARG",
         help="Append client CLI arg; accepts --extra-arg=--flag and --extra-arg --flag.",
     )
-    drive.add_argument("--format", choices=("text", "json"), default="json")
+    drive.add_argument(
+        "--format",
+        choices=("text", "json", "summary"),
+        default="json",
+        help="Output format: summary (compact, no full client stdout), json, or text.",
+    )
 
     nlp = sub.add_parser("nlp", help="Map natural language to TILLM drive DSL.")
     nlp.add_argument("text", nargs="+", help="Natural-language control request.")

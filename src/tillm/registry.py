@@ -1,6 +1,6 @@
 """Registry of shell LLM clients.
 
-The registry is intentionally declarative. Vendor CLIs change, so SLLM keeps
+The registry is intentionally declarative. Vendor CLIs change, so TILLM keeps
 only conservative invocation defaults here and lets callers override arguments
 with ``--extra-arg`` or project config later.
 """
