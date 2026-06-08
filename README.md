@@ -4,15 +4,15 @@
 
 Drives shell and terminal clients (`aider`, `claude`, `codex`, `gemini`, `qwen-code`, `opencode`, `devin`) from one registry and execution pipeline. Pair with [`gillm`](../gillm) for **graphical** control (focus, inject, capture, orchestrator DSL).
 
-![Version](https://img.shields.io/badge/version-0.1.33-blue) ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![Version](https://img.shields.io/badge/version-0.1.34-blue) ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.33-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$1.59-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-7.2h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fdeep%2Fdeep--v4--pro-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.34-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$2.35-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-8.3h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fdeep%2Fdeep--v4--pro-lightgrey)
 
-- 🤖 **LLM usage:** $1.5932 (33 commits)
-- 👤 **Human dev:** ~$722 (7.2h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $2.3498 (34 commits)
+- 👤 **Human dev:** ~$826 (8.3h @ $100/h, 30min dedup)
 
 Generated on 2026-06-08 using [openrouter/deep/deep-v4-pro](https://openrouter.ai/deep/deep-v4-pro)
 
@@ -174,24 +174,18 @@ DRIVE_MATRIX ALL PROMPT "review" EXECUTE true PROFILE automation
 
 ## Configuration
 
-Copy `.env.example` → `.env`. tillm does **not** auto-load `.env`:
+Copy `.env.example` → `.env`. tillm **auto-loads** `<project>/.env` (via `project_env` + optional `env2llm`):
 
 ```bash
-set -a && source .env && set +a
-```
-
-**aider + OpenRouter** — aider reads `AIDER_MODEL`, not `LLM_MODEL`:
-
-```bash
-# .env
+# .env — tillm reads this automatically from project root
 OPENROUTER_API_KEY=sk-or-v1-...
 LLM_MODEL=openrouter/deepseek/deepseek-v4-pro
-AIDER_MODEL=openrouter/deepseek/deepseek-v4-pro
+AIDER_MODEL=openrouter/deepseek/deepseek-v4-pro   # optional; defaults from LLM_MODEL
 
-# shell
-export OPENAI_API_KEY="$OPENROUTER_API_KEY"   # tillm readiness workaround
 tillm drive --client aider --prompt "fix tests" --execute
 ```
+
+Install env2llm integration: `pip install -e ".[env]"` or `pip install -e ../env2llm`
 
 Full reference: [docs/configuration.md](docs/configuration.md)
 
@@ -257,10 +251,24 @@ dsl2tillm validate-schema
 dsl2tillm exec HEALTH
 ```
 
+## Examples
+
+Runnable smoke tests per shell client (OpenRouter + tillm):
+
+```bash
+cp examples/openrouter/env.example .env   # set OPENROUTER_API_KEY
+source examples/openrouter/load-env.sh
+bash examples/aider/execute.sh
+bash examples/run-all-dry-run.sh
+```
+
+See [examples/README.md](examples/README.md).
+
 ## Documentation
 
 | Document | Description |
 | --- | --- |
+| [examples/README.md](examples/README.md) | Per-client CLI smoke scripts |
 | [docs/README.md](docs/README.md) | Documentation index |
 | [docs/configuration.md](docs/configuration.md) | `.env`, OpenRouter, env vars |
 | [docs/control-layer.md](docs/control-layer.md) | `*2tillm` packages |

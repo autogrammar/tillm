@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `tillm.project_env` — auto-load `<project>/.env`, OpenRouter bridges, optional env2llm map refresh
+- `OPENROUTER_API_KEY` accepted for aider readiness in registry
+- Optional extra `pip install tillm[env]` → `env2llm>=0.1.12`
+- `examples/*/*` — per-client smoke scripts (OpenRouter + tillm dry-run/execute)
 - Control layer packages: `dsl2tillm`, `uri2tillm`, `nlp2tillm`, `cli2tillm`, `mcp2tillm`, `rest2tillm` (port **8216**)
 - DSL verbs: `HEALTH`, `CLIENTS`, `ORIENT`, `ACTIONS`, `VALIDATE`, `RESOLVE`, `DOCKER_STATUS`, `DRIVE`, `DRIVE_MATRIX`
 - JSON Schema validation, CQRS bus (`dispatch()`), EventStore for commands
@@ -27,6 +31,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Circular import between `tillm.controller` and `tillm.transports.binary` (lazy import in transports)
 - `uri2tillm` parser: `source` from URI `netloc` (aligned with `gillm` pattern)
+
+## [0.1.34] - 2026-06-08
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update TODO.md
+- Update docs/README.md
+- Update docs/configuration.md
+- Update examples/README.md
+
+### Test
+- Update tests/test_sillm.py
+
+### Other
+- Update .gitignore
+- Update app.doql.less
+- Update examples/aider/dry-run.sh
+- Update examples/aider/execute.sh
+- Update examples/aider/model-switch.sh
+- Update examples/aider/refactor.sh
+- Update examples/claude-code/dry-run.sh
+- Update examples/claude-code/execute.sh
+- Update examples/cline/dry-run.sh
+- Update examples/codex/dry-run.sh
+- ... and 24 more files
 
 ## [0.1.33] - 2026-06-08
 

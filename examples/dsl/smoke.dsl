@@ -1,0 +1,6 @@
+# tillm control DSL smoke test
+HEALTH
+CLIENTS
+ORIENT
+ACTIONS
+VALIDATE

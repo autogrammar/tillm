@@ -5,9 +5,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import select
 import sys
 from pathlib import Path
 
+from tillm.drive_log import log_drive_event
+from tillm.project_env import bootstrap_project_env
 from tillm.controller import (
     MultiShellDriveRequest,
     ShellDriveRequest,
@@ -112,7 +115,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Drive all registered clients (defaults to available-only).",
     )
     drive.add_argument("--project", type=Path, default=Path.cwd(), help="Project root.")
-    drive.add_argument("--prompt", default=None, help="Prompt text.")
+    drive.add_argument(
+        "--prompt",
+        default=None,
+        help="Prompt text (required unless --prompt-file or stdin pipe is used).",
+    )
     drive.add_argument("--prompt-file", type=Path, default=None, help="Read prompt text from file.")
     drive.add_argument("--execute", action="store_true", help="Actually run the shell client.")
     drive.add_argument(
@@ -202,15 +209,34 @@ def _resolve_execute_profile(raw: str | None) -> str:
     return normalize_execute_profile(raw or os.getenv("TILLM_EXECUTE_PROFILE"))
 
 
+def _missing_prompt_error() -> ValueError:
+    return ValueError(
+        "missing prompt; provide --prompt, --prompt-file, or pipe text on stdin. "
+        "Examples:\n"
+        "  tillm drive --client aider --prompt 'Refactor X' --execute\n"
+        "  tillm drive --client aider --prompt-file task.md --execute\n"
+        "  echo 'Refactor X' | tillm drive --client aider --execute"
+    )
+
+
+def _stdin_has_data() -> bool:
+    try:
+        return bool(select.select([sys.stdin], [], [], 0)[0])
+    except Exception:
+        return False
+
+
 def _read_prompt(args: argparse.Namespace) -> str:
     if args.prompt_file is not None:
         return args.prompt_file.read_text(encoding="utf-8")
     if args.prompt is not None:
         return args.prompt
+    if sys.stdin.isatty() or not _stdin_has_data():
+        raise _missing_prompt_error()
     data = sys.stdin.read()
     if data.strip():
         return data
-    raise ValueError("missing prompt; use --prompt, --prompt-file, or stdin")
+    raise _missing_prompt_error()
 
 
 def _resolve_drive_targets(args: argparse.Namespace) -> tuple[str, ...]:
@@ -239,7 +265,33 @@ def _base_drive_request(args: argparse.Namespace, prompt: str) -> MultiShellDriv
 
 
 def _drive(args: argparse.Namespace) -> int:
-    prompt = _read_prompt(args)
+    try:
+        prompt = _read_prompt(args)
+    except ValueError as exc:
+        label = args.client or args.clients or "all"
+        log_drive_event(
+            args.project,
+            phase="prompt_error",
+            client_id=str(label),
+            execute=bool(args.execute),
+            dry_run=bool(args.dry_run or not args.execute),
+            ok=False,
+            error=type(exc).__name__,
+            message=str(exc),
+        )
+        payload = result_from_error(str(label), exc)
+        _print(payload, args.format)
+        return 2
+
+    client_label = args.client or args.clients or "all"
+    log_drive_event(
+        args.project,
+        phase="start",
+        client_id=str(client_label),
+        execute=bool(args.execute),
+        dry_run=bool(args.dry_run or not args.execute),
+        prompt=prompt,
+    )
     try:
         if args.client:
             result = drive_shell_llm(
@@ -259,10 +311,35 @@ def _drive(args: argparse.Namespace) -> int:
             matrix = drive_shell_llm_many(_base_drive_request(args, prompt))
             payload = matrix.to_dict()
     except Exception as exc:
-        label = args.client or args.clients or "all"
-        payload = result_from_error(str(label), exc)
+        log_drive_event(
+            args.project,
+            phase="error",
+            client_id=str(client_label),
+            execute=bool(args.execute),
+            dry_run=bool(args.dry_run or not args.execute),
+            prompt=prompt,
+            ok=False,
+            error=type(exc).__name__,
+            message=str(exc),
+        )
+        payload = result_from_error(str(client_label), exc)
         _print(payload, args.format)
         return 2
+
+    if args.client and isinstance(payload, dict):
+        log_drive_event(
+            args.project,
+            phase="finish",
+            client_id=str(payload.get("client_id", client_label)),
+            execute=bool(args.execute),
+            dry_run=bool(payload.get("dry_run", True)),
+            prompt=prompt,
+            prompt_path=str(payload.get("prompt_path", "")),
+            command=list(payload.get("command", [])) if payload.get("command") else None,
+            ok=bool(payload.get("ok")),
+            exit_code=payload.get("exit_code"),  # type: ignore[arg-type]
+            message=str(payload.get("message", "")),
+        )
     _print(payload, args.format)
     return 0 if payload.get("ok") else 1
 
@@ -297,6 +374,7 @@ def _nlp(args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     parse_argv = sys.argv[1:] if argv is None else argv
     args = _build_parser().parse_args(_normalize_extra_arg_tokens(list(parse_argv)))
+    bootstrap_project_env(Path.cwd())
     if args.action == "clients":
         _print(detect_clients(), args.format)
         return 0

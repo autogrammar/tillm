@@ -122,7 +122,7 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         prompt_mode="message-file",
         prompt_file_flag="--message-file",
         argv_prefix=("--no-show-model-warnings", "--yes-always"),
-        env_vars_any=("OPENAI_API_KEY", "ANTHROPIC_API_KEY"),
+        env_vars_any=("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY"),
         notes="Aider message-file workflow; argv_prefix skips headless confirmation prompts.",
     ),
     ShellClientSpec(

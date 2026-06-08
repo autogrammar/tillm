@@ -7,7 +7,10 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
+from pathlib import Path
+
 from tillm.nlp import ShellIntent
+from tillm.project_env import bootstrap_project_env
 from tillm.registry import detect_clients, get_client_spec, iter_client_specs, normalize_client_id
 
 SLLM_DRIVE_ACTIONS = frozenset({"tillm.drive", "shell_llm_drive", "drive_shell_llm"})
@@ -136,13 +139,15 @@ def validate_intent_contracts() -> dict[str, object]:
     }
 
 
-def ecosystem_status() -> dict[str, object]:
+def ecosystem_status(*, project: Path | str | None = None) -> dict[str, object]:
+    bootstrap_project_env(project or Path.cwd())
     packages = {
         "nlp2dsl": "nlp2dsl_sdk",
         "intract": "intract",
         "redsl": "redsl",
         "proxym": "proxym",
         "llx": "llx",
+        "env2llm": "env2llm",
     }
     clients = client_status_rows()
     client_errors: list[str] = []

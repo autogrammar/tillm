@@ -1,5 +1,12 @@
 # Byte-compiled / optimized / DLL files
+.nlp2dsl
+.tillm/
+.koru
+.code2llm_cache
+.nlp2dsl
+.planfile
 .code2llm_cache/
+.aider.tags.cache.v4
 node_modules
 .env.example
 .idea

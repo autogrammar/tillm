@@ -2,8 +2,8 @@
 
 ## High priority
 
-- [ ] Add `OPENROUTER_API_KEY` to aider registry `env_vars_any` (remove `OPENAI_API_KEY=$OPENROUTER_API_KEY` workaround)
-- [ ] Auto-load project `.env` in `drive_shell_llm` (optional `TILLM_ENV_FILE`)
+- [x] Add `OPENROUTER_API_KEY` to aider registry `env_vars_any`
+- [x] Auto-load project `.env` via `project_env` + env2llm (`TILLM_ENV_FILE`, `TILLM_ENV2LLM`)
 - [ ] Publish `tillm` and `*2tillm` packages to PyPI
 
 ## Control layer
@@ -20,6 +20,7 @@
 
 ## Documentation
 
+- [x] `examples/*/*` — per-client OpenRouter smoke scripts
 - [x] `docs/configuration.md` — `.env`, OpenRouter, tillm env vars
 - [x] `docs/control-layer.md` — `*2tillm` overview
 - [x] `docs/clients/README.md` — client matrix

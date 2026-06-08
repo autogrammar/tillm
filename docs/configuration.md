@@ -2,11 +2,18 @@
 
 ## `.env` in the project root
 
-Copy `.env.example` and fill in keys. tillm **does not load `.env` automatically** — export variables before running commands:
+Copy `.env.example` and fill in keys. tillm **auto-loads** `<project>/.env` on every CLI run and before `drive` / `validate` (via `tillm.project_env` + optional [env2llm](https://github.com/semcod/env2llm)).
+
+Manual export is still supported (shell env wins over `.env` for non-empty values):
 
 ```bash
 set -a && source .env && set +a
 ```
+
+| Variable | Purpose |
+| --- | --- |
+| `TILLM_ENV_FILE` | Override path to env file (default: `<project>/.env`) |
+| `TILLM_ENV2LLM` | `0` disables env2llm map refresh (default: `1`) |
 
 ### Semcod / pfix variables
 
@@ -37,18 +44,9 @@ LLM_MODEL=openrouter/deepseek/deepseek-v4-pro
 AIDER_MODEL=openrouter/deepseek/deepseek-v4-pro
 ```
 
-tillm readiness check for aider expects `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`. For OpenRouter-only setups, use a workaround before `--execute`:
+With `OPENROUTER_API_KEY` in `.env`, tillm auto-maps `OPENAI_API_KEY` and `AIDER_MODEL` from `LLM_MODEL` — no manual workaround needed.
 
 ```bash
-export OPENAI_API_KEY="$OPENROUTER_API_KEY"
-```
-
-Run:
-
-```bash
-set -a && source .env && set +a
-export OPENAI_API_KEY="$OPENROUTER_API_KEY"
-
 tillm drive --client aider --prompt "fix tests" --execute
 ```
 

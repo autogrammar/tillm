@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -25,6 +26,7 @@ from tillm.controller import (
     drive_shell_llm_many,
 )
 from tillm.nlp import ShellIntent, intent_from_text
+from tillm.project_env import bootstrap_project_env, load_env_file
 from tillm.registry import (
     available_client_ids,
     detect_clients,
@@ -595,3 +597,111 @@ def test_intent_contracts_are_exposed_for_ecosystem_validation() -> None:
     assert "tillm.drive" in status["expected_actions"]
     assert "intent_contracts" in status
     assert "clients" in status
+
+
+def test_load_env_file_parses_key_value(tmp_path: Path) -> None:
+    env_path = tmp_path / ".env"
+    env_path.write_text(
+        'OPENROUTER_API_KEY=sk-or-test\nLLM_MODEL=openrouter/deepseek/deepseek-v4-pro\n',
+        encoding="utf-8",
+    )
+    values = load_env_file(env_path)
+    assert values["OPENROUTER_API_KEY"] == "sk-or-test"
+    assert values["LLM_MODEL"] == "openrouter/deepseek/deepseek-v4-pro"
+
+
+def test_bootstrap_project_env_openrouter_enables_aider(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.delenv("AIDER_MODEL", raising=False)
+    monkeypatch.setenv("TILLM_ENV2LLM", "0")
+    (tmp_path / ".env").write_text(
+        "OPENROUTER_API_KEY=sk-or-test\nLLM_MODEL=openrouter/deepseek/deepseek-v4-pro\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("shutil.which", lambda name: "/bin/aider" if name == "aider" else None)
+
+    bootstrap_project_env(tmp_path)
+    readiness = validate_client_readiness("aider", require_execute=True)
+    assert readiness.ok is True
+    assert os.environ.get("AIDER_MODEL") == "openrouter/deepseek/deepseek-v4-pro"
+
+
+def test_build_drive_plan_bootstraps_env_for_execute(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.setenv("TILLM_ENV2LLM", "0")
+    (tmp_path / ".env").write_text("OPENROUTER_API_KEY=sk-or-test\n", encoding="utf-8")
+    monkeypatch.setattr("shutil.which", lambda name: "/bin/aider" if name == "aider" else None)
+
+    plan = build_drive_plan(
+        ShellDriveRequest(
+            client_id="aider",
+            prompt="smoke",
+            project=tmp_path,
+            execute=True,
+            dry_run=False,
+        )
+    )
+    assert "aider" in plan.shell_preview() or "/bin/aider" in plan.argv[0]
+
+
+def test_drive_without_prompt_on_tty_fails_fast(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr("sys.stdin.isatty", lambda: True)
+
+    rc = main(["drive", "--client", "aider", "--execute"])
+
+    payload = json.loads(capsys.readouterr().out)
+    assert rc == 2
+    assert payload["ok"] is False
+    assert payload["error"] == "ValueError"
+    assert "missing prompt" in payload["message"]
+
+
+def test_drive_without_prompt_on_empty_stdin_fails_fast(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr("sys.stdin.isatty", lambda: False)
+    monkeypatch.setattr("tillm.cli._stdin_has_data", lambda: False)
+
+    rc = main(["drive", "--client", "aider", "--execute"])
+
+    payload = json.loads(capsys.readouterr().out)
+    assert rc == 2
+    assert payload["ok"] is False
+    assert "missing prompt" in payload["message"]
+
+
+def test_drive_without_prompt_writes_tillm_log(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr("sys.stdin.isatty", lambda: True)
+    monkeypatch.chdir(tmp_path)
+
+    rc = main(["drive", "--client", "aider", "--execute", "--project", str(tmp_path)])
+
+    assert rc == 2
+    log_root = tmp_path / ".tillm" / "logs"
+    assert log_root.is_dir()
+    jsonl_files = list(log_root.glob("drive-*.jsonl"))
+    assert jsonl_files
+    lines = jsonl_files[0].read_text(encoding="utf-8").strip().splitlines()
+    event = json.loads(lines[-1])
+    assert event["phase"] == "prompt_error"
+    assert event["client_id"] == "aider"
+    assert event["ok"] is False
+    latest = json.loads((log_root / "latest.json").read_text(encoding="utf-8"))
+    assert latest["phase"] == "prompt_error"

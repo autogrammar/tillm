@@ -1,0 +1,110 @@
+# Główna strategia planfile — typowe zadania jakości kodu (patrz project/code-quality-strategy.yaml).
+name: "Tillm Code Quality"
+version: "1.0.0"
+project_type: "python"
+domain: "software"
+goal: "Poprawa jakości kodu i redukcja długu technicznego"
+
+description: |
+  Strategia oparta na analizie code2llm. Obejmuje typowe kategorie:
+  - redukcja złożoności cyklomatycznej (CC)
+  - usuwanie code smells (god function, shotgun surgery)
+  - testy i pokrycie
+  - dokumentacja i chore
+
+quality_gates:
+  - name: "Cyclomatic Complexity"
+    description: "Brak funkcji z CC > 15"
+    criteria:
+      - "Wszystkie funkcje CC ≤ 15"
+      - "code2llm evolution.toon bez CRITICAL CC"
+    required: true
+
+  - name: "Test Suite"
+    description: "Testy przechodzą po każdym tickecie"
+    criteria:
+      - "pytest tests/ packages/*/tests -q → 0 failures"
+    required: true
+
+  - name: "Code Smells"
+    description: "Brak krytycznych code smells"
+    criteria:
+      - "Brak god-function i shotgun-surgery w CRITICAL"
+    required: true
+
+sprints:
+  - id: "code-quality"
+    name: "Code Quality Sprint"
+    objectives:
+      - "Obniżyć CC w funkcjach krytycznych"
+      - "Usunąć code smells wskazane przez code2llm"
+      - "Utrzymać zielone testy"
+
+    tasks:
+      - name: "Reduce Cyclomatic Complexity"
+        description: |
+          Znajdź funkcje z CC > 15 (code2llm analysis.toon / planfile-tickets.yaml).
+          Wydziel mniejsze funkcje, spłaszcz warunki, zachowaj zachowanie.
+        type: "refactor"
+        priority: "high"
+        tags: ["complexity", "code2llm", "llm-ready"]
+        model_hints: "balanced"
+
+      - name: "Fix God Function"
+        description: |
+          Rozbij oversized funkcje (wysoki fan-out, wiele mutacji).
+          Preferuj ekstrakcję helperów zamiast dużych klas.
+        type: "refactor"
+        priority: "high"
+        tags: ["code-smell", "god-function", "llm-ready"]
+        model_hints: "balanced"
+
+      - name: "Fix Shotgun Surgery"
+        description: |
+          Skonsoliduj logikę rozproszoną po wielu funkcjach/plikach.
+          Wprowadź jeden punkt zmiany (helper, value object, bus).
+        type: "refactor"
+        priority: "high"
+        tags: ["code-smell", "shotgun-surgery", "llm-ready"]
+        model_hints: "balanced"
+
+      - name: "Add Missing Tests"
+        description: |
+          Dodaj testy dla modułów o niskim pokryciu lub po refaktorze.
+          Skup się na ścieżkach krytycznych (controller, registry, DSL).
+        type: "test"
+        priority: "medium"
+        tags: ["coverage", "llm-ready"]
+        model_hints: "cheap"
+
+      - name: "Type Hints & Tech Debt"
+        description: |
+          Uzupełnij adnotacje typów w publicznym API.
+          Usuń martwy kod i nieużywane importy.
+        type: "tech_debt"
+        priority: "medium"
+        tags: ["typing", "cleanup"]
+        model_hints: "cheap"
+
+      - name: "Update Documentation"
+        description: |
+          Zaktualizuj README/docs po zmianach architektury.
+          Opisz nowe konwencje i przykłady użycia.
+        type: "documentation"
+        priority: "low"
+        tags: ["docs"]
+        model_hints: "free"
+
+      - name: "Lint & Chore"
+        description: |
+          Napraw ostrzeżenia ruff/mypy. Uporządkuj formatowanie i importy.
+        type: "chore"
+        priority: "low"
+        tags: ["lint", "format"]
+        model_hints: "free"
+
+metadata:
+  source: "code2llm"
+  tickets_file: "project/planfile-tickets.yaml"
+  executor: "tillm drive --client aider"
+  tags: ["code-quality", "refactor", "tillm"]

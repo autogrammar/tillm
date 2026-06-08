@@ -2,6 +2,7 @@
 
 | Document | Description |
 | --- | --- |
+| [../examples/README.md](../examples/README.md) | Runnable per-client CLI smoke scripts |
 | [configuration.md](configuration.md) | `.env`, environment variables, OpenRouter + aider |
 | [control-layer.md](control-layer.md) | `*2tillm` packages (DSL, REST, MCP, URI, NLP) |
 | [clients/README.md](clients/README.md) | Shell client registry and setup |

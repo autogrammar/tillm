@@ -11,4 +11,10 @@ $PIP install -e packages/nlp2tillm
 $PIP install -e packages/cli2tillm
 $PIP install -e packages/mcp2tillm
 $PIP install -e packages/rest2tillm
+if [[ -d ../env2llm ]]; then
+  $PIP install -e ../env2llm
+fi
+if [[ -d ../planfile ]]; then
+  $PIP install -e ../planfile
+fi
 echo "✓ tillm control layers installed"

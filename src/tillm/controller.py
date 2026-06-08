@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from tillm.project_env import bootstrap_project_env
 from tillm.registry import (
     DEFAULT_EXECUTE_PROFILE,
     ClientTransport,
@@ -219,6 +220,7 @@ def _resolve_execute_args(spec: ShellClientSpec, *, execute: bool, profile: str)
 
 
 def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
+    bootstrap_project_env(request.project)
     spec = _resolve_spec(request.client_id)
     _validate_request(request, spec)
     command_path = _resolve_command(spec)
