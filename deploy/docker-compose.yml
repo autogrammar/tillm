@@ -1,0 +1,77 @@
+# tillm shell-client services (scaffold)
+#
+# Each service runs one vendor CLI behind a shared workspace mount.
+# Wire TILLM_BACKEND=docker and per-client TILLM_<CLIENT>_URL when HTTP
+# adapters (e.g. AgentAPI) are added. For now this is an image/layout scaffold.
+#
+# Usage:
+#   docker compose -f deploy/docker-compose.yml up -d
+#   tillm drive --all --prompt "review auth module" --dry-run
+
+x-tillm-service: &tillm-service
+  restart: unless-stopped
+  working_dir: /workspace
+  volumes:
+    - ${TILLM_WORKSPACE:-..}:/workspace
+  healthcheck:
+    test: ["CMD-SHELL", "test -f /tmp/tillm-healthy || exit 1"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+
+services:
+  tillm-orchestrator:
+    image: python:3.11-slim
+    <<: *tillm-service
+    command: ["sleep", "infinity"]
+    environment:
+      TILLM_BACKEND: docker
+
+  tillm-aider:
+    image: python:3.11-slim
+    <<: *tillm-service
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    command: ["bash", "-lc", "pip install -q aider-chat && touch /tmp/tillm-healthy && sleep infinity"]
+
+  tillm-claude-code:
+    image: node:20-slim
+    <<: *tillm-service
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    command: ["bash", "-lc", "npm install -g @anthropic-ai/claude-code && touch /tmp/tillm-healthy && sleep infinity"]
+
+  tillm-codex:
+    image: node:20-slim
+    <<: *tillm-service
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    command: ["bash", "-lc", "npm install -g @openai/codex && touch /tmp/tillm-healthy && sleep infinity"]
+
+  tillm-gemini-cli:
+    image: node:20-slim
+    <<: *tillm-service
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+    command: ["bash", "-lc", "npm install -g @google/gemini-cli && touch /tmp/tillm-healthy && sleep infinity"]
+
+  tillm-qwen-code:
+    image: node:20-slim
+    <<: *tillm-service
+    environment:
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+    command: ["bash", "-lc", "npm install -g @qwen-code/qwen-code && touch /tmp/tillm-healthy && sleep infinity"]
+
+  tillm-opencode:
+    image: node:20-slim
+    <<: *tillm-service
+    command: ["bash", "-lc", "npm install -g opencode-ai && touch /tmp/tillm-healthy && sleep infinity"]
+
+  tillm-devin:
+    image: node:20-slim
+    <<: *tillm-service
+    environment:
+      DEVIN_API_KEY: ${DEVIN_API_KEY:-}
+    command: ["bash", "-lc", "npm install -g devin-cli && touch /tmp/tillm-healthy && sleep infinity"]

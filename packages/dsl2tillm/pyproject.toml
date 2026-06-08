@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dsl2tillm"
+version = "0.1.0"
+description = "Tillm control DSL with JSON Schema validation and CQRS bus"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+dependencies = [
+    "tillm>=0.1.32",
+    "jsonschema>=4.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+dsl2tillm = "dsl2tillm.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"dsl2tillm" = ["schema/commands/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

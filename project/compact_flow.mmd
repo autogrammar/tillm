@@ -1,5 +1,18 @@
 flowchart TD
-%% generated in 0.00s
-    src__sillm["src.sillm<br/>6 funcs"]
-    src__tillm["src.tillm<br/>40 funcs"]
-    src__tillm ==>|16| src__sillm
+%% generated in 0.01s
+    packages__cli2tillm["packages.cli2tillm<br/>2 funcs"]
+    packages__dsl2tillm["packages.dsl2tillm<br/>39 funcs"]
+    packages__mcp2tillm["packages.mcp2tillm<br/>7 funcs"]
+    packages__nlp2tillm["packages.nlp2tillm<br/>3 funcs"]
+    packages__rest2tillm["packages.rest2tillm<br/>2 funcs"]
+    packages__uri2tillm["packages.uri2tillm<br/>9 funcs"]
+    src__tillm["src.tillm<br/>73 funcs"]
+    packages__dsl2tillm ==>|10| src__tillm
+    packages__rest2tillm ==>|6| packages__dsl2tillm
+    packages__mcp2tillm ==>|6| packages__dsl2tillm
+    packages__cli2tillm -->|3| packages__dsl2tillm
+    packages__nlp2tillm -->|1| src__tillm
+    packages__nlp2tillm -->|1| packages__dsl2tillm
+    packages__dsl2tillm -->|1| packages__nlp2tillm
+    packages__mcp2tillm -->|1| packages__nlp2tillm
+    packages__uri2tillm -->|1| packages__dsl2tillm

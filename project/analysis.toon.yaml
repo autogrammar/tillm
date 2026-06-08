@@ -1,74 +1,187 @@
-# code2llm | 13f 1623L | python:8,yaml:2,txt:1,shell:1,toml:1 | 2026-06-08
-# generated in 0.00s
-# CC̅=3.3 | critical:1/47 | dups:0 | cycles:0
+# code2llm | 62f 4173L | python:39,json:10,toml:7,shell:2,yaml:2,txt:1,yml:1 | 2026-06-08
+# generated in 0.01s
+# CC̅=4.4 | critical:10/136 | dups:0 | cycles:0
 
-HEALTH[1]:
+HEALTH[10]:
+  🟡 CC    _main_subcommand CC=17 (limit:15)
+  🟡 CC    uri_to_dsl CC=24 (limit:15)
+  🟡 CC    main CC=16 (limit:15)
+  🟡 CC    parse_line CC=35 (limit:15)
+  🟡 CC    to_text CC=15 (limit:15)
+  🟡 CC    _print CC=17 (limit:15)
+  🟡 CC    dispatch CC=15 (limit:15)
   🟡 CC    _intent_from_nlp2dsl CC=15 (limit:15)
+  🟡 CC    resolve_client_ids CC=15 (limit:15)
+  🟡 CC    drive_shell_llm_many CC=26 (limit:15)
 
 REFACTOR[1]:
-  1. split 1 high-CC methods  (CC>15)
+  1. split 10 high-CC methods  (CC>15)
 
-PIPELINES[15]:
-  [1] Src [main]: main → _normalize_extra_arg_tokens
+PIPELINES[38]:
+  [1] Src [main]: main → _main_legacy → dispatch → envelope_from_bytes → ...(3 more)
       PURITY: 100% pure
-  [2] Src [shell_preview]: shell_preview
+  [2] Src [main]: main → run_server → create_server
       PURITY: 100% pure
-  [3] Src [to_dict]: to_dict
+  [3] Src [encode_protobuf]: encode_protobuf
       PURITY: 100% pure
-  [4] Src [to_dict]: to_dict
+  [4] Src [all_verbs]: all_verbs → _load_schemas
       PURITY: 100% pure
-  [5] Src [command_path]: command_path
+  [5] Src [main]: main → create_app → schema_for_verb → _load_schemas
       PURITY: 100% pure
-  [6] Src [to_dict]: to_dict
+  [6] Src [main]: main → run_shell → dispatch → envelope_from_bytes → ...(3 more)
       PURITY: 100% pure
-  [7] Src [to_dict]: to_dict
+  [7] Src [to_text]: to_text
       PURITY: 100% pure
-  [8] Src [is_client_available]: is_client_available → get_client_spec → normalize_client_id
+  [8] Src [uri_for_cmd]: uri_for_cmd → _encode
       PURITY: 100% pure
-  [9] Src [shell_client_ids]: shell_client_ids → iter_client_specs
+  [9] Src [uri_for_client]: uri_for_client → _encode
       PURITY: 100% pure
-  [10] Src [shell_process_patterns]: shell_process_patterns → iter_client_specs
+  [10] Src [is_tillm_uri]: is_tillm_uri
       PURITY: 100% pure
-  [11] Src [tool_registry_entries]: tool_registry_entries → iter_client_specs
+  [11] Src [main]: main → _normalize_extra_arg_tokens
       PURITY: 100% pure
-  [12] Src [autopilot_backend_for_client]: autopilot_backend_for_client → is_shell_llm_client → get_client_spec → normalize_client_id
+  [12] Src [main]: main → run_uri → uri_to_dsl → parse_tillm_uri → ...(1 more)
       PURITY: 100% pure
-  [13] Src [detect_koru_agent_rows]: detect_koru_agent_rows → detect_clients → normalize_client_id
+  [13] Src [main]: main → apply_nl → to_dsl → intent_from_text → ...(2 more)
       PURITY: 100% pure
-  [14] Src [drive_koru_chat]: drive_koru_chat → drive_shell_llm → build_drive_plan → _resolve_spec → ...(2 more)
+  [14] Src [is_client_available]: is_client_available → get_client_spec → normalize_client_id
       PURITY: 100% pure
-  [15] Src [launch_koru_agent]: launch_koru_agent → normalize_client_id
+  [15] Src [shell_client_ids]: shell_client_ids → iter_client_specs
+      PURITY: 100% pure
+  [16] Src [shell_process_patterns]: shell_process_patterns → iter_client_specs
+      PURITY: 100% pure
+  [17] Src [tool_registry_entries]: tool_registry_entries → iter_client_specs
+      PURITY: 100% pure
+  [18] Src [autopilot_backend_for_client]: autopilot_backend_for_client → is_shell_llm_client → get_client_spec → normalize_client_id
+      PURITY: 100% pure
+  [19] Src [detect_koru_agent_rows]: detect_koru_agent_rows → detect_clients → normalize_client_id
+      PURITY: 100% pure
+  [20] Src [drive_koru_chat]: drive_koru_chat → drive_shell_llm → build_drive_plan → _resolve_spec → ...(2 more)
+      PURITY: 100% pure
+  [21] Src [launch_koru_agent]: launch_koru_agent → normalize_client_id
+      PURITY: 100% pure
+  [22] Src [to_dict]: to_dict
+      PURITY: 100% pure
+  [23] Src [for_workdir]: for_workdir
+      PURITY: 100% pure
+  [24] Src [append_command]: append_command
+      PURITY: 100% pure
+  [25] Src [read_all]: read_all
+      PURITY: 100% pure
+  [26] Src [__post_init__]: __post_init__ → _require_fastmcp
+      PURITY: 100% pure
+  [27] Src [_register_tools]: _register_tools → dispatch → envelope_from_bytes → validate_payload → ...(2 more)
+      PURITY: 100% pure
+  [28] Src [run]: run
+      PURITY: 100% pure
+  [29] Src [to_dict]: to_dict
+      PURITY: 100% pure
+  [30] Src [command_path]: command_path
+      PURITY: 100% pure
+  [31] Src [profile_execute_args]: profile_execute_args
+      PURITY: 100% pure
+  [32] Src [missing_env_vars]: missing_env_vars
+      PURITY: 100% pure
+  [33] Src [to_dict]: to_dict
+      PURITY: 100% pure
+  [34] Src [shell_preview]: shell_preview
+      PURITY: 100% pure
+  [35] Src [to_dict]: to_dict
+      PURITY: 100% pure
+  [36] Src [to_dict]: to_dict
+      PURITY: 100% pure
+  [37] Src [to_dict]: to_dict
+      PURITY: 100% pure
+  [38] Src [_drive_one_client]: _drive_one_client → drive_shell_llm → build_drive_plan → _resolve_spec → ...(2 more)
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.5    ←in:0  →out:0
-  │ controller                 248L  6C   11m  CC=10     ←2
+  src/                            CC̄=4.5    ←in:0  →out:0
+  │ !! controller                 412L  10C   18m  CC=26     ←5
+  │ !! cli                        314L  0C   12m  CC=17     ←0
+  │ !! registry                   309L  1C   13m  CC=15     ←7
   │ compat                     205L  0C   11m  CC=8      ←0
-  │ cli                        167L  0C    7m  CC=6      ←0
-  │ validation                 127L  1C    6m  CC=9      ←1
-  │ !! nlp                        104L  1C    5m  CC=15     ←1
-  │ __init__                    36L  0C    0m  CC=0.0    ←0
+  │ validation                 182L  1C    8m  CC=12     ←3
+  │ docker                     143L  0C    5m  CC=10     ←2
+  │ !! nlp                        104L  1C    5m  CC=15     ←2
+  │ binary                      77L  0C    1m  CC=10     ←1
+  │ __init__                    46L  0C    0m  CC=0.0    ←0
+  │ __init__                    10L  0C    0m  CC=0.0    ←0
   │ __main__                     7L  0C    0m  CC=0.0    ←0
   │
-  //                              CC̄=2.3    ←in:0  →out:0
+  packages/                       CC̄=4.4    ←in:0  →out:0
+  │ __init__                   176L  1C   12m  CC=8      ←1
+  │ !! grammar                    151L  0C    5m  CC=35     ←1
+  │ !! cli                        112L  0C    3m  CC=17     ←0
+  │ !! bus                         88L  0C    3m  CC=15     ←7
+  │ app                         78L  0C    1m  CC=1      ←1
+  │ !! cli                         70L  0C    1m  CC=16     ←0
+  │ server                      69L  1C    6m  CC=2      ←1
+  │ events                      67L  2C    5m  CC=4      ←0
+  │ !! decode                      60L  0C    1m  CC=24     ←2
+  │ uri                         51L  0C    6m  CC=5      ←1
+  │ schema_registry             49L  0C    4m  CC=5      ←3
+  │ cli                         40L  0C    1m  CC=7      ←0
+  │ cli                         40L  0C    1m  CC=7      ←0
+  │ pyproject.toml              33L  0C    0m  CC=0.0    ←0
+  │ shell                       32L  0C    1m  CC=8      ←1
+  │ codec                       31L  0C    3m  CC=2      ←1
+  │ pyproject.toml              31L  0C    0m  CC=0.0    ←0
+  │ pb_codec                    28L  0C    3m  CC=3      ←3
+  │ result                      28L  1C    1m  CC=1      ←0
+  │ pyproject.toml              28L  0C    0m  CC=0.0    ←0
+  │ cli                         27L  0C    1m  CC=3      ←0
+  │ pyproject.toml              24L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml              24L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml              24L  0C    0m  CC=0.0    ←0
+  │ cli                         23L  0C    1m  CC=3      ←0
+  │ to_dsl                      21L  0C    2m  CC=2      ←3
+  │ drive_matrix.schema.json    20L  0C    0m  CC=0.0    ←0
+  │ drive.schema.json           16L  0C    0m  CC=0.0    ←0
+  │ install-dev.sh              14L  0C    0m  CC=0.0    ←0
+  │ run                         11L  0C    1m  CC=1      ←1
+  │ resolve.schema.json         10L  0C    0m  CC=0.0    ←0
+  │ validate.schema.json        10L  0C    0m  CC=0.0    ←0
+  │ docker_status.schema.json     9L  0C    0m  CC=0.0    ←0
+  │ health.schema.json           9L  0C    0m  CC=0.0    ←0
+  │ clients.schema.json          9L  0C    0m  CC=0.0    ←0
+  │ actions.schema.json          9L  0C    0m  CC=0.0    ←0
+  │ orient.schema.json           9L  0C    0m  CC=0.0    ←0
+  │ __init__                     6L  0C    0m  CC=0.0    ←0
+  │ engine                       5L  0C    0m  CC=0.0    ←0
+  │ __init__                     4L  0C    0m  CC=0.0    ←0
+  │ __init__                     3L  0C    0m  CC=0.0    ←0
+  │ __init__                     3L  0C    0m  CC=0.0    ←0
+  │ __init__                     3L  0C    0m  CC=0.0    ←0
+  │ __init__                     3L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=0.0    ←in:0  →out:0
   │ !! goal.yaml                  511L  0C    0m  CC=0.0    ←0
-  │ tree.txt                    79L  0C    0m  CC=0.0    ←0
   │ pyproject.toml              77L  0C    0m  CC=0.0    ←0
   │ project.sh                  62L  0C    1m  CC=0.0    ←0
+  │ tree.txt                    58L  0C    0m  CC=0.0    ←0
+  │ coverage.json                1L  0C    0m  CC=0.0    ←0
   │
-  ── zero ──
-     /home/tom/github/semcod/sllm/src/sillm/registry.py  0L
-     /home/tom/github/semcod/sllm/testql-scenarios/generated-cli-tests.testql.toon.yaml  0L
+  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
+  │ generated-cli-tests.testql.toon.yaml    20L  0C    0m  CC=0.0    ←0
+  │
+  deploy/                         CC̄=0.0    ←in:0  →out:0
+  │ docker-compose.yml          77L  0C    0m  CC=0.0    ←0
+  │
 
 COUPLING:
-             src.sillm  src.tillm
-  src.sillm         ──        ←16  hub
-  src.tillm         16         ──  !! fan-out
+                        packages.dsl2tillm            src.tillm   packages.mcp2tillm  packages.rest2tillm   packages.nlp2tillm   packages.cli2tillm   packages.uri2tillm
+   packages.dsl2tillm                   ──                   10                   ←6                   ←6                    1                   ←3                   ←1  hub
+            src.tillm                  ←10                   ──                                                             ←1                                            hub
+   packages.mcp2tillm                    6                                        ──                                         1                                          
+  packages.rest2tillm                    6                                                             ──                                                               
+   packages.nlp2tillm                    1                    1                   ←1                                        ──                                          
+   packages.cli2tillm                    3                                                                                                       ──                     
+   packages.uri2tillm                    1                                                                                                                            ──
   CYCLES: none
-  HUB: src.sillm/ (fan-in=16)
-  SMELL: src.tillm/ fan-out=16 → split needed
+  HUB: src.tillm/ (fan-in=11)
+  HUB: packages.dsl2tillm/ (fan-in=17)
+  SMELL: packages.dsl2tillm/ fan-out=11 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

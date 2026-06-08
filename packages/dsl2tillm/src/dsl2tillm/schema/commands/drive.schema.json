@@ -1,0 +1,16 @@
+{
+  "$id": "dsl2tillm/commands/drive",
+  "type": "object",
+  "required": ["verb", "client", "prompt"],
+  "properties": {
+    "verb": { "const": "DRIVE" },
+    "client": { "type": "string", "minLength": 1 },
+    "prompt": { "type": "string", "minLength": 1 },
+    "project": { "type": "string" },
+    "execute": { "type": "boolean", "default": false },
+    "dry_run": { "type": "boolean", "default": true },
+    "profile": { "type": "string", "default": "default" },
+    "backend": { "enum": ["binary", "docker", "http"], "default": "binary" }
+  },
+  "additionalProperties": false
+}

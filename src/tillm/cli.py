@@ -1,18 +1,60 @@
-"""CLI for SILLM shell-client control."""
+"""CLI for TILLM shell-client control."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
-from tillm.controller import ShellDriveRequest, drive_shell_llm, result_from_error
+from tillm.controller import (
+    MultiShellDriveRequest,
+    ShellDriveRequest,
+    drive_shell_llm,
+    drive_shell_llm_many,
+    result_from_error,
+)
 from tillm.nlp import intent_from_text
-from tillm.registry import detect_clients
+from tillm.registry import DEFAULT_EXECUTE_PROFILE, detect_clients, normalize_execute_profile, resolve_client_ids
 from tillm.validation import ecosystem_status, validate_intent
 
 _EXTRA_ARG_OPTION = "--extra-arg"
+
+
+def _format_client_row(row: dict[str, object]) -> str:
+    mark = "ok" if row.get("ready") else ("~" if row.get("available") else "--")
+    aliases = ", ".join(str(alias) for alias in row.get("aliases", [])) or "-"
+    caps = []
+    if row.get("supports_execute"):
+        caps.append("execute")
+    if row.get("supports_dry_run"):
+        caps.append("dry-run")
+    commands = row.get("commands")
+    fallback = commands[0] if isinstance(commands, list) and commands else "?"
+    command = row.get("command_path") or fallback
+    profiles = row.get("supported_execute_profiles")
+    profile_text = ",".join(str(item) for item in profiles) if isinstance(profiles, list) else "default"
+    transport = row.get("transport", "binary")
+    return (
+        f"{mark} {row.get('id'):<14} {row.get('label'):<12} "
+        f"mode={row.get('prompt_mode'):<13} caps={','.join(caps) or '-':<12} "
+        f"profiles={profile_text:<16} transport={transport:<6} "
+        f"cmd={command} aliases={aliases}"
+    )
+
+
+def _format_matrix_row(result: dict[str, object]) -> str:
+    status = "ok" if result.get("ok") else "fail"
+    exit_code = result.get("exit_code")
+    exit_text = "-" if exit_code is None else str(exit_code)
+    message = str(result.get("message") or "")
+    if len(message) > 48:
+        message = message[:45] + "..."
+    return (
+        f"{status:<4} {str(result.get('client_id')):<14} "
+        f"exit={exit_text:<4} dry_run={str(result.get('dry_run')):<5} {message}"
+    )
 
 
 def _print(payload: dict[str, object] | list[dict[str, object]], output_format: str) -> None:
@@ -21,9 +63,31 @@ def _print(payload: dict[str, object] | list[dict[str, object]], output_format: 
         return
     if isinstance(payload, list):
         for row in payload:
-            mark = "ok" if row.get("available") else "--"
-            print(f"{mark} {row.get('id'):<14} {row.get('label')} ({row.get('prompt_mode')})")
+            print(_format_client_row(row))
         return
+    if "results" in payload and isinstance(payload["results"], list):
+        print(
+            f"matrix ok={payload.get('ok')} succeeded={payload.get('succeeded')} "
+            f"failed={payload.get('failed')} message={payload.get('message')}"
+        )
+        for row in payload["results"]:
+            if isinstance(row, dict):
+                print(_format_matrix_row(row))
+        return
+    if "clients" in payload and isinstance(payload["clients"], dict):
+        clients = payload["clients"]
+        rows = clients.get("rows")
+        if isinstance(rows, list):
+            print(f"registered: {clients.get('count', len(rows))}")
+            for row in rows:
+                if isinstance(row, dict):
+                    print(_format_client_row(row))
+            errors = clients.get("errors")
+            if isinstance(errors, list) and errors:
+                print("issues:")
+                for error in errors:
+                    print(f"  - {error}")
+            return
     for key, value in payload.items():
         print(f"{key}: {value}")
 
@@ -36,12 +100,53 @@ def _build_parser() -> argparse.ArgumentParser:
     clients.add_argument("--format", choices=("text", "json"), default="text")
 
     drive = sub.add_parser("drive", help="Build or execute a shell LLM invocation.")
-    drive.add_argument("--client", required=True, help="Client id, e.g. aider or claude-code.")
+    target = drive.add_mutually_exclusive_group(required=True)
+    target.add_argument("--client", help="Single client id, e.g. aider or claude-code.")
+    target.add_argument(
+        "--clients",
+        help="Comma-separated client ids, e.g. aider,claude-code,codex.",
+    )
+    target.add_argument(
+        "--all",
+        action="store_true",
+        help="Drive all registered clients (defaults to available-only).",
+    )
     drive.add_argument("--project", type=Path, default=Path.cwd(), help="Project root.")
     drive.add_argument("--prompt", default=None, help="Prompt text.")
     drive.add_argument("--prompt-file", type=Path, default=None, help="Read prompt text from file.")
     drive.add_argument("--execute", action="store_true", help="Actually run the shell client.")
+    drive.add_argument(
+        "--profile",
+        default=None,
+        help=(
+            "Execute profile: default (conservative) or automation "
+            f"(permission bypass where supported). Env: TILLM_EXECUTE_PROFILE."
+        ),
+    )
     drive.add_argument("--dry-run", action="store_true", help="Plan only.")
+    drive.add_argument(
+        "--available-only",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="For --all/--clients, skip clients without a binary in PATH.",
+    )
+    drive.add_argument(
+        "--parallel",
+        type=int,
+        default=1,
+        help="Max concurrent client runs for --all/--clients (default: 1).",
+    )
+    drive.add_argument(
+        "--fail-fast",
+        action="store_true",
+        help="Stop the matrix after the first failed client.",
+    )
+    drive.add_argument(
+        "--quorum",
+        type=int,
+        default=None,
+        help="Stop after this many successful clients.",
+    )
     drive.add_argument("--timeout", type=float, default=900.0, help="Execution timeout seconds.")
     drive.add_argument(
         "--extra-arg",
@@ -52,11 +157,16 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     drive.add_argument("--format", choices=("text", "json"), default="json")
 
-    nlp = sub.add_parser("nlp", help="Map natural language to SILLM drive DSL.")
+    nlp = sub.add_parser("nlp", help="Map natural language to TILLM drive DSL.")
     nlp.add_argument("text", nargs="+", help="Natural-language control request.")
     nlp.add_argument("--client", default=None, help="Default client when text does not name one.")
     nlp.add_argument("--project", type=Path, default=Path.cwd(), help="Project root.")
     nlp.add_argument("--execute", action="store_true", help="Run the inferred client command.")
+    nlp.add_argument(
+        "--profile",
+        default=None,
+        help="Execute profile for --execute (default or automation).",
+    )
     nlp.add_argument(
         "--extra-arg",
         action="append",
@@ -66,7 +176,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     nlp.add_argument("--format", choices=("text", "json"), default="json")
 
-    validate = sub.add_parser("validate", help="Validate SILLM ecosystem hooks.")
+    validate = sub.add_parser("validate", help="Validate TILLM ecosystem hooks.")
     validate.add_argument("--format", choices=("text", "json"), default="json")
 
     return parser
@@ -88,6 +198,10 @@ def _normalize_extra_arg_tokens(argv: list[str]) -> list[str]:
     return normalized
 
 
+def _resolve_execute_profile(raw: str | None) -> str:
+    return normalize_execute_profile(raw or os.getenv("TILLM_EXECUTE_PROFILE"))
+
+
 def _read_prompt(args: argparse.Namespace) -> str:
     if args.prompt_file is not None:
         return args.prompt_file.read_text(encoding="utf-8")
@@ -99,22 +213,54 @@ def _read_prompt(args: argparse.Namespace) -> str:
     raise ValueError("missing prompt; use --prompt, --prompt-file, or stdin")
 
 
+def _resolve_drive_targets(args: argparse.Namespace) -> tuple[str, ...]:
+    return resolve_client_ids(
+        client=args.client,
+        clients=args.clients,
+        all_clients=bool(args.all),
+        available_only=bool(args.available_only),
+    )
+
+
+def _base_drive_request(args: argparse.Namespace, prompt: str) -> MultiShellDriveRequest:
+    return MultiShellDriveRequest(
+        client_ids=_resolve_drive_targets(args),
+        prompt=prompt,
+        project=args.project,
+        execute=bool(args.execute),
+        dry_run=bool(args.dry_run or not args.execute),
+        extra_args=tuple(args.extra_arg or ()),
+        execute_profile=_resolve_execute_profile(args.profile),
+        timeout_seconds=args.timeout,
+        parallel=max(1, int(args.parallel)),
+        fail_fast=bool(args.fail_fast),
+        quorum=args.quorum,
+    )
+
+
 def _drive(args: argparse.Namespace) -> int:
+    prompt = _read_prompt(args)
     try:
-        result = drive_shell_llm(
-            ShellDriveRequest(
-                client_id=args.client,
-                prompt=_read_prompt(args),
-                project=args.project,
-                execute=bool(args.execute),
-                dry_run=bool(args.dry_run or not args.execute),
-                extra_args=tuple(args.extra_arg or ()),
-                timeout_seconds=args.timeout,
+        if args.client:
+            result = drive_shell_llm(
+                ShellDriveRequest(
+                    client_id=args.client,
+                    prompt=prompt,
+                    project=args.project,
+                    execute=bool(args.execute),
+                    dry_run=bool(args.dry_run or not args.execute),
+                    extra_args=tuple(args.extra_arg or ()),
+                    execute_profile=_resolve_execute_profile(args.profile),
+                    timeout_seconds=args.timeout,
+                )
             )
-        )
-        payload = result.to_dict()
+            payload: dict[str, object] = result.to_dict()
+        else:
+            matrix = drive_shell_llm_many(_base_drive_request(args, prompt))
+            payload = matrix.to_dict()
     except Exception as exc:
-        payload = result_from_error(args.client, exc)
+        label = args.client or args.clients or "all"
+        payload = result_from_error(str(label), exc)
         _print(payload, args.format)
         return 2
     _print(payload, args.format)
@@ -141,6 +287,7 @@ def _nlp(args: argparse.Namespace) -> int:
             execute=True,
             dry_run=False,
             extra_args=tuple(args.extra_arg or ()),
+            execute_profile=_resolve_execute_profile(args.profile),
         )
     )
     _print({"ok": result.ok, "source": intent.source, "result": result.to_dict()}, args.format)

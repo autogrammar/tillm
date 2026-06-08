@@ -1,0 +1,10 @@
+{
+  "$id": "dsl2tillm/commands/resolve",
+  "type": "object",
+  "required": ["verb", "prompt"],
+  "properties": {
+    "verb": { "const": "RESOLVE" },
+    "prompt": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

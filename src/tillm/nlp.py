@@ -1,7 +1,7 @@
-"""NLP-to-SILLM intent mapping.
+"""NLP-to-TILLM intent mapping.
 
 The preferred external bridge is ``nlp2dsl``. It is intentionally opt-in at
-runtime so a normal Koru/SILLM install does not require Docker services or HTTP
+runtime so a normal Koru/TILLM install does not require Docker services or HTTP
 credentials just to list shell clients.
 """
 
@@ -44,7 +44,7 @@ def _client_from_text(text: str, default_client: str | None) -> str:
         names = (spec.id, *spec.aliases, *spec.commands)
         if any(name and name.lower() in lower for name in names):
             return spec.id
-    return normalize_client_id(default_client or os.getenv("SILLM_DEFAULT_CLIENT", "aider"))
+    return normalize_client_id(default_client or os.getenv("TILLM_DEFAULT_CLIENT", "aider"))
 
 
 def _strip_drive_prefix(text: str) -> str:
@@ -60,7 +60,7 @@ def _strip_drive_prefix(text: str) -> str:
 
 
 def _intent_from_nlp2dsl(text: str, default_client: str | None) -> ShellIntent | None:
-    enabled = os.getenv("SILLM_NLP2DSL", "").strip().lower() in {"1", "true", "yes", "on"}
+    enabled = os.getenv("TILLM_NLP2DSL", "").strip().lower() in {"1", "true", "yes", "on"}
     if not enabled:
         return None
     try:

@@ -1,0 +1,9 @@
+{
+  "$id": "dsl2tillm/commands/docker_status",
+  "type": "object",
+  "required": ["verb"],
+  "properties": {
+    "verb": { "const": "DOCKER_STATUS" }
+  },
+  "additionalProperties": false
+}

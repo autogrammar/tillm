@@ -1,13 +1,13 @@
 # Aider Docker Autoloop
 
 This legacy workflow documents how to run a TestQL autoloop through an
-`aider` container. It lives in SLLM because Docker image setup, prompt-file
+`aider` container. It lives in tillm because Docker image setup, prompt-file
 contracts, and shell-client execution are shell LLM control concerns.
 
-Prefer the native SLLM entrypoint when possible:
+Prefer the native tillm entrypoint when possible:
 
 ```bash
-sllm drive --client aider \
+tillm drive --client aider \
   --prompt-file .aider/prompts/testql-autoloop.md \
   --extra-arg .windsurf/workflows/testql-autoloop.md \
   --extra-arg .testql/autoloop-state.json \

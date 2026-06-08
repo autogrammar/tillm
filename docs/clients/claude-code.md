@@ -1,30 +1,37 @@
 # Claude Code
 
-Claude Code is Anthropic's shell LLM coding client. In the semcod ecosystem it
-is registered and launched by SLLM so Koru can delegate shell-agent control
-through a single plugin boundary.
+Claude Code is Anthropic's shell LLM coding client, registered and launched by tillm.
 
 ## When to use
 
-| Scenario | SLLM command |
-|---|---|
+| Scenario | Command |
+| --- | --- |
 | Dry-run a task prompt | `tillm drive --client claude-code --prompt "Fix PLF-21"` |
 | Execute a task prompt | `tillm drive --client claude-code --prompt "Fix PLF-21" --execute` |
+| CI / permission bypass | `tillm drive --client claude-code --prompt "..." --execute --profile automation` |
 | Natural-language intent | `tillm nlp "claude: napraw importy"` |
 
-For explicit `tillm drive`, Claude Code is treated conservatively as a stdin
-client. Koru launch compatibility keeps TTY behavior for interactive sessions.
+For `tillm drive`, Claude Code is a stdin client (`claude -p` with prompt on stdin).
 
 ## Environment
 
-Claude Code needs Anthropic authentication:
-
 ```bash
-claude-code login
+claude login
 # or
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-Project-specific rules files, permissions, and CI wrappers should stay in the
-project repository. SLLM owns only the shell-client registry and invocation
-control plane.
+## Execute profiles
+
+| Profile | Args |
+| --- | --- |
+| `default` | `-p` |
+| `automation` | `-p --dangerously-skip-permissions` |
+
+```bash
+export TILLM_EXECUTE_PROFILE=automation
+tillm drive --client claude-code --prompt "Fix PLF-21" --execute
+```
+
+Project-specific rules, permissions, and CI wrappers stay in the project repository.
+tillm owns only the shell-client registry and invocation control plane.

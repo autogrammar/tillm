@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tillm"
-version = "0.1.32"
-description = "Shell LLM client control plane for semcod/coru automation."
+version = "0.1.33"
+description = "Text-interface LLM control plane for semcod/coru shell automation (pair with gillm for GUI)."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Semcod" }, { name = "Tom Sapletta", email = "tom@sapletta.com" }]

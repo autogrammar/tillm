@@ -1,4 +1,4 @@
-"""Compatibility helpers used by Koru during the migration to SILLM."""
+"""Compatibility helpers used by Koru during the migration to TILLM."""
 
 from __future__ import annotations
 
@@ -76,7 +76,7 @@ def tool_registry_entries() -> tuple[dict[str, object], ...]:
                 "detect": {
                     "commands": list(spec.commands),
                     "markers": [],
-                    "env": [],
+                    "env": list(spec.env_vars) + list(spec.env_vars_any),
                 },
                 "invoke": (
                     f"koru tillm drive --client {spec.id} "
@@ -149,10 +149,10 @@ def launch_koru_agent(
     prompt: str,
     command: str | None = None,
 ) -> int:
-    """Launch a Koru agent through SILLM while preserving TTY behavior.
+    """Launch a Koru agent through TILLM while preserving TTY behavior.
 
     Clients with a file/arg prompt contract receive the prompt directly.
-    Stdin-only clients are launched interactively after SILLM saves the prompt,
+    Stdin-only clients are launched interactively after TILLM saves the prompt,
     matching Koru's legacy behavior and avoiding accidental TTY breakage.
     """
     client_id = normalize_client_id(agent_id)

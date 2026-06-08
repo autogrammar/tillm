@@ -1,4 +1,4 @@
-"""Run SILLM as ``python -m tillm``."""
+"""Run TILLM as ``python -m tillm``."""
 
 from tillm.cli import main
 

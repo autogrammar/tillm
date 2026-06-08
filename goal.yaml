@@ -16,7 +16,7 @@ project:
   name: tillm
   type:
   - python
-  description: Shell LLM client control plane for semcod/coru automation.
+  description: Text-interface LLM control plane for semcod/coru shell automation (pair with gillm for GUI).
 versioning:
   strategy: semver
   files:

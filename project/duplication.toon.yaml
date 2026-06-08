@@ -1,9 +1,9 @@
-# redup/duplication | 0 groups | 8f 1062L | 2026-06-08
+# redup/duplication | 0 groups | 39f 3088L | 2026-06-08
 
 SUMMARY:
-  files_scanned: 8
-  total_lines:   1062
+  files_scanned: 39
+  total_lines:   3088
   dup_groups:    0
   dup_fragments: 0
   saved_lines:   0
-  scan_ms:       2019
+  scan_ms:       2189

@@ -1,8 +1,494 @@
 source: code2llm
-# generated in 0.00s
+# generated in 0.03s
 schema: code2llm.planfile_tickets.v1
 project_root: /home/tom/github/semcod/tillm
 tickets:
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
+    (CC=35)'
+  description: 'code2llm reports `packages.dsl2tillm.src.dsl2tillm.grammar.parse_line`
+    at `packages/dsl2tillm/src/dsl2tillm/grammar.py:32` with cyclomatic complexity
+    35 (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/grammar.py
+  dedupe_key: code2llm:cc:packages/dsl2tillm/src/dsl2tillm/grammar.py:packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: src.tillm.controller.drive_shell_llm_many
+    (CC=26)'
+  description: 'code2llm reports `src.tillm.controller.drive_shell_llm_many` at `src/tillm/controller.py:293`
+    with cyclomatic complexity 26 (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - src/tillm/controller.py
+  dedupe_key: code2llm:cc:src/tillm/controller.py:src.tillm.controller.drive_shell_llm_many
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: _build_parser'
+  description: 'code2llm reports `God Function: _build_parser` in `src/tillm/cli.py:95`.
+
+
+    Function ''_build_parser'' is oversized: CC=1, fan-out=10, mutations=38.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:95:God Function: _build_parser'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: args'
+  description: 'code2llm reports `Shotgun Surgery: args` in `packages/nlp2tillm/src/nlp2tillm/cli.py:12`.
+
+
+    Mutation of variable ''args'' spans 8 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - packages/nlp2tillm/src/nlp2tillm/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:packages/nlp2tillm/src/nlp2tillm/cli.py:12:Shotgun
+    Surgery: args'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: client'
+  description: 'code2llm reports `Shotgun Surgery: client` in `packages/uri2tillm/src/uri2tillm/decode.py:8`.
+
+
+    Mutation of variable ''client'' spans 5 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - packages/uri2tillm/src/uri2tillm/decode.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:packages/uri2tillm/src/uri2tillm/decode.py:8:Shotgun
+    Surgery: client'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: client_id'
+  description: 'code2llm reports `Shotgun Surgery: client_id` in `src/tillm/controller.py:293`.
+
+
+    Mutation of variable ''client_id'' spans 5 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/controller.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/controller.py:293:Shotgun
+    Surgery: client_id'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: data'
+  description: 'code2llm reports `Shotgun Surgery: data` in `packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py:144`.
+
+
+    Mutation of variable ''data'' spans 9 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py:144:Shotgun
+    Surgery: data'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: default_file'
+  description: 'code2llm reports `Shotgun Surgery: default_file` in `packages/nlp2tillm/src/nlp2tillm/cli.py:12`.
+
+
+    Mutation of variable ''default_file'' spans 5 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - packages/nlp2tillm/src/nlp2tillm/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:packages/nlp2tillm/src/nlp2tillm/cli.py:12:Shotgun
+    Surgery: default_file'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: errors'
+  description: 'code2llm reports `Shotgun Surgery: errors` in `src/tillm/validation.py:57`.
+
+
+    Mutation of variable ''errors'' spans 7 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/validation.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/validation.py:57:Shotgun Surgery:
+    errors'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: line'
+  description: 'code2llm reports `Shotgun Surgery: line` in `src/tillm/transports/docker.py:32`.
+
+
+    Mutation of variable ''line'' spans 8 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/transports/docker.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/transports/docker.py:32:Shotgun
+    Surgery: line'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: parser'
+  description: 'code2llm reports `Shotgun Surgery: parser` in `packages/nlp2tillm/src/nlp2tillm/cli.py:12`.
+
+
+    Mutation of variable ''parser'' spans 8 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - packages/nlp2tillm/src/nlp2tillm/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:packages/nlp2tillm/src/nlp2tillm/cli.py:12:Shotgun
+    Surgery: parser'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: payload'
+  description: 'code2llm reports `Shotgun Surgery: payload` in `src/tillm/nlp.py:62`.
+
+
+    Mutation of variable ''payload'' spans 8 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/nlp.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/nlp.py:62:Shotgun Surgery:
+    payload'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: prompt'
+  description: 'code2llm reports `Shotgun Surgery: prompt` in `src/tillm/nlp.py:62`.
+
+
+    Mutation of variable ''prompt'' spans 5 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/nlp.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/nlp.py:62:Shotgun Surgery:
+    prompt'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: result'
+  description: 'code2llm reports `Shotgun Surgery: result` in `src/tillm/controller.py:293`.
+
+
+    Mutation of variable ''result'' spans 14 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/controller.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/controller.py:293:Shotgun
+    Surgery: result'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: results'
+  description: 'code2llm reports `Shotgun Surgery: results` in `src/tillm/controller.py:293`.
+
+
+    Mutation of variable ''results'' spans 5 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/controller.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/controller.py:293:Shotgun
+    Surgery: results'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: rows'
+  description: 'code2llm reports `Shotgun Surgery: rows` in `src/tillm/transports/docker.py:32`.
+
+
+    Mutation of variable ''rows'' spans 7 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/transports/docker.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/transports/docker.py:32:Shotgun
+    Surgery: rows'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: spec'
+  description: 'code2llm reports `Shotgun Surgery: spec` in `src/tillm/compat.py:145`.
+
+
+    Mutation of variable ''spec'' spans 6 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/tillm/compat.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/tillm/compat.py:145:Shotgun Surgery:
+    spec'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: sub'
+  description: 'code2llm reports `Shotgun Surgery: sub` in `packages/nlp2tillm/src/nlp2tillm/cli.py:12`.
+
+
+    Mutation of variable ''sub'' spans 7 functions. Changing this logic requires work
+    in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - packages/nlp2tillm/src/nlp2tillm/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:packages/nlp2tillm/src/nlp2tillm/cli.py:12:Shotgun
+    Surgery: sub'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: verb'
+  description: 'code2llm reports `Shotgun Surgery: verb` in `packages/dsl2tillm/src/dsl2tillm/bus.py:15`.
+
+
+    Mutation of variable ''verb'' spans 8 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/bus.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:packages/dsl2tillm/src/dsl2tillm/bus.py:15:Shotgun
+    Surgery: verb'
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: packages.cli2tillm.src.cli2tillm.cli.main
+    (CC=16)'
+  description: 'code2llm reports `packages.cli2tillm.src.cli2tillm.cli.main` at `packages/cli2tillm/src/cli2tillm/cli.py:14`
+    with cyclomatic complexity 16 (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - packages/cli2tillm/src/cli2tillm/cli.py
+  dedupe_key: code2llm:cc:packages/cli2tillm/src/cli2tillm/cli.py:packages.cli2tillm.src.cli2tillm.cli.main
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+    (CC=15)'
+  description: 'code2llm reports `packages.dsl2tillm.src.dsl2tillm.bus.dispatch` at
+    `packages/dsl2tillm/src/dsl2tillm/bus.py:15` with cyclomatic complexity 15 (limit
+    15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/bus.py
+  dedupe_key: code2llm:cc:packages/dsl2tillm/src/dsl2tillm/bus.py:packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand
+    (CC=17)'
+  description: 'code2llm reports `packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand`
+    at `packages/dsl2tillm/src/dsl2tillm/cli.py:46` with cyclomatic complexity 17
+    (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/cli.py
+  dedupe_key: code2llm:cc:packages/dsl2tillm/src/dsl2tillm/cli.py:packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: packages.dsl2tillm.src.dsl2tillm.grammar.to_text
+    (CC=15)'
+  description: 'code2llm reports `packages.dsl2tillm.src.dsl2tillm.grammar.to_text`
+    at `packages/dsl2tillm/src/dsl2tillm/grammar.py:119` with cyclomatic complexity
+    15 (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/grammar.py
+  dedupe_key: code2llm:cc:packages/dsl2tillm/src/dsl2tillm/grammar.py:packages.dsl2tillm.src.dsl2tillm.grammar.to_text
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl
+    (CC=24)'
+  description: 'code2llm reports `packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl`
+    at `packages/uri2tillm/src/uri2tillm/decode.py:8` with cyclomatic complexity 24
+    (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - packages/uri2tillm/src/uri2tillm/decode.py
+  dedupe_key: code2llm:cc:packages/uri2tillm/src/uri2tillm/decode.py:packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: src.tillm.cli._print (CC=17)'
+  description: 'code2llm reports `src.tillm.cli._print` at `src/tillm/cli.py:60` with
+    cyclomatic complexity 17 (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - src/tillm/cli.py
+  dedupe_key: code2llm:cc:src/tillm/cli.py:src.tillm.cli._print
 - signal: code2llm_cc
   title: 'Reduce cyclomatic complexity: src.tillm.nlp._intent_from_nlp2dsl (CC=15)'
   description: 'code2llm reports `src.tillm.nlp._intent_from_nlp2dsl` at `src/tillm/nlp.py:62`
@@ -20,12 +506,29 @@ tickets:
   files:
   - src/tillm/nlp.py
   dedupe_key: code2llm:cc:src/tillm/nlp.py:src.tillm.nlp._intent_from_nlp2dsl
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: src.tillm.registry.resolve_client_ids (CC=15)'
+  description: 'code2llm reports `src.tillm.registry.resolve_client_ids` at `src/tillm/registry.py:233`
+    with cyclomatic complexity 15 (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - src/tillm/registry.py
+  dedupe_key: code2llm:cc:src/tillm/registry.py:src.tillm.registry.resolve_client_ids
 - signal: code2llm_smell_god_function
-  title: 'Address code smell: God Function: _build_parser'
-  description: 'code2llm reports `God Function: _build_parser` in `src/tillm/cli.py:31`.
+  title: 'Address code smell: God Function: _drive'
+  description: 'code2llm reports `God Function: _drive` in `src/tillm/cli.py:241`.
 
 
-    Function ''_build_parser'' is oversized: CC=1, fan-out=8, mutations=28.
+    Function ''_drive'' is oversized: CC=8, fan-out=14, mutations=6.
 
 
     Make the smallest refactor that removes the smell and run local tests.'
@@ -37,10 +540,84 @@ tickets:
   - god-function
   files:
   - src/tillm/cli.py
-  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:31:God Function: _build_parser'
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:241:God Function: _drive'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: _drive_matrix'
+  description: 'code2llm reports `God Function: _drive_matrix` in `packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py:144`.
+
+
+    Function ''_drive_matrix'' is oversized: CC=4, fan-out=11, mutations=5.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py
+  dedupe_key: 'code2llm:smell:god_function:packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py:144:God
+    Function: _drive_matrix'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: _format_client_row'
+  description: 'code2llm reports `God Function: _format_client_row` in `src/tillm/cli.py:25`.
+
+
+    Function ''_format_client_row'' is oversized: CC=13, fan-out=5, mutations=11.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:25:God Function: _format_client_row'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: _main_legacy'
+  description: 'code2llm reports `God Function: _main_legacy` in `packages/dsl2tillm/src/dsl2tillm/cli.py:16`.
+
+
+    Function ''_main_legacy'' is oversized: CC=12, fan-out=12, mutations=11.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:packages/dsl2tillm/src/dsl2tillm/cli.py:16:God
+    Function: _main_legacy'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: _nlp'
+  description: 'code2llm reports `God Function: _nlp` in `src/tillm/cli.py:270`.
+
+
+    Function ''_nlp'' is oversized: CC=5, fan-out=11, mutations=6.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:270:God Function: _nlp'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: _normalize_extra_arg_tokens'
-  description: 'code2llm reports `God Function: _normalize_extra_arg_tokens` in `src/tillm/cli.py:75`.
+  description: 'code2llm reports `God Function: _normalize_extra_arg_tokens` in `src/tillm/cli.py:185`.
 
 
     Function ''_normalize_extra_arg_tokens'' is oversized: CC=5, fan-out=3, mutations=7.
@@ -55,7 +632,7 @@ tickets:
   - god-function
   files:
   - src/tillm/cli.py
-  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:75:God Function: _normalize_extra_arg_tokens'
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/cli.py:185:God Function: _normalize_extra_arg_tokens'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: _strip_drive_prefix'
   description: 'code2llm reports `God Function: _strip_drive_prefix` in `src/tillm/nlp.py:50`.
@@ -76,10 +653,10 @@ tickets:
   dedupe_key: 'code2llm:smell:god_function:src/tillm/nlp.py:50:God Function: _strip_drive_prefix'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: build_drive_plan'
-  description: 'code2llm reports `God Function: build_drive_plan` in `src/tillm/controller.py:128`.
+  description: 'code2llm reports `God Function: build_drive_plan` in `src/tillm/controller.py:221`.
 
 
-    Function ''build_drive_plan'' is oversized: CC=3, fan-out=10, mutations=7.
+    Function ''build_drive_plan'' is oversized: CC=3, fan-out=14, mutations=9.
 
 
     Make the smallest refactor that removes the smell and run local tests.'
@@ -91,8 +668,46 @@ tickets:
   - god-function
   files:
   - src/tillm/controller.py
-  dedupe_key: 'code2llm:smell:god_function:src/tillm/controller.py:128:God Function:
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/controller.py:221:God Function:
     build_drive_plan'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: create_app'
+  description: 'code2llm reports `God Function: create_app` in `packages/rest2tillm/src/rest2tillm/app.py:19`.
+
+
+    Function ''create_app'' is oversized: CC=1, fan-out=21, mutations=9.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - packages/rest2tillm/src/rest2tillm/app.py
+  dedupe_key: 'code2llm:smell:god_function:packages/rest2tillm/src/rest2tillm/app.py:19:God
+    Function: create_app'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: detect_clients'
+  description: 'code2llm reports `God Function: detect_clients` in `src/tillm/registry.py:266`.
+
+
+    Function ''detect_clients'' is oversized: CC=4, fan-out=3, mutations=7.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/tillm/registry.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/registry.py:266:God Function:
+    detect_clients'
 - signal: code2llm_smell_god_function
   title: 'Address code smell: God Function: detect_koru_agent_rows'
   description: 'code2llm reports `God Function: detect_koru_agent_rows` in `src/tillm/compat.py:95`.
@@ -129,5 +744,100 @@ tickets:
   files:
   - src/tillm/compat.py
   dedupe_key: 'code2llm:smell:god_function:src/tillm/compat.py:145:God Function: launch_koru_agent'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: main'
+  description: 'code2llm reports `God Function: main` in `packages/rest2tillm/src/rest2tillm/cli.py:13`.
+
+
+    Function ''main'' is oversized: CC=3, fan-out=7, mutations=8.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - packages/rest2tillm/src/rest2tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:packages/rest2tillm/src/rest2tillm/cli.py:13:God
+    Function: main'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: main'
+  description: 'code2llm reports `God Function: main` in `packages/uri2tillm/src/uri2tillm/cli.py:13`.
+
+
+    Function ''main'' is oversized: CC=7, fan-out=11, mutations=15.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - packages/uri2tillm/src/uri2tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:packages/uri2tillm/src/uri2tillm/cli.py:13:God
+    Function: main'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: main'
+  description: 'code2llm reports `God Function: main` in `packages/nlp2tillm/src/nlp2tillm/cli.py:12`.
+
+
+    Function ''main'' is oversized: CC=7, fan-out=12, mutations=16.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - packages/nlp2tillm/src/nlp2tillm/cli.py
+  dedupe_key: 'code2llm:smell:god_function:packages/nlp2tillm/src/nlp2tillm/cli.py:12:God
+    Function: main'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: read_all'
+  description: 'code2llm reports `God Function: read_all` in `packages/dsl2tillm/src/dsl2tillm/events.py:50`.
+
+
+    Function ''read_all'' is oversized: CC=4, fan-out=11, mutations=0.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - packages/dsl2tillm/src/dsl2tillm/events.py
+  dedupe_key: 'code2llm:smell:god_function:packages/dsl2tillm/src/dsl2tillm/events.py:50:God
+    Function: read_all'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: validate_client_readiness'
+  description: 'code2llm reports `God Function: validate_client_readiness` in `src/tillm/validation.py:34`.
+
+
+    Function ''validate_client_readiness'' is oversized: CC=7, fan-out=7, mutations=7.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/tillm/validation.py
+  dedupe_key: 'code2llm:smell:god_function:src/tillm/validation.py:34:God Function:
+    validate_client_readiness'
 applied: []
 skipped: []

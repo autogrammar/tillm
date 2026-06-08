@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from tillm.cli import main
 from tillm.compat import (
     agent_backend_aliases,
@@ -14,68 +16,200 @@ from tillm.compat import (
     shell_process_patterns,
     tool_registry_entries,
 )
-from tillm.controller import ShellDriveRequest, build_drive_plan
+from tillm.controller import (
+    ClientNotReadyError,
+    MultiShellDriveRequest,
+    ShellDriveRequest,
+    UnknownProfileError,
+    build_drive_plan,
+    drive_shell_llm_many,
+)
 from tillm.nlp import ShellIntent, intent_from_text
-from tillm.registry import detect_clients, get_client_spec, normalize_client_id
+from tillm.registry import (
+    available_client_ids,
+    detect_clients,
+    get_client_spec,
+    iter_client_specs,
+    normalize_client_id,
+    registered_client_ids,
+    resolve_client_ids,
+)
 from tillm.validation import (
     ecosystem_status,
     intent_contracts,
+    validate_client_readiness,
     validate_intent,
     validate_intent_contracts,
+    validate_raw_dsl,
 )
 
+EXPECTED_CLIENT_IDS = (
+    "claude-code",
+    "aider",
+    "codex",
+    "gemini-cli",
+    "cline",
+    "qwen-code",
+    "opencode",
+    "devin",
+)
 
-def test_registry_normalizes_common_aliases() -> None:
-    assert normalize_client_id("claude") == "claude-code"
-    assert normalize_client_id("codex-cli") == "codex"
-    assert get_client_spec("aider") is not None
+AUTOMATION_EXECUTE_ARGS: dict[str, tuple[str, ...]] = {
+    "claude-code": ("-p", "--dangerously-skip-permissions"),
+    "codex": ("exec", "--dangerously-bypass-approvals-and-sandbox"),
+    "gemini-cli": ("-p", "--yolo"),
+    "devin": ("-p", "--permission-mode", "dangerous"),
+}
+
+EXPECTED_EXECUTE_ARGS: dict[str, tuple[str, ...]] = {
+    "claude-code": ("-p",),
+    "aider": (),
+    "codex": ("exec",),
+    "gemini-cli": ("-p", "--approval-mode", "auto_edit"),
+    "cline": (),
+    "qwen-code": ("-p", "--approval-mode", "yolo"),
+    "opencode": ("run", "--dangerously-skip-permissions"),
+    "devin": ("-p",),
+}
+
+
+@pytest.mark.parametrize(
+    ("alias", "canonical"),
+    [
+        ("claude", "claude-code"),
+        ("codex-cli", "codex"),
+        ("openai-codex", "codex"),
+        ("gemini", "gemini-cli"),
+        ("qwen", "qwen-code"),
+        ("open-code", "opencode"),
+        ("devin-cli", "devin"),
+    ],
+)
+def test_registry_normalizes_common_aliases(alias: str, canonical: str) -> None:
+    assert normalize_client_id(alias) == canonical
+    assert get_client_spec(alias) is not None
+
+
+def test_registry_lists_all_shell_clients() -> None:
+    assert shell_client_ids() == EXPECTED_CLIENT_IDS
+    for client_id in EXPECTED_CLIENT_IDS:
+        spec = get_client_spec(client_id)
+        assert spec is not None
+        assert spec.id == client_id
+        assert spec.commands
+        assert spec.prompt_mode in {"stdin", "message-file", "arg"}
 
 
 def test_detect_clients_marks_available_from_injected_which() -> None:
-    rows = detect_clients(which=lambda name: f"/bin/{name}" if name == "aider" else None)
+    rows = detect_clients(
+        which=lambda name: f"/bin/{name}" if name == "aider" else None,
+        environ={},
+    )
     aider = next(row for row in rows if row["id"] == "aider")
     claude = next(row for row in rows if row["id"] == "claude-code")
     assert aider["available"] is True
+    assert aider["ready"] is False
     assert claude["available"] is False
 
 
-def test_compat_exports_koru_agent_rows() -> None:
-    import shutil
-    from unittest.mock import patch
+def test_detect_clients_reports_capabilities_and_env() -> None:
+    env = {"OPENAI_API_KEY": "test-key"}
+    rows = detect_clients(
+        which=lambda name: f"/bin/{name}" if name == "codex" else None,
+        environ=env,
+    )
+    codex = next(row for row in rows if row["id"] == "codex")
+    assert codex["supports_execute"] is True
+    assert codex["supports_dry_run"] is True
+    assert codex["ready"] is True
+    assert codex["missing_env_vars"] == []
 
-    def fake_which(name: str) -> str | None:
-        return "/usr/bin/claude" if name == "claude" else None
 
-    with patch.object(shutil, "which", fake_which):
-        rows = detect_koru_agent_rows()
-        claude = next(row for row in rows if row["id"] == "claude-code")
-        assert "claude-code" in shell_client_ids()
+@pytest.mark.parametrize("client_id", EXPECTED_CLIENT_IDS)
+def test_build_drive_plan_for_each_registered_client(
+    client_id: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    spec = get_client_spec(client_id)
+    assert spec is not None
+    monkeypatch.setattr(
+        "shutil.which",
+        lambda name: f"/usr/bin/{name}" if name in spec.commands else None,
+    )
 
-        # Get the autopilot backend constant from the function result
-        autopilot_backend = autopilot_backend_for_client("claude")
-        assert autopilot_backend is not None
-
-        assert claude["available"] is True
-        assert claude["launchable"] is True
-        assert claude["command"] == "/usr/bin/claude"
-        assert is_client_available("claude") is True
-        assert is_client_available("aider") is False
-        assert ("codex", "Codex CLI", ("codex",)) in shell_process_patterns()
-        registry = {str(row["id"]): row for row in tool_registry_entries()}
-        assert registry["aider"]["category"] == "cli_agent"
-        assert registry["aider"]["invoke"] == (
-            "koru tillm drive --client aider --prompt '<prompt>' --execute"
+    plan = build_drive_plan(
+        ShellDriveRequest(
+            client_id=client_id,
+            prompt=f"drive {client_id}",
+            project=tmp_path,
         )
-        assert registry["codex-cli"]["invoke"] == (
-            "koru tillm drive --client codex --prompt '<prompt>' --execute"
-        )
+    )
 
-        # Get backend profile info dynamically
-        aliases = agent_backend_aliases()
-        profiles = agent_backend_profiles()
-        if aliases and "tillm_shell" in aliases and profiles:
-            backend_profile_id = aliases["tillm_shell"]
-            assert profiles[0]["id"] == backend_profile_id
+    assert plan.spec.id == client_id
+    assert plan.argv[0].startswith("/usr/bin/")
+    assert plan.prompt_path.exists()
+    if spec.prompt_mode == "stdin":
+        assert plan.stdin_text is not None
+    elif spec.prompt_mode == "message-file":
+        assert spec.prompt_file_flag in plan.argv
+        assert plan.stdin_text is None
+
+
+@pytest.mark.parametrize("client_id", EXPECTED_CLIENT_IDS)
+def test_execute_args_match_vendor_headless_flags(client_id: str) -> None:
+    spec = get_client_spec(client_id)
+    assert spec is not None
+    assert spec.execute_args == EXPECTED_EXECUTE_ARGS[client_id]
+
+
+@pytest.mark.parametrize("client_id", [cid for cid in EXPECTED_CLIENT_IDS if cid != "cline"])
+def test_build_drive_plan_includes_execute_args_when_executing(
+    client_id: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    spec = get_client_spec(client_id)
+    assert spec is not None
+    for name in spec.env_vars:
+        monkeypatch.setenv(name, "test")
+    if spec.env_vars_any:
+        monkeypatch.setenv(spec.env_vars_any[0], "test")
+    monkeypatch.setattr(
+        "shutil.which",
+        lambda name: f"/usr/bin/{name}" if name in spec.commands else None,
+    )
+
+    dry_plan = build_drive_plan(
+        ShellDriveRequest(client_id=client_id, prompt="run", project=tmp_path, dry_run=True)
+    )
+    for arg in spec.execute_args:
+        assert arg not in dry_plan.argv
+
+    exec_plan = build_drive_plan(
+        ShellDriveRequest(
+            client_id=client_id,
+            prompt="run",
+            project=tmp_path,
+            execute=True,
+            dry_run=False,
+        )
+    )
+    for arg in spec.execute_args:
+        assert arg in exec_plan.argv
+
+
+def test_build_drive_plan_rejects_execute_for_cline(tmp_path: Path) -> None:
+    with pytest.raises(ClientNotReadyError, match="does not support non-interactive"):
+        build_drive_plan(
+            ShellDriveRequest(
+                client_id="cline",
+                prompt="run",
+                project=tmp_path,
+                execute=True,
+                dry_run=False,
+            )
+        )
 
 
 def test_build_drive_plan_uses_message_file_for_aider(tmp_path: Path) -> None:
@@ -101,10 +235,79 @@ def test_build_drive_plan_uses_message_file_for_aider(tmp_path: Path) -> None:
         assert plan.stdin_text is None
 
 
+def test_validate_client_readiness_reports_missing_binary_and_env(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr("shutil.which", lambda _name: None)
+    result = validate_client_readiness("codex", environ={})
+    assert result.ok is False
+    assert any("binary not in PATH" in error for error in result.errors)
+    assert any("missing env vars" in error for error in result.errors)
+
+
+def test_validate_client_readiness_rejects_execute_for_interactive_only() -> None:
+    result = validate_client_readiness("cline", require_execute=True, environ={"OPENAI_API_KEY": "x"})
+    assert result.ok is False
+    assert any("does not support non-interactive --execute" in error for error in result.errors)
+
+
+def test_validate_raw_dsl_rejects_unknown_client() -> None:
+    errors = validate_raw_dsl(
+        {
+            "steps": [
+                {
+                    "action": "tillm.drive",
+                    "config": {"client": "unknown-agent", "prompt": "x"},
+                }
+            ]
+        },
+        "unknown-agent",
+    )
+    assert "raw_dsl unknown client" in errors[0]
+
+
+def test_compat_exports_koru_agent_rows() -> None:
+    import shutil
+    from unittest.mock import patch
+
+    def fake_which(name: str) -> str | None:
+        return "/usr/bin/claude" if name == "claude" else None
+
+    with patch.object(shutil, "which", fake_which):
+        rows = detect_koru_agent_rows()
+        claude = next(row for row in rows if row["id"] == "claude-code")
+        assert "claude-code" in shell_client_ids()
+
+        autopilot_backend = autopilot_backend_for_client("claude")
+        assert autopilot_backend is not None
+
+        assert claude["available"] is True
+        assert claude["launchable"] is True
+        assert claude["command"] == "/usr/bin/claude"
+        assert is_client_available("claude") is True
+        assert is_client_available("aider") is False
+        assert ("codex", "Codex CLI", ("codex",)) in shell_process_patterns()
+        registry = {str(row["id"]): row for row in tool_registry_entries()}
+        assert registry["aider"]["category"] == "cli_agent"
+        assert registry["aider"]["invoke"] == (
+            "koru tillm drive --client aider --prompt '<prompt>' --execute"
+        )
+        assert registry["codex-cli"]["invoke"] == (
+            "koru tillm drive --client codex --prompt '<prompt>' --execute"
+        )
+        assert registry["codex-cli"]["detect"]["env"] == ["OPENAI_API_KEY"]
+
+        aliases = agent_backend_aliases()
+        profiles = agent_backend_profiles()
+        if aliases and "tillm_shell" in aliases and profiles:
+            backend_profile_id = aliases["tillm_shell"]
+            assert profiles[0]["id"] == backend_profile_id
+
+
 def test_drive_cli_accepts_space_form_extra_arg_flags(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
-    capsys,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     monkeypatch.setattr(
         "shutil.which",
@@ -137,6 +340,14 @@ def test_drive_cli_accepts_space_form_extra_arg_flags(
     assert payload["command"].count("--yes-always") >= 1
 
 
+def test_clients_cli_lists_registered_clients(capsys: pytest.CaptureFixture[str]) -> None:
+    rc = main(["clients"])
+    out = capsys.readouterr().out
+    assert rc == 0
+    for client_id in EXPECTED_CLIENT_IDS:
+        assert client_id in out
+
+
 def test_nlp_rules_select_client_and_prompt() -> None:
     intent = intent_from_text("aider: napraw testy", default_client="claude")
     assert intent.client_id == "aider"
@@ -155,6 +366,227 @@ def test_validate_intent_rejects_raw_dsl_without_tillm_drive() -> None:
     assert "raw_dsl has no tillm drive action" in result.errors
 
 
+def test_ecosystem_status_includes_client_rows() -> None:
+    status = ecosystem_status()
+    assert status["clients"]["count"] == len(EXPECTED_CLIENT_IDS)
+    assert set(status["clients"]["registered"]) == set(EXPECTED_CLIENT_IDS)
+    assert len(status["clients"]["rows"]) == len(EXPECTED_CLIENT_IDS)
+
+
+@pytest.mark.parametrize("client_id", tuple(AUTOMATION_EXECUTE_ARGS))
+def test_automation_profile_uses_permission_bypass_flags(
+    client_id: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    spec = get_client_spec(client_id)
+    assert spec is not None
+    for name in spec.env_vars:
+        monkeypatch.setenv(name, "test")
+    if spec.env_vars_any:
+        monkeypatch.setenv(spec.env_vars_any[0], "test")
+    monkeypatch.setattr(
+        "shutil.which",
+        lambda name: f"/usr/bin/{name}" if name in spec.commands else None,
+    )
+
+    plan = build_drive_plan(
+        ShellDriveRequest(
+            client_id=client_id,
+            prompt="automate",
+            project=tmp_path,
+            execute=True,
+            dry_run=False,
+            execute_profile="automation",
+        )
+    )
+    assert plan.execute_profile == "automation"
+    for arg in AUTOMATION_EXECUTE_ARGS[client_id]:
+        assert arg in plan.argv
+
+
+def test_automation_profile_is_rejected_when_unsupported(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("OPENAI_API_KEY", "test")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test")
+    monkeypatch.setattr("shutil.which", lambda name: f"/usr/bin/{name}" if name == "aider" else None)
+
+    with pytest.raises(UnknownProfileError, match="unsupported execute profile"):
+        build_drive_plan(
+            ShellDriveRequest(
+                client_id="aider",
+                prompt="automate",
+                project=tmp_path,
+                execute=True,
+                dry_run=False,
+                execute_profile="automation",
+            )
+        )
+
+
+def test_drive_cli_accepts_automation_profile(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    import subprocess
+
+    class _Proc:
+        returncode = 0
+        stdout = "ok"
+        stderr = ""
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test")
+    monkeypatch.setattr(
+        "shutil.which",
+        lambda name: f"/usr/bin/{name}" if name == "claude" else None,
+    )
+    monkeypatch.setattr(subprocess, "run", lambda *args, **kwargs: _Proc())
+
+    rc = main(
+        [
+            "drive",
+            "--client",
+            "claude-code",
+            "--project",
+            str(tmp_path),
+            "--prompt",
+            "automate",
+            "--execute",
+            "--profile",
+            "automation",
+            "--format",
+            "json",
+        ]
+    )
+
+    payload = json.loads(capsys.readouterr().out)
+    assert rc == 0
+    assert payload["execute_profile"] == "automation"
+    assert "--dangerously-skip-permissions" in payload["command"]
+
+
+def test_resolve_client_ids_for_all_available_only(monkeypatch: pytest.MonkeyPatch) -> None:
+    fake_available = ("aider", "codex")
+    monkeypatch.setattr(
+        "tillm.registry.available_client_ids",
+        lambda **kwargs: fake_available,
+    )
+    assert resolve_client_ids(all_clients=True, available_only=True) == fake_available
+
+
+def test_resolve_client_ids_for_clients_list() -> None:
+    assert resolve_client_ids(clients="claude,codex-cli", available_only=False) == (
+        "claude-code",
+        "codex",
+    )
+
+
+def test_drive_many_plans_all_selected_clients(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        "shutil.which",
+        lambda name: f"/usr/bin/{name}" if name in {"aider", "codex"} else None,
+    )
+
+    matrix = drive_shell_llm_many(
+        MultiShellDriveRequest(
+            client_ids=("aider", "codex"),
+            prompt="review module",
+            project=tmp_path,
+            dry_run=True,
+            parallel=2,
+        )
+    )
+
+    assert matrix.ok is True
+    assert matrix.succeeded == 2
+    assert matrix.failed == 0
+    assert {result.client_id for result in matrix.results} == {"aider", "codex"}
+    assert all(result.dry_run for result in matrix.results)
+
+
+def test_drive_many_fail_fast_stops_after_first_failure(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        "shutil.which",
+        lambda name: f"/usr/bin/{name}" if name == "aider" else None,
+    )
+
+    matrix = drive_shell_llm_many(
+        MultiShellDriveRequest(
+            client_ids=("aider", "codex", "claude-code"),
+            prompt="review module",
+            project=tmp_path,
+            dry_run=True,
+            parallel=3,
+            fail_fast=True,
+        )
+    )
+
+    assert matrix.ok is False
+    assert matrix.failed >= 1
+    assert len(matrix.results) <= 3
+
+
+def test_drive_cli_all_available_clients(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr(
+        "tillm.registry.available_client_ids",
+        lambda **kwargs: ("aider", "codex"),
+    )
+    monkeypatch.setattr(
+        "shutil.which",
+        lambda name: f"/usr/bin/{name}" if name in {"aider", "codex"} else None,
+    )
+
+    rc = main(
+        [
+            "drive",
+            "--all",
+            "--project",
+            str(tmp_path),
+            "--prompt",
+            "matrix test",
+            "--format",
+            "json",
+        ]
+    )
+
+    payload = json.loads(capsys.readouterr().out)
+    assert rc == 0
+    assert payload["ok"] is True
+    assert payload["succeeded"] == 2
+    assert len(payload["results"]) == 2
+
+
+def test_registry_lists_transport_metadata() -> None:
+    spec = get_client_spec("codex")
+    assert spec is not None
+    assert spec.transport == "binary"
+    assert spec.docker_service == ""
+    row = spec.to_dict()
+    assert row["docker_service"] == "tillm-codex"
+
+
+def test_registered_and_available_client_helpers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr("shutil.which", lambda name: "/bin/aider" if name == "aider" else None)
+    assert len(registered_client_ids()) == len(EXPECTED_CLIENT_IDS)
+    assert "aider" in available_client_ids()
+    assert "codex" not in available_client_ids()
+
+
 def test_intent_contracts_are_exposed_for_ecosystem_validation() -> None:
     assert intent_contracts()
     contracts = validate_intent_contracts()
@@ -162,3 +594,4 @@ def test_intent_contracts_are_exposed_for_ecosystem_validation() -> None:
     status = ecosystem_status()
     assert "tillm.drive" in status["expected_actions"]
     assert "intent_contracts" in status
+    assert "clients" in status

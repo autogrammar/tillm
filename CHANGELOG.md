@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Control layer packages: `dsl2tillm`, `uri2tillm`, `nlp2tillm`, `cli2tillm`, `mcp2tillm`, `rest2tillm` (port **8216**)
+- DSL verbs: `HEALTH`, `CLIENTS`, `ORIENT`, `ACTIONS`, `VALIDATE`, `RESOLVE`, `DOCKER_STATUS`, `DRIVE`, `DRIVE_MATRIX`
+- JSON Schema validation, CQRS bus (`dispatch()`), EventStore for commands
+- `tillm://` URI builders and decoders (`uri_for_cmd`, `uri_for_client`)
+- Multi-client orchestration: `--clients`, `--all`, `--parallel`, `--fail-fast`, `--quorum`
+- Execute profiles: `default` and `automation` (permission bypass per vendor)
+- Transport layer: `binary` (subprocess) and `docker` (compose exec)
+- Docker compose scaffold: `deploy/docker-compose.yml`
+- Documentation: `docs/configuration.md`, `docs/control-layer.md`, `docs/clients/README.md`, `TODO.md`
+- `packages/install-dev.sh` for editable control-layer installs
+
+### Changed
+- `docs/clients/aider.md`: OpenRouter setup (`AIDER_MODEL` vs `LLM_MODEL`, `.env` loading)
+- `docs/clients/claude-code.md`: execute profiles, tillm naming
+- `README.md`: architecture, control layer, multi-client, version/update guide
+
+### Fixed
+- Circular import between `tillm.controller` and `tillm.transports.binary` (lazy import in transports)
+- `uri2tillm` parser: `source` from URI `netloc` (aligned with `gillm` pattern)
+
+## [0.1.33] - 2026-06-08
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update SUMD.md
+- Update SUMR.md
+- Update TODO.md
+- Update docs/README.md
+- Update docs/clients/README.md
+- Update docs/clients/aider-docker-autoloop.md
+- Update docs/clients/aider.md
+- Update docs/clients/claude-code.md
+- ... and 9 more files
+
+### Test
+- Update tests/fixtures/refactor_sample.py
+- Update tests/test_sillm.py
+
+### Other
+- Update .goal_test_report.xml
+- Update app.doql.less
+- Update coverage.json
+- Update deploy/docker-compose.yml
+- Update packages/cli2tillm/pyproject.toml
+- Update packages/cli2tillm/src/cli2tillm/__init__.py
+- Update packages/cli2tillm/src/cli2tillm/cli.py
+- Update packages/cli2tillm/src/cli2tillm/shell.py
+- Update packages/cli2tillm/tests/test_cli2tillm.py
+- Update packages/dsl2tillm/pyproject.toml
+- ... and 63 more files
+
 ## [0.1.32] - 2026-06-08
 
 ### Docs

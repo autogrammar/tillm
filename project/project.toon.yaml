@@ -1,45 +1,52 @@
-# tillm | 47 func | 7f | 1623L | python | 2026-06-08
+# tillm | 136 func | 30f | 4173L | python | 2026-06-08
 # generated in 0.00s
 
 HEALTH:
-  CC̄=3.3  critical=2 (limit:10)  dup=0  cycles=0
+  CC̄=4.4  critical=15 (limit:10)  dup=0  cycles=0
 
-ALERTS[6]:
-  !   cc_exceeded      _intent_from_nlp2dsl = 15 (limit:15)
-  !   high_fan_out     _intent_from_nlp2dsl = 14 (limit:10)
-  !   high_fan_out     _nlp = 10 (limit:10)
-  !   high_fan_out     main = 10 (limit:10)
-  !   high_fan_out     build_drive_plan = 10 (limit:10)
-  !   high_fan_out     launch_koru_agent = 10 (limit:10)
+ALERTS[20]:
+  !!! cc_exceeded      parse_line = 35 (limit:15)
+  !!! cc_exceeded      drive_shell_llm_many = 26 (limit:15)
+  !!! high_fan_out     create_app = 21 (limit:10)
+  !!! high_fan_out     _main_subcommand = 20 (limit:10)
+  !!  cc_exceeded      uri_to_dsl = 24 (limit:15)
+  !!  high_fan_out     dispatch = 18 (limit:10)
+  !!  high_fan_out     drive_shell_llm_many = 18 (limit:10)
+  !!  high_fan_out     main = 17 (limit:10)
+  !   cc_exceeded      _main_subcommand = 17 (limit:15)
+  !   cc_exceeded      _print = 17 (limit:15)
 
-MODULES[13] (top by size):
+MODULES[62] (top by size):
   M[goal.yaml] 511L C:0 F:0 CC↑0 D:0 (yaml)
-  M[src/tillm/controller.py] 248L C:6 F:11 CC↑10 D:2 (python)
+  M[src/tillm/controller.py] 412L C:10 F:18 CC↑26 D:5 (python)
+  M[src/tillm/cli.py] 314L C:0 F:12 CC↑17 D:0 (python)
+  M[src/tillm/registry.py] 309L C:1 F:13 CC↑15 D:7 (python)
   M[src/tillm/compat.py] 205L C:0 F:11 CC↑8 D:0 (python)
-  M[src/tillm/cli.py] 167L C:0 F:7 CC↑6 D:0 (python)
-  M[src/tillm/validation.py] 127L C:1 F:6 CC↑9 D:1 (python)
-  M[src/tillm/nlp.py] 104L C:1 F:5 CC↑15 D:1 (python)
-  M[tree.txt] 79L C:0 F:0 CC↑0 D:0 (txt)
-  M[pyproject.toml] 77L C:0 F:0 CC↑0 D:0 (toml)
-  M[project.sh] 62L C:0 F:1 CC↑0 D:0 (shell)
-  M[src/tillm/__init__.py] 36L C:0 F:0 CC↑0 D:0 (python)
-  M[src/tillm/__main__.py] 7L C:0 F:0 CC↑0 D:0 (python)
-  M[/home/tom/github/semcod/sllm/src/sillm/registry.py] 0L C:1 F:6 CC↑4 D:5 (python)
-  M[/home/tom/github/semcod/sllm/testql-scenarios/generated-cli-tests.testql.toon.yaml] 0L C:0 F:0 CC↑0 D:0 (yaml)
-  LANGS: python:8/yaml:2/shell:1/toml:1/txt:1
+  M[src/tillm/validation.py] 182L C:1 F:8 CC↑12 D:3 (python)
+  M[packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py] 176L C:1 F:12 CC↑8 D:1 (python)
+  M[packages/dsl2tillm/src/dsl2tillm/grammar.py] 151L C:0 F:5 CC↑35 D:1 (python)
+  M[src/tillm/transports/docker.py] 143L C:0 F:5 CC↑10 D:2 (python)
+  M[packages/dsl2tillm/src/dsl2tillm/cli.py] 112L C:0 F:3 CC↑17 D:0 (python)
+  M[src/tillm/nlp.py] 104L C:1 F:5 CC↑15 D:2 (python)
+  M[packages/dsl2tillm/src/dsl2tillm/bus.py] 88L C:0 F:3 CC↑15 D:7 (python)
+  M[packages/rest2tillm/src/rest2tillm/app.py] 78L C:0 F:1 CC↑1 D:1 (python)
+  M[src/tillm/transports/binary.py] 77L C:0 F:1 CC↑10 D:1 (python)
+  M[deploy/docker-compose.yml] 77L C:0 F:0 CC↑0 D:0 (yml)
+  LANGS: python:39/json:10/toml:7/yaml:2/shell:2/yml:1/txt:1
 
-HOTSPOTS[5]:
-  ★ _intent_from_nlp2dsl fan=14  // Orchestrates 14 calls
-  ★ _nlp fan=10  // Orchestrates 10 calls
-  ★ main fan=10  // Orchestrates 10 calls
-  ★ build_drive_plan fan=10  // Orchestrates 10 calls
-  ★ launch_koru_agent fan=10  // Launch a Koru agent through SILLM while preserving TTY behavior.
+HOTSPOTS[10]:
+  ★ create_app fan=21  // Orchestrates 21 calls
+  ★ _main_subcommand fan=20  // Orchestrates 20 calls
+  ★ dispatch fan=18  // 18-way dispatch
+  ★ drive_shell_llm_many fan=18  // Orchestrates 18 calls
+  ★ main fan=17  // Orchestrates 17 calls
 
-Clients with a
-
-REFACTOR[2]:
-  [1] H/H Split god module goal.yaml (511L, 0 classes)
-  [2] M/L Split _intent_from_nlp2dsl (CC=15)
+REFACTOR[14]:
+  [1] H/L Split parse_line (CC=35)
+  [2] H/L Split drive_shell_llm_many (CC=26)
+  [3] H/H Split god module goal.yaml (511L, 0 classes)
+  [4] M/L Split _main_subcommand (CC=17)
+  [5] M/L Split uri_to_dsl (CC=24)
 
 EVOLUTION:
-  2026-06-08 CC̄=3.3 crit=2 1623L // Automated analysis
+  2026-06-08 CC̄=4.4 crit=15 4173L // Automated analysis

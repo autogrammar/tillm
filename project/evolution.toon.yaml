@@ -1,24 +1,56 @@
-# code2llm/evolution | 47 func | 7f | 2026-06-08
+# code2llm/evolution | 136 func | 30f | 2026-06-08
 # generated in 0.00s
 
-NEXT[2] (ranked by impact):
-  [1] !  SPLIT-FUNC      _intent_from_nlp2dsl  CC=15  fan=14
+NEXT[10] (ranked by impact):
+  [1] !! SPLIT-FUNC      drive_shell_llm_many  CC=26  fan=18
+      WHY: CC=26 exceeds 15
+      EFFORT: ~1h  IMPACT: 468
+
+  [2] !  SPLIT-FUNC      _main_subcommand  CC=17  fan=20
+      WHY: CC=17 exceeds 15
+      EFFORT: ~1h  IMPACT: 340
+
+  [3] !! SPLIT-FUNC      parse_line  CC=35  fan=8
+      WHY: CC=35 exceeds 15
+      EFFORT: ~1h  IMPACT: 280
+
+  [4] !  SPLIT-FUNC      main  CC=16  fan=17
+      WHY: CC=16 exceeds 15
+      EFFORT: ~1h  IMPACT: 272
+
+  [5] !  SPLIT-FUNC      dispatch  CC=15  fan=18
+      WHY: CC=15 exceeds 15
+      EFFORT: ~1h  IMPACT: 270
+
+  [6] !  SPLIT-FUNC      _intent_from_nlp2dsl  CC=15  fan=14
       WHY: CC=15 exceeds 15
       EFFORT: ~1h  IMPACT: 210
 
-  [2] !! SPLIT           goal.yaml
-      WHY: 511L, 0 classes, max CC=0
-      EFFORT: ~4h  IMPACT: 0
+  [7] !  SPLIT-FUNC      resolve_client_ids  CC=15  fan=13
+      WHY: CC=15 exceeds 15
+      EFFORT: ~1h  IMPACT: 195
+
+  [8] !  SPLIT-FUNC      uri_to_dsl  CC=24  fan=8
+      WHY: CC=24 exceeds 15
+      EFFORT: ~1h  IMPACT: 192
+
+  [9] !  SPLIT-FUNC      _print  CC=17  fan=9
+      WHY: CC=17 exceeds 15
+      EFFORT: ~1h  IMPACT: 153
+
+  [10] !  SPLIT-FUNC      to_text  CC=15  fan=5
+      WHY: CC=15 exceeds 15
+      EFFORT: ~1h  IMPACT: 75
 
 
 RISKS[1]:
   ⚠ Splitting goal.yaml may break 0 import paths
 
 METRICS-TARGET:
-  CC̄:          3.3 → ≤2.3
-  max-CC:      15 → ≤7
+  CC̄:          4.4 → ≤3.1
+  max-CC:      35 → ≤17
   god-modules: 1 → 0
-  high-CC(≥15): 1 → ≤0
+  high-CC(≥15): 10 → ≤5
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):
@@ -46,4 +78,4 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=3.3 → now CC̄=3.3
+  prev CC̄=3.3 → now CC̄=4.4

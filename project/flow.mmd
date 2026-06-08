@@ -1,26 +1,31 @@
 flowchart TD
-%% generated in 0.00s
+%% generated in 0.01s
 
     %% Entry points (blue)
     classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff
 
-    subgraph Core
-        project__venv_is_usable["venv_is_usable"]
-        src__tillm__cli___print["_print"]
-        src__tillm__cli___build_parser["_build_parser"]
-        src__tillm__cli___normalize_extra_arg_tokens["_normalize_extra_arg_tokens"]
-        src__tillm__cli___read_prompt["_read_prompt"]
-        src__tillm__cli___drive["_drive"]
-        src__tillm__cli___nlp["_nlp"]
-        src__tillm__cli__main["main"]
-        src__tillm__controller__ShellDrivePlan__shell_preview["shell_preview"]
-        src__tillm__controller__ShellDrivePlan__to_dict["to_dict"]
-        src__tillm__controller__ShellDriveResult__to_dict["to_dict"]
-        src__tillm__controller___resolve_spec["_resolve_spec"]
-        src__tillm__controller__build_drive_plan["build_drive_plan"]
-        src__tillm__controller__drive_shell_llm("drive_shell_llm CC=10")
-        src__sillm__registry__ShellClientSpec__command_path["command_path"]
-        ...["+21 more"]
+    subgraph CLI
+        packages__cli2tillm__src__cli2tillm__cli__main["main"]
+        packages__cli2tillm__src__cli2tillm__shell__run_shell["run_shell"]
     end
 
-    class project__venv_is_usable,src__tillm__cli___print,src__tillm__cli___build_parser,src__tillm__cli___normalize_extra_arg_tokens,src__tillm__cli___read_prompt,src__tillm__cli___drive,src__tillm__cli___nlp,src__tillm__cli__main,src__tillm__controller__ShellDrivePlan__shell_preview,src__tillm__controller__ShellDrivePlan__to_dict entry
+    subgraph Core
+        project__venv_is_usable["venv_is_usable"]
+        packages__dsl2tillm__src__dsl2tillm__cli___main_legacy["_main_legacy"]
+        packages__dsl2tillm__src__dsl2tillm__cli___main_subcommand["_main_subcommand"]
+        packages__dsl2tillm__src__dsl2tillm__cli__main["main"]
+        packages__mcp2tillm__src__mcp2tillm__cli__main["main"]
+        packages__dsl2tillm__src__dsl2tillm__pb_codec__encode_protobuf["encode_protobuf"]
+        packages__dsl2tillm__src__dsl2tillm__schema_registry__all_verbs["all_verbs"]
+        packages__rest2tillm__src__rest2tillm__cli__main["main"]
+        packages__uri2tillm__src__uri2tillm__decode__uri_to_dsl{{uri_to_dsl CC=24}}
+        packages__dsl2tillm__src__dsl2tillm__grammar__parse_line{{parse_line CC=35}}
+        packages__dsl2tillm__src__dsl2tillm__grammar__to_text["to_text"]
+        packages__uri2tillm__src__uri2tillm__uri__uri_for_cmd["uri_for_cmd"]
+        packages__uri2tillm__src__uri2tillm__uri__uri_for_client["uri_for_client"]
+        packages__uri2tillm__src__uri2tillm__uri__is_tillm_uri["is_tillm_uri"]
+        src__tillm__cli___format_client_row["_format_client_row"]
+        ...["+67 more"]
+    end
+
+    class project__venv_is_usable,packages__dsl2tillm__src__dsl2tillm__cli___main_legacy,packages__dsl2tillm__src__dsl2tillm__cli___main_subcommand,packages__dsl2tillm__src__dsl2tillm__cli__main,packages__mcp2tillm__src__mcp2tillm__cli__main,packages__dsl2tillm__src__dsl2tillm__pb_codec__encode_protobuf,packages__dsl2tillm__src__dsl2tillm__schema_registry__all_verbs,packages__rest2tillm__src__rest2tillm__cli__main,packages__cli2tillm__src__cli2tillm__cli__main,packages__dsl2tillm__src__dsl2tillm__grammar__to_text entry
