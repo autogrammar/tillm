@@ -4,17 +4,15 @@
 
 Drives shell and terminal clients (`aider`, `claude`, `codex`, `gemini`, `qwen-code`, `opencode`, `devin`) from one registry and execution pipeline. Pair with [`gillm`](../gillm) for **graphical** control (focus, inject, capture, orchestrator DSL).
 
-![Version](https://img.shields.io/badge/version-0.1.35-blue) ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![Version](https://img.shields.io/badge/version-0.1.36-blue) ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.35-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$2.42-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-8.3h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fdeep%2Fdeep--v4--pro-lightgrey)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$11.18-orange) ![AI Model](https://img.shields.io/badge/AI%20Model-openrouter%2Fdeep%2Fdeep-v4-pro-lightgrey)
 
-- 🤖 **LLM usage:** $2.4161 (35 commits)
-- 👤 **Human dev:** ~$826 (8.3h @ $100/h, 30min dedup)
+This project uses AI-generated code. Total cost: **$11.1812** with **37** AI commits.
 
-Generated on 2026-06-08 using [openrouter/deep/deep-v4-pro](https://openrouter.ai/deep/deep-v4-pro)
+Generated on 2026-06-29 using [openrouter/deep/deep-v4-pro](https://openrouter.ai/models/openrouter/deep/deep-v4-pro)
 
 ---
 
