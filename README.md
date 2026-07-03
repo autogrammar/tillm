@@ -4,15 +4,15 @@
 
 Drives shell and terminal clients (`aider`, `claude`, `codex`, `gemini`, `qwen-code`, `opencode`, `devin`) from one registry and execution pipeline. Pair with [`gillm`](../gillm) for **graphical** control (focus, inject, capture, orchestrator DSL).
 
-![Version](https://img.shields.io/badge/version-0.1.36-blue) ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![Version](https://img.shields.io/badge/version-0.1.37-blue) ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.36-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$2.43-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-10.7h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fdeep%2Fdeep--v4--pro-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.37-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$2.44-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-11.7h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fdeep%2Fdeep--v4--pro-lightgrey)
 
-- 🤖 **LLM usage:** $2.4323 (38 commits)
-- 👤 **Human dev:** ~$1072 (10.7h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $2.4399 (39 commits)
+- 👤 **Human dev:** ~$1172 (11.7h @ $100/h, 30min dedup)
 
 Generated on 2026-07-03 using [openrouter/deep/deep-v4-pro](https://openrouter.ai/deep/deep-v4-pro)
 
