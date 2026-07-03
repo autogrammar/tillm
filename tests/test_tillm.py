@@ -28,6 +28,7 @@ from tillm.controller import (
 from tillm.nlp import ShellIntent, intent_from_text
 from tillm.project_env import bootstrap_project_env, load_env_file
 from tillm.registry import (
+    ShellClientSpec,
     available_client_ids,
     detect_clients,
     get_client_spec,
@@ -214,6 +215,46 @@ def test_build_drive_plan_rejects_execute_for_cline(tmp_path: Path) -> None:
         )
 
 
+def test_build_drive_plan_forces_model_flag(tmp_path: Path) -> None:
+    import shutil
+    from unittest.mock import patch
+
+    def fake_which(name: str) -> str | None:
+        return f"/usr/bin/{name}"
+
+    with patch.object(shutil, "which", fake_which):
+        plan = build_drive_plan(
+            ShellDriveRequest(
+                client_id="claude-code",
+                prompt="Fix PLF-1",
+                project=tmp_path,
+                model="sonnet-5",
+            )
+        )
+        assert "--model" in plan.argv
+        assert plan.argv[plan.argv.index("--model") + 1] == "claude-sonnet-5"
+
+        codex_plan = build_drive_plan(
+            ShellDriveRequest(
+                client_id="codex",
+                prompt="Fix PLF-1",
+                project=tmp_path,
+                model="gpt-5",
+            )
+        )
+        assert "-m" in codex_plan.argv
+
+        with pytest.raises(ClientNotReadyError):
+            build_drive_plan(
+                ShellDriveRequest(
+                    client_id="cline",
+                    prompt="Fix PLF-1",
+                    project=tmp_path,
+                    model="sonnet-5",
+                )
+            )
+
+
 def test_build_drive_plan_uses_message_file_for_aider(tmp_path: Path) -> None:
     import shutil
     from unittest.mock import patch
@@ -241,10 +282,23 @@ def test_validate_client_readiness_reports_missing_binary_and_env(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr("shutil.which", lambda _name: None)
+    monkeypatch.setattr(ShellClientSpec, "has_auth_file", lambda self: False)
     result = validate_client_readiness("codex", environ={})
     assert result.ok is False
     assert any("binary not in PATH" in error for error in result.errors)
     assert any("missing env vars" in error for error in result.errors)
+
+
+def test_missing_env_vars_satisfied_by_auth_file(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    spec = get_client_spec("claude-code")
+    assert spec is not None
+    monkeypatch.setattr(ShellClientSpec, "has_auth_file", lambda self: True)
+    assert spec.missing_env_vars({}) == ()
+    monkeypatch.setattr(ShellClientSpec, "has_auth_file", lambda self: False)
+    assert spec.missing_env_vars({}) == ("ANTHROPIC_API_KEY",)
+    assert spec.missing_env_vars({"ANTHROPIC_API_KEY": "x"}) == ()
 
 
 def test_validate_client_readiness_rejects_execute_for_interactive_only() -> None:

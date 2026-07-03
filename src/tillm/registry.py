@@ -11,6 +11,7 @@ import os
 import shutil
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Literal
 
 PromptMode = Literal["stdin", "message-file", "arg"]
@@ -36,6 +37,8 @@ class ShellClientSpec:
     supports_dry_run: bool = True
     env_vars: tuple[str, ...] = ()
     env_vars_any: tuple[str, ...] = ()
+    auth_paths: tuple[str, ...] = ()
+    model_flag: str | None = "--model"
     execute_args: tuple[str, ...] = ()
     execute_profiles: tuple[tuple[str, tuple[str, ...]], ...] = ()
     transport: ClientTransport = "binary"
@@ -63,11 +66,16 @@ class ShellClientSpec:
     def supported_execute_profiles(self) -> tuple[str, ...]:
         return (DEFAULT_EXECUTE_PROFILE, *(profile_id for profile_id, _ in self.execute_profiles))
 
+    def has_auth_file(self) -> bool:
+        return any(Path(raw).expanduser().is_file() for raw in self.auth_paths)
+
     def missing_env_vars(self, environ: dict[str, str] | None = None) -> tuple[str, ...]:
         env = environ if environ is not None else os.environ
         missing = [name for name in self.env_vars if not env.get(name, "").strip()]
         if self.env_vars_any and not any(env.get(name, "").strip() for name in self.env_vars_any):
             missing.append(" or ".join(self.env_vars_any))
+        if missing and self.has_auth_file():
+            return ()
         return tuple(missing)
 
     def to_dict(self, *, which: WhichFn | None = None, environ: dict[str, str] | None = None) -> dict[str, object]:
@@ -93,6 +101,9 @@ class ShellClientSpec:
             "supports_dry_run": self.supports_dry_run,
             "env_vars": list(self.env_vars),
             "env_vars_any": list(self.env_vars_any),
+            "auth_paths": list(self.auth_paths),
+            "auth_file_present": self.has_auth_file(),
+            "model_flag": self.model_flag,
             "missing_env_vars": list(missing_env),
             "ready": command_path is not None and not missing_env,
             "transport": self.transport,
@@ -109,6 +120,7 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         prompt_mode="stdin",
         aliases=("claude", "anthropic"),
         env_vars=("ANTHROPIC_API_KEY",),
+        auth_paths=("~/.claude/.credentials.json",),
         execute_args=("-p",),
         execute_profiles=(
             ("automation", ("-p", "--dangerously-skip-permissions")),
@@ -132,6 +144,8 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         prompt_mode="stdin",
         aliases=("codex-cli", "openai-codex"),
         env_vars=("OPENAI_API_KEY",),
+        auth_paths=("~/.codex/auth.json",),
+        model_flag="-m",
         execute_args=("exec",),
         execute_profiles=(
             (
@@ -148,6 +162,8 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         prompt_mode="stdin",
         aliases=("gemini",),
         env_vars_any=("GEMINI_API_KEY", "GOOGLE_API_KEY"),
+        auth_paths=("~/.gemini/oauth_creds.json",),
+        model_flag="-m",
         execute_args=("-p", "--approval-mode", "auto_edit"),
         execute_profiles=(
             ("automation", ("-p", "--yolo")),
@@ -161,6 +177,7 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         prompt_mode="stdin",
         supports_execute=False,
         env_vars_any=("OPENAI_API_KEY", "ANTHROPIC_API_KEY"),
+        model_flag=None,
         notes="Interactive CLI; tillm drive plans prompts but does not auto-execute.",
     ),
     ShellClientSpec(
@@ -170,6 +187,8 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         prompt_mode="stdin",
         aliases=("qwen",),
         env_vars_any=("DASHSCOPE_API_KEY", "OPENAI_API_KEY"),
+        auth_paths=("~/.qwen/oauth_creds.json",),
+        model_flag="-m",
         execute_args=("-p", "--approval-mode", "yolo"),
         notes="Headless via qwen -p/--prompt with prompt on stdin.",
     ),

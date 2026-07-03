@@ -60,6 +60,7 @@ class ShellDriveRequest:
     backend: ClientTransport = "binary"
     timeout_seconds: float | None = 900.0
     prompt_dir: Path | None = None
+    model: str | None = None
 
 
 def resolve_backend(raw: str | None = None, *, spec: ShellClientSpec | None = None) -> ClientTransport:
@@ -111,6 +112,7 @@ class MultiShellDriveRequest:
     fail_fast: bool = False
     quorum: int | None = None
     backend: ClientTransport = "binary"
+    model: str | None = None
 
 
 @dataclass(frozen=True)
@@ -219,6 +221,23 @@ def _resolve_execute_args(spec: ShellClientSpec, *, execute: bool, profile: str)
         raise UnknownProfileError(str(exc)) from exc
 
 
+_CLAUDE_MODEL_ALIASES = {"sonnet", "opus", "haiku", "fable", "default"}
+
+
+def _normalize_model_for_client(client_id: str, model: str) -> str:
+    """Map short model names onto vendor CLI conventions.
+
+    Claude Code accepts bare tier aliases (``sonnet``) or full ``claude-*``
+    ids; shorthand like ``sonnet-5`` needs the ``claude-`` prefix.
+    """
+    if not model or client_id != "claude-code":
+        return model
+    lowered = model.lower()
+    if lowered in _CLAUDE_MODEL_ALIASES or lowered.startswith("claude-"):
+        return model
+    return f"claude-{lowered}"
+
+
 def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
     bootstrap_project_env(request.project)
     spec = _resolve_spec(request.client_id)
@@ -233,7 +252,15 @@ def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
     execute_args = list(
         _resolve_execute_args(spec, execute=request.execute, profile=execute_profile)
     )
-    argv = [command_path, *spec.argv_prefix, *execute_args, *request.extra_args]
+    model_args: list[str] = []
+    model = _normalize_model_for_client(spec.id, (request.model or "").strip())
+    if model:
+        if not spec.model_flag:
+            raise ClientNotReadyError(
+                f"{spec.id}: client does not support forcing a model"
+            )
+        model_args = [spec.model_flag, model]
+    argv = [command_path, *spec.argv_prefix, *execute_args, *model_args, *request.extra_args]
     stdin_text: str | None = None
 
     if spec.prompt_mode == "message-file":
@@ -285,6 +312,7 @@ def _drive_one_client(request: MultiShellDriveRequest, client_id: str) -> ShellD
         backend=resolve_backend(request.backend),
         timeout_seconds=request.timeout_seconds,
         prompt_dir=request.prompt_dir,
+        model=request.model,
     )
     try:
         return drive_shell_llm(single)

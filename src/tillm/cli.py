@@ -281,6 +281,14 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     drive.add_argument("--timeout", type=float, default=900.0, help="Execution timeout seconds.")
     drive.add_argument(
+        "--model",
+        "--llm",
+        dest="model",
+        default=None,
+        metavar="MODEL",
+        help="Force the LLM model via the client's model flag (e.g. sonnet-5).",
+    )
+    drive.add_argument(
         "--extra-arg",
         action="append",
         default=[],
@@ -391,6 +399,7 @@ def _base_drive_request(args: argparse.Namespace, prompt: str) -> MultiShellDriv
         parallel=max(1, int(args.parallel)),
         fail_fast=bool(args.fail_fast),
         quorum=args.quorum,
+        model=args.model,
     )
 
 
@@ -434,6 +443,7 @@ def _drive(args: argparse.Namespace) -> int:
                     extra_args=tuple(args.extra_arg or ()),
                     execute_profile=_resolve_execute_profile(args.profile),
                     timeout_seconds=args.timeout,
+                    model=args.model,
                 )
             )
             payload: dict[str, object] = result.to_dict()

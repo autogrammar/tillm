@@ -129,6 +129,8 @@ def drive_koru_chat(
     project: Path,
     prompt: str,
     execute: bool = True,
+    model: str | None = None,
+    execute_profile: str = "default",
 ) -> dict[str, object]:
     result = drive_shell_llm(
         ShellDriveRequest(
@@ -137,6 +139,8 @@ def drive_koru_chat(
             project=project,
             execute=execute,
             dry_run=not execute,
+            model=model,
+            execute_profile=execute_profile,
         )
     )
     return result.to_dict()
