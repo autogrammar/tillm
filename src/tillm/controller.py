@@ -61,6 +61,7 @@ class ShellDriveRequest:
     timeout_seconds: float | None = 900.0
     prompt_dir: Path | None = None
     model: str | None = None
+    provider: str | None = None
 
 
 def resolve_backend(raw: str | None = None, *, spec: ShellClientSpec | None = None) -> ClientTransport:
@@ -81,6 +82,7 @@ class ShellDrivePlan:
     prompt_path: Path
     stdin_text: str | None = None
     execute_profile: str = DEFAULT_EXECUTE_PROFILE
+    env_overlay: dict[str, str] = field(default_factory=dict)
 
     def shell_preview(self) -> str:
         return " ".join(shlex.quote(part) for part in self.argv)
@@ -113,6 +115,7 @@ class MultiShellDriveRequest:
     quorum: int | None = None
     backend: ClientTransport = "binary"
     model: str | None = None
+    provider: str | None = None
 
 
 @dataclass(frozen=True)
@@ -270,6 +273,13 @@ def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
     else:
         stdin_text = request.prompt.strip() + "\n"
 
+    from tillm.providers import provider_env_overlay, resolve_request_provider
+
+    env_overlay: dict[str, str] = {}
+    provider = resolve_request_provider(request.provider)
+    if provider:
+        env_overlay = provider_env_overlay(spec.id, provider)
+
     return ShellDrivePlan(
         spec=spec,
         command_path=command_path,
@@ -278,6 +288,7 @@ def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
         prompt_path=prompt_path,
         stdin_text=stdin_text,
         execute_profile=execute_profile,
+        env_overlay=env_overlay,
     )
 
 
@@ -313,6 +324,7 @@ def _drive_one_client(request: MultiShellDriveRequest, client_id: str) -> ShellD
         timeout_seconds=request.timeout_seconds,
         prompt_dir=request.prompt_dir,
         model=request.model,
+        provider=getattr(request, "provider", None),
     )
     try:
         return drive_shell_llm(single)

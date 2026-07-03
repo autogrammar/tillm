@@ -99,7 +99,7 @@ def run_docker_drive(request: ShellDriveRequest, plan: ShellDrivePlan) -> ShellD
             text=True,
             check=False,
             timeout=_timeout_value(request.timeout_seconds),
-            env=dict(os.environ),
+            env={**os.environ, **plan.env_overlay},
         )
     except subprocess.TimeoutExpired as exc:
         return ShellDriveResult(

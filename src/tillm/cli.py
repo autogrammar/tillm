@@ -281,6 +281,11 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     drive.add_argument("--timeout", type=float, default=900.0, help="Execution timeout seconds.")
     drive.add_argument(
+        "--provider",
+        default=None,
+        help="API provider behind the client (see `tillm providers`), e.g. z.ai.",
+    )
+    drive.add_argument(
         "--model",
         "--llm",
         dest="model",
@@ -301,6 +306,22 @@ def _build_parser() -> argparse.ArgumentParser:
         default="json",
         help="Output format: summary (compact, no full client stdout), json, or text.",
     )
+
+    providers = sub.add_parser(
+        "providers", help="List API providers usable behind shell clients."
+    )
+    providers.add_argument("--format", choices=("text", "json"), default="text")
+
+    provider = sub.add_parser("provider", help="Configure or test a provider.")
+    provider_sub = provider.add_subparsers(dest="provider_action", required=True)
+    p_set = provider_sub.add_parser("set", help="Store a provider token (chmod 600).")
+    p_set.add_argument("provider_id", help="Provider id, e.g. z.ai / openrouter.")
+    p_set.add_argument("--token", default=None, help="Token; omit to be prompted.")
+    p_set.add_argument("--model", default=None, help="Default model for this provider.")
+    p_test = provider_sub.add_parser("test", help="Probe the provider with the stored/env token.")
+    p_test.add_argument("provider_id")
+    p_test.add_argument("--model", default=None, help="Probe with a specific model.")
+    p_test.add_argument("--format", choices=("text", "json"), default="text")
 
     nlp = sub.add_parser("nlp", help="Map natural language to TILLM drive DSL.")
     nlp.add_argument("text", nargs="+", help="Natural-language control request.")
@@ -400,6 +421,7 @@ def _base_drive_request(args: argparse.Namespace, prompt: str) -> MultiShellDriv
         fail_fast=bool(args.fail_fast),
         quorum=args.quorum,
         model=args.model,
+        provider=args.provider,
     )
 
 
@@ -484,6 +506,82 @@ def _drive(args: argparse.Namespace) -> int:
     return 0 if payload.get("ok") else 1
 
 
+def _providers_list(args: argparse.Namespace) -> int:
+    from tillm.providers import iter_provider_specs, resolve_provider_token
+
+    rows = []
+    for spec in iter_provider_specs():
+        token = resolve_provider_token(spec.id)
+        rows.append(
+            {
+                "id": spec.id,
+                "label": spec.label,
+                "kind": spec.kind,
+                "token": "set" if token else "missing",
+                "token_env": spec.token_env,
+                "clients": list(spec.compatible_clients()),
+                "notes": spec.notes,
+            }
+        )
+    if args.format == "json":
+        print(json.dumps(rows, indent=2))
+        return 0
+    for row in rows:
+        token_mark = "✓" if row["token"] == "set" else "✗"
+        print(
+            f"{row['id']:<12} {row['kind']:<12} token={token_mark} "
+            f"({row['token_env']})  clients: {', '.join(row['clients']) or '-'}"
+        )
+        if row["notes"]:
+            print(f"{'':<12} {row['notes']}")
+    return 0
+
+
+def _provider_action(args: argparse.Namespace) -> int:
+    from tillm.providers import (
+        UnknownProviderError,
+        get_provider_spec,
+        probe_provider,
+        save_provider_token,
+    )
+
+    try:
+        spec = get_provider_spec(args.provider_id)
+    except UnknownProviderError as exc:
+        print(f"tillm: {exc}", file=sys.stderr)
+        return 2
+
+    if args.provider_action == "set":
+        token = (args.token or "").strip()
+        if not token:
+            import getpass
+
+            token = getpass.getpass(f"{spec.label} token ({spec.token_env}): ").strip()
+        if not token:
+            print("tillm: empty token, nothing stored", file=sys.stderr)
+            return 2
+        path = save_provider_token(spec.id, token, model=args.model)
+        print(f"✓ stored token for {spec.id} in {path}")
+        result = probe_provider(spec.id)
+        print(("✓" if result.ok else "✗") + f" probe: {result.detail}")
+        return 0 if result.ok else 1
+
+    if args.provider_action == "test":
+        result = probe_provider(spec.id, model=args.model)
+        if getattr(args, "format", "text") == "json":
+            print(json.dumps(result.to_dict(), indent=2))
+        else:
+            mark = "✓" if result.ok else "✗"
+            print(f"{mark} {spec.id}: {result.detail}")
+            if result.endpoint:
+                print(f"  endpoint: {result.endpoint}")
+            if result.attempts:
+                print(f"  attempts: {', '.join(result.attempts)}")
+        return 0 if result.ok else 1
+
+    raise AssertionError(args.provider_action)
+
+
 def _nlp(args: argparse.Namespace) -> int:
     text = " ".join(args.text)
     intent = intent_from_text(text, default_client=args.client)
@@ -520,6 +618,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.action == "drive":
         return _drive(args)
+    if args.action == "providers":
+        return _providers_list(args)
+    if args.action == "provider":
+        return _provider_action(args)
     if args.action == "nlp":
         return _nlp(args)
     if args.action == "validate":
