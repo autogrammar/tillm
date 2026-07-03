@@ -30,6 +30,7 @@ Generated on 2026-07-03 using [openrouter/deep/deep-v4-pro](https://openrouter.a
 - [Installation](#installation)
 - [Quick start](#quick-start)
 - [Shell clients](#shell-clients)
+- [API providers](#api-providers)
 - [Multi-client orchestration](#multi-client-orchestration)
 - [Configuration](#configuration)
 - [Version and updates](#version-and-updates)
@@ -156,6 +157,36 @@ Eight clients in the registry. Live status: `tillm clients` (`ok` / `~` / `--`).
 | cline | dry-run only | — |
 
 Per-client setup: [docs/clients/](docs/clients/)
+
+## API providers
+
+A *client* is the tool tillm drives; a *provider* is the API or subscription
+serving the model behind it. The same `claude` binary can talk to Anthropic
+(native) or to any Anthropic-protocol vendor such as **z.ai (GLM)** by
+overriding the endpoint + token environment for the subprocess.
+
+| Provider | Kind | Token env | Compatible clients |
+| --- | --- | --- | --- |
+| anthropic | subscription | `ANTHROPIC_API_KEY` | claude-code (native) |
+| z.ai | api | `ZAI_API_KEY` | claude-code, aider, codex |
+| openrouter | api | `OPENROUTER_API_KEY` | aider, codex |
+| openai | api | `OPENAI_API_KEY` | aider, codex (native) |
+
+```bash
+tillm providers                       # list with token status
+tillm provider set z.ai               # prompt for token (stored chmod 600), auto-probe
+tillm provider test z.ai              # live connectivity check
+tillm drive --client claude-code --provider z.ai --prompt "..." --execute
+export TILLM_PROVIDER=z.ai            # provider for every drive (koru autonomy uses this)
+```
+
+Token precedence: process env var beats the store
+(`~/.config/tillm/providers.json`, override dir via `TILLM_CONFIG_DIR`).
+For z.ai the Anthropic-compatible endpoint (`https://api.z.ai/api/anthropic`)
+drives claude-code with `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`; the
+OpenAI-compatible endpoint serves aider/codex via `OPENAI_API_BASE`.
+Interactive picker: `koru tillm` (koru-side UI over this registry).
+Full guide: [docs/providers.md](docs/providers.md).
 
 ## Multi-client orchestration
 

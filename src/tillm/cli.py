@@ -466,6 +466,7 @@ def _drive(args: argparse.Namespace) -> int:
                     execute_profile=_resolve_execute_profile(args.profile),
                     timeout_seconds=args.timeout,
                     model=args.model,
+                    provider=args.provider,
                 )
             )
             payload: dict[str, object] = result.to_dict()
