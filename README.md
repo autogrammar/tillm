@@ -165,12 +165,27 @@ serving the model behind it. The same `claude` binary can talk to Anthropic
 (native) or to any Anthropic-protocol vendor such as **z.ai (GLM)** by
 overriding the endpoint + token environment for the subprocess.
 
-| Provider | Kind | Token env | Compatible clients |
-| --- | --- | --- | --- |
-| anthropic | subscription | `ANTHROPIC_API_KEY` | claude-code (native) |
-| z.ai | api | `ZAI_API_KEY` | claude-code, aider, codex |
-| openrouter | api | `OPENROUTER_API_KEY` | aider, codex |
-| openai | api | `OPENAI_API_KEY` | aider, codex (native) |
+| Provider | Kind | Token env | claude-code | aider/codex |
+| --- | --- | --- | --- | --- |
+| anthropic | subscription | `ANTHROPIC_API_KEY` | native | — |
+| openai | api | `OPENAI_API_KEY` | — | native |
+| z.ai (GLM) | api | `ZAI_API_KEY` | ✓ | ✓ |
+| deepseek | api | `DEEPSEEK_API_KEY` | ✓ | ✓ |
+| google (Gemini) | api | `GEMINI_API_KEY` | — | ✓ |
+| openrouter | api | `OPENROUTER_API_KEY` | — | ✓ |
+| moonshot (Kimi) | api | `MOONSHOT_API_KEY` | ✓ | ✓ |
+| xai (Grok) | api | `XAI_API_KEY` | — | ✓ |
+| groq | api | `GROQ_API_KEY` | — | ✓ |
+| mistral | api | `MISTRAL_API_KEY` | — | ✓ |
+| minimax (M2) | api | `MINIMAX_API_KEY` | ✓ | ✓ |
+| qwen (DashScope) | api | `DASHSCOPE_API_KEY` | — | ✓ |
+| ollama | local | — | — | ✓ |
+
+Ordered by popularity/recency; ✓ in the claude-code column means the vendor
+exposes an Anthropic-compatible endpoint. Each provider carries a `token_url`
+(where to create the key — shown before token prompts), curated model list,
+and probe models. Default provider precedence: `--provider` > `TILLM_PROVIDER`
+env > stored default (`koru tillm` can set it).
 
 ```bash
 tillm providers                       # list with token status

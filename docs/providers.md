@@ -27,7 +27,11 @@ export KORU_TILLM_CLIENT=claude-code
 koru -a --ide claude
 ```
 
-Interactive picker with the same registry: `koru tillm`.
+Interactive picker with the same registry: `koru tillm` — full list of 13
+providers (anthropic, openai, z.ai, deepseek, google, openrouter, moonshot,
+xai, groq, mistral, minimax, qwen, ollama) ordered by popularity, with token
+page links, model select-lists (Enter keeps the current value) and an optional
+stored default provider used by every drive.
 
 ## How the overlay works
 

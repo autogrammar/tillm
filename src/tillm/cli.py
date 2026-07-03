@@ -557,6 +557,8 @@ def _provider_action(args: argparse.Namespace) -> int:
         if not token:
             import getpass
 
+            if spec.token_url:
+                print(f"Token do pobrania tutaj: {spec.token_url}")
             token = getpass.getpass(f"{spec.label} token ({spec.token_env}): ").strip()
         if not token:
             print("tillm: empty token, nothing stored", file=sys.stderr)
