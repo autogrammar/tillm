@@ -667,7 +667,7 @@ def diagnose_provider(provider_id: str) -> ProviderDiagnosis:
 
     token = resolve_provider_token(spec.id)
     if token or spec.kind in ("local", "subscription"):
-        items.append(DiagnosisItem("ok", "token", f"token: {'present' if token else 'not required'}"))
+        items.append(DiagnosisItem("ok", "token", "present" if token else "not required"))
     else:
         items.append(
             DiagnosisItem(
