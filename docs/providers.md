@@ -33,6 +33,13 @@ xai, groq, mistral, minimax, qwen, ollama) ordered by popularity, with token
 page links, model select-lists (Enter keeps the current value) and an optional
 stored default provider used by every drive.
 
+## Localization
+
+CLI messages default to **English**; `pl` and `de` catalogs ship in
+`tillm.i18n`. Resolution: `--lang` flag (persisted) > `TILLM_LANG` env >
+stored choice > system locale (`LC_ALL`/`LC_MESSAGES`/`LANG`) > English.
+Example: `koru tillm --lang de` or `TILLM_LANG=pl koru tillm`.
+
 ## How the overlay works
 
 | Client protocol | Env applied |

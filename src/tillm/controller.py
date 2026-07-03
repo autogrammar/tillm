@@ -273,12 +273,26 @@ def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
     else:
         stdin_text = request.prompt.strip() + "\n"
 
-    from tillm.providers import provider_env_overlay, resolve_request_provider
+    from tillm.providers import (
+        client_protocol,
+        get_provider_spec,
+        provider_env_overlay,
+        resolve_request_provider,
+    )
 
     env_overlay: dict[str, str] = {}
+    explicit_provider = bool((request.provider or "").strip())
     provider = resolve_request_provider(request.provider)
     if provider:
-        env_overlay = provider_env_overlay(spec.id, provider)
+        # An implicit provider (TILLM_PROVIDER env or stored default) must not
+        # break clients it cannot serve — skip the overlay for unmapped or
+        # protocol-incompatible clients. An explicit --provider still raises.
+        protocol = client_protocol(spec.id)
+        compatible = (
+            protocol is not None and protocol in get_provider_spec(provider).protocols()
+        )
+        if explicit_provider or compatible:
+            env_overlay = provider_env_overlay(spec.id, provider)
 
     return ShellDrivePlan(
         spec=spec,

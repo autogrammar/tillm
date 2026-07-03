@@ -173,3 +173,49 @@ class TestProbe:
         result = prov.probe_provider("z.ai")
         assert result.ok is True
         assert result.model == "glm-4.6"
+
+
+class TestImplicitProviderSafety:
+    """A stored default / env provider must never break unmapped clients."""
+
+    def test_stored_default_skips_unmapped_client(self, tmp_path, monkeypatch):
+        from tillm.controller import ShellDriveRequest, build_drive_plan
+
+        prov.save_provider_token("z.ai", "sk")
+        prov.set_default_provider("z.ai")
+        monkeypatch.setattr(
+            "tillm.controller._resolve_command", lambda spec: "/usr/bin/gemini"
+        )
+        plan = build_drive_plan(
+            ShellDriveRequest(client_id="gemini-cli", prompt="x", project=tmp_path)
+        )
+        assert plan.env_overlay == {}  # implicit provider skipped, no crash
+
+    def test_stored_default_applies_to_compatible_client(self, tmp_path, monkeypatch):
+        from tillm.controller import ShellDriveRequest, build_drive_plan
+
+        prov.save_provider_token("z.ai", "sk")
+        prov.set_default_provider("z.ai")
+        monkeypatch.setattr(
+            "tillm.controller._resolve_command", lambda spec: "/usr/bin/claude"
+        )
+        plan = build_drive_plan(
+            ShellDriveRequest(client_id="claude-code", prompt="x", project=tmp_path)
+        )
+        assert plan.env_overlay["ANTHROPIC_AUTH_TOKEN"] == "sk"
+
+    def test_explicit_provider_still_raises_for_unmapped_client(
+        self, tmp_path, monkeypatch
+    ):
+        from tillm.controller import ShellDriveRequest, build_drive_plan
+
+        prov.save_provider_token("z.ai", "sk")
+        monkeypatch.setattr(
+            "tillm.controller._resolve_command", lambda spec: "/usr/bin/gemini"
+        )
+        with pytest.raises(ValueError, match="no provider protocol"):
+            build_drive_plan(
+                ShellDriveRequest(
+                    client_id="gemini-cli", prompt="x", project=tmp_path, provider="z.ai"
+                )
+            )

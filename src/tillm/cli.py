@@ -557,16 +557,22 @@ def _provider_action(args: argparse.Namespace) -> int:
         if not token:
             import getpass
 
+            from tillm.i18n import _
+
             if spec.token_url:
-                print(f"Token do pobrania tutaj: {spec.token_url}")
+                print(_("token.get_here", url=spec.token_url))
             token = getpass.getpass(f"{spec.label} token ({spec.token_env}): ").strip()
         if not token:
-            print("tillm: empty token, nothing stored", file=sys.stderr)
+            from tillm.i18n import _
+
+            print(f"tillm: {_('token.empty')}", file=sys.stderr)
             return 2
+        from tillm.i18n import _
+
         path = save_provider_token(spec.id, token, model=args.model)
-        print(f"✓ stored token for {spec.id} in {path}")
+        print(_("token.stored_in", id=spec.id, path=path))
         result = probe_provider(spec.id)
-        print(("✓" if result.ok else "✗") + f" probe: {result.detail}")
+        print(("✓" if result.ok else "✗") + " " + _("probe.result", detail=result.detail))
         return 0 if result.ok else 1
 
     if args.provider_action == "test":
