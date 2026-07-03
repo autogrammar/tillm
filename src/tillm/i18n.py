@@ -172,6 +172,21 @@ _CATALOG: dict[str, dict[str, str]] = {
         "pl": "Nadpisać? [t/N]: ",
         "de": "Überschreiben? [j/N]: ",
     },
+    "models.live": {
+        "en": "live from API",
+        "pl": "żywe z API",
+        "de": "live von der API",
+    },
+    "models.curated": {
+        "en": "built-in list; live fetch unavailable",
+        "pl": "lista wbudowana; brak dostępu do żywej",
+        "de": "eingebaute Liste; Live-Abruf nicht verfügbar",
+    },
+    "diag.title": {
+        "en": "Diagnostics:",
+        "pl": "Diagnostyka:",
+        "de": "Diagnose:",
+    },
     "lang.set": {
         "en": "✓ language: {lang}",
         "pl": "✓ język: {lang}",

@@ -493,7 +493,15 @@ def probe_provider(provider_id: str, *, model: str | None = None) -> ProbeResult
         )
 
     if spec.anthropic_base_url:
-        models = (model,) if model else (spec.probe_models or (spec.default_model or "",))
+        if model:
+            models: tuple[str, ...] = (model,)
+        else:
+            stored = stored_provider_entry(spec.id).get("model", "").strip()
+            ordered = [stored] if stored else []
+            ordered += [m for m in spec.probe_models if m not in ordered]
+            if spec.default_model and spec.default_model not in ordered:
+                ordered.append(spec.default_model)
+            models = tuple(ordered) or ("",)
         attempts: list[str] = []
         for candidate in [m for m in models if m]:
             status, body = _probe_anthropic_endpoint(spec, token, candidate)
@@ -543,13 +551,213 @@ def probe_provider(provider_id: str, *, model: str | None = None) -> ProbeResult
     )
 
 
+@dataclass(frozen=True)
+class ModelListing:
+    provider_id: str
+    models: tuple[str, ...]
+    source: str  # "live" | "curated"
+    detail: str = ""
+
+
+def _parse_models_payload(body: str) -> tuple[str, ...]:
+    try:
+        data = json.loads(body)
+    except ValueError:
+        return ()
+    rows = data.get("data") if isinstance(data, dict) else data
+    if not isinstance(rows, list):
+        return ()
+    entries = []
+    for row in rows:
+        if isinstance(row, dict) and row.get("id"):
+            entries.append((row.get("created") or 0, str(row["id"])))
+    # Newest first when the API exposes creation timestamps.
+    entries.sort(key=lambda pair: pair[0], reverse=True)
+    return tuple(model_id for _, model_id in entries)
+
+
+def list_provider_models(provider_id: str, *, timeout: float = 10.0) -> ModelListing:
+    """Live model list from the provider API; curated fallback when unavailable.
+
+    Hardcoded model lists go stale (users already run models newer than any
+    snapshot); this asks the provider itself and only falls back to the
+    curated ``spec.models``.
+    """
+    spec = get_provider_spec(provider_id)
+    token = resolve_provider_token(spec.id)
+    if not token and spec.kind == "local":
+        token = "local"
+
+    attempts: list[str] = []
+    if token:
+        endpoints = []
+        if spec.openai_base_url:
+            endpoints.append(
+                (
+                    f"{spec.openai_base_url.rstrip('/')}/models",
+                    {"Authorization": f"Bearer {token}"},
+                )
+            )
+        if spec.anthropic_base_url:
+            endpoints.append(
+                (
+                    f"{spec.anthropic_base_url.rstrip('/')}/v1/models",
+                    {
+                        "Authorization": f"Bearer {token}",
+                        "x-api-key": token,
+                        "anthropic-version": _ANTHROPIC_VERSION,
+                    },
+                )
+            )
+        if spec.id == "anthropic":
+            endpoints.append(
+                (
+                    "https://api.anthropic.com/v1/models",
+                    {"x-api-key": token, "anthropic-version": _ANTHROPIC_VERSION},
+                )
+            )
+        for url, headers in endpoints:
+            status, body = _http_json(url, headers=headers, timeout=timeout)
+            attempts.append(f"{url}:{status}")
+            if status == 200:
+                models = _parse_models_payload(body)
+                if models:
+                    return ModelListing(
+                        provider_id=spec.id,
+                        models=models,
+                        source="live",
+                        detail=url,
+                    )
+    return ModelListing(
+        provider_id=spec.id,
+        models=spec.models,
+        source="curated",
+        detail="; ".join(attempts) if attempts else "no token / no endpoint",
+    )
+
+
+@dataclass(frozen=True)
+class DiagnosisItem:
+    level: str  # "ok" | "warn" | "fail"
+    code: str
+    message: str
+    fix: str = ""
+
+
+@dataclass(frozen=True)
+class ProviderDiagnosis:
+    provider_id: str
+    ok: bool
+    items: tuple[DiagnosisItem, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "provider": self.provider_id,
+            "ok": self.ok,
+            "items": [vars(item) for item in self.items],
+        }
+
+
+def diagnose_provider(provider_id: str) -> ProviderDiagnosis:
+    """Auto-diagnostics: token, endpoint, the *configured* model, client binaries."""
+    import shutil as _shutil
+
+    spec = get_provider_spec(provider_id)
+    items: list[DiagnosisItem] = []
+
+    token = resolve_provider_token(spec.id)
+    if token or spec.kind in ("local", "subscription"):
+        items.append(DiagnosisItem("ok", "token", f"token: {'present' if token else 'not required'}"))
+    else:
+        items.append(
+            DiagnosisItem(
+                "fail",
+                "token",
+                f"no token ({spec.token_env})",
+                fix=f"tillm provider set {spec.id}",
+            )
+        )
+
+    configured_model = stored_provider_entry(spec.id).get("model", "").strip() or None
+    effective_model = configured_model or spec.default_model
+
+    if token or spec.kind == "local":
+        listing = list_provider_models(spec.id)
+        if listing.source == "live":
+            items.append(
+                DiagnosisItem("ok", "endpoint", f"model list fetched live ({len(listing.models)} models)")
+            )
+            if effective_model and listing.models and effective_model not in listing.models:
+                near = [m for m in listing.models if effective_model.split("-")[0] in m][:3]
+                items.append(
+                    DiagnosisItem(
+                        "warn",
+                        "model_unknown",
+                        f"configured model {effective_model!r} not in the provider's live list",
+                        fix=f"try: {', '.join(near) or listing.models[0]}",
+                    )
+                )
+        else:
+            items.append(
+                DiagnosisItem("warn", "endpoint", f"live model list unavailable ({listing.detail})")
+            )
+
+        if spec.kind != "subscription":
+            result = probe_provider(spec.id, model=effective_model if spec.anthropic_base_url else None)
+            if result.ok:
+                items.append(
+                    DiagnosisItem("ok", "probe", f"probe OK ({result.model or 'endpoint'})")
+                )
+            else:
+                fallback = probe_provider(spec.id) if effective_model else result
+                if effective_model and fallback.ok:
+                    items.append(
+                        DiagnosisItem(
+                            "fail",
+                            "model_rejected",
+                            f"configured model {effective_model!r} rejected, "
+                            f"but {fallback.model!r} works",
+                            fix=f"tillm provider set {spec.id} --model {fallback.model}",
+                        )
+                    )
+                else:
+                    items.append(
+                        DiagnosisItem("fail", "probe", result.detail, fix=f"tillm provider test {spec.id}")
+                    )
+
+    from tillm.registry import available_client_ids
+
+    available = set(available_client_ids())
+    compatible = spec.compatible_clients()
+    present = [c for c in compatible if c in available]
+    if present:
+        items.append(DiagnosisItem("ok", "clients", f"clients on PATH: {', '.join(present)}"))
+    elif compatible:
+        items.append(
+            DiagnosisItem(
+                "warn",
+                "clients",
+                f"no compatible client on PATH ({', '.join(compatible)})",
+                fix=f"install one of: {', '.join(compatible)}",
+            )
+        )
+
+    ok = not any(item.level == "fail" for item in items)
+    return ProviderDiagnosis(provider_id=spec.id, ok=ok, items=tuple(items))
+
+
 __all__ = [
     "ProviderSpec",
     "ProbeResult",
     "UnknownProviderError",
     "client_protocol",
     "get_provider_spec",
+    "DiagnosisItem",
+    "ModelListing",
+    "ProviderDiagnosis",
+    "diagnose_provider",
     "iter_provider_specs",
+    "list_provider_models",
     "normalize_provider_id",
     "probe_provider",
     "get_default_provider",

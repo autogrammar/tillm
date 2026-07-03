@@ -219,3 +219,77 @@ class TestImplicitProviderSafety:
                     client_id="gemini-cli", prompt="x", project=tmp_path, provider="z.ai"
                 )
             )
+
+
+class TestLiveModelListing:
+    def test_live_list_sorted_newest_first(self, monkeypatch):
+        prov.save_provider_token("openrouter", "sk")
+        payload = '{"data": [{"id": "old-model", "created": 100}, {"id": "new-model", "created": 900}]}'
+        monkeypatch.setattr(prov, "_http_json", lambda *a, **k: (200, payload))
+        listing = prov.list_provider_models("openrouter")
+        assert listing.source == "live"
+        assert listing.models == ("new-model", "old-model")
+
+    def test_fallback_to_curated_on_failure(self, monkeypatch):
+        prov.save_provider_token("z.ai", "sk")
+        monkeypatch.setattr(prov, "_http_json", lambda *a, **k: (500, "boom"))
+        listing = prov.list_provider_models("z.ai")
+        assert listing.source == "curated"
+        assert "glm-4.7" in listing.models
+
+    def test_no_token_falls_back_to_curated(self):
+        listing = prov.list_provider_models("z.ai")
+        assert listing.source == "curated"
+
+
+class TestProbeUsesConfiguredModel:
+    def test_stored_model_probed_first(self, monkeypatch):
+        prov.save_provider_token("z.ai", "sk", model="glm-5.2")
+        seen: list[dict] = []
+
+        def fake_http(url, **kwargs):
+            seen.append(kwargs.get("payload") or {})
+            return 200, "ok"
+
+        monkeypatch.setattr(prov, "_http_json", fake_http)
+        result = prov.probe_provider("z.ai")
+        assert result.ok and result.model == "glm-5.2"
+        assert seen[0]["model"] == "glm-5.2"
+
+
+class TestDiagnostics:
+    def test_diagnose_flags_model_rejected_with_working_fallback(self, monkeypatch):
+        prov.save_provider_token("z.ai", "sk", model="glm-9.9")
+
+        def fake_http(url, method="GET", headers=None, payload=None, timeout=20.0):
+            if url.endswith("/models"):
+                return 500, "no live list"
+            if payload and payload.get("model") == "glm-9.9":
+                return 404, "model not found"
+            return 200, "ok"
+
+        monkeypatch.setattr(prov, "_http_json", fake_http)
+        diagnosis = prov.diagnose_provider("z.ai")
+        codes = {item.code: item for item in diagnosis.items}
+        assert "model_rejected" in codes
+        assert "--model" in codes["model_rejected"].fix
+        assert diagnosis.ok is False
+
+    def test_diagnose_missing_token(self):
+        diagnosis = prov.diagnose_provider("deepseek")
+        codes = {item.code: item.level for item in diagnosis.items}
+        assert codes.get("token") == "fail"
+        assert diagnosis.ok is False
+
+    def test_diagnose_healthy_provider(self, monkeypatch):
+        prov.save_provider_token("z.ai", "sk", model="glm-5.2")
+        payload = '{"data": [{"id": "glm-5.2", "created": 2}, {"id": "glm-4.7", "created": 1}]}'
+
+        def fake_http(url, method="GET", headers=None, payload_arg=None, timeout=20.0, **kw):
+            if url.endswith("/models"):
+                return 200, payload
+            return 200, "ok"
+
+        monkeypatch.setattr(prov, "_http_json", fake_http)
+        diagnosis = prov.diagnose_provider("z.ai")
+        assert diagnosis.ok, [vars(i) for i in diagnosis.items]

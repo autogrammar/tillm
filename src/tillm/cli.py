@@ -322,6 +322,17 @@ def _build_parser() -> argparse.ArgumentParser:
     p_test.add_argument("provider_id")
     p_test.add_argument("--model", default=None, help="Probe with a specific model.")
     p_test.add_argument("--format", choices=("text", "json"), default="text")
+    p_models = provider_sub.add_parser(
+        "models", help="List the provider's current models (live from its API)."
+    )
+    p_models.add_argument("provider_id")
+    p_models.add_argument("--limit", type=int, default=30)
+    p_models.add_argument("--format", choices=("text", "json"), default="text")
+    p_doctor = provider_sub.add_parser(
+        "doctor", help="Auto-diagnose a provider: token, endpoint, configured model, clients."
+    )
+    p_doctor.add_argument("provider_id")
+    p_doctor.add_argument("--format", choices=("text", "json"), default="text")
 
     nlp = sub.add_parser("nlp", help="Map natural language to TILLM drive DSL.")
     nlp.add_argument("text", nargs="+", help="Natural-language control request.")
@@ -587,6 +598,37 @@ def _provider_action(args: argparse.Namespace) -> int:
             if result.attempts:
                 print(f"  attempts: {', '.join(result.attempts)}")
         return 0 if result.ok else 1
+
+    if args.provider_action == "models":
+        from tillm.providers import list_provider_models
+
+        listing = list_provider_models(spec.id)
+        if getattr(args, "format", "text") == "json":
+            print(json.dumps({
+                "provider": listing.provider_id,
+                "source": listing.source,
+                "models": list(listing.models[: max(1, args.limit)]),
+            }, indent=2))
+        else:
+            print(f"{spec.id}: {listing.source} ({len(listing.models)} models)")
+            for model in listing.models[: max(1, args.limit)]:
+                print(f"  {model}")
+        return 0 if listing.models else 1
+
+    if args.provider_action == "doctor":
+        from tillm.providers import diagnose_provider
+
+        diagnosis = diagnose_provider(spec.id)
+        if getattr(args, "format", "text") == "json":
+            print(json.dumps(diagnosis.to_dict(), indent=2))
+        else:
+            marks = {"ok": "✓", "warn": "⚠", "fail": "✗"}
+            print(f"{spec.id}: {'OK' if diagnosis.ok else 'PROBLEMS FOUND'}")
+            for item in diagnosis.items:
+                print(f"  {marks[item.level]} {item.code}: {item.message}")
+                if item.fix:
+                    print(f"     fix: {item.fix}")
+        return 0 if diagnosis.ok else 1
 
     raise AssertionError(args.provider_action)
 
