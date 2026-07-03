@@ -36,7 +36,9 @@ package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["tillm"]
+# "tillm" alone excludes subpackages (tillm.transports shipped broken wheels);
+# the wildcard picks up every subpackage.
+include = ["tillm", "tillm.*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
