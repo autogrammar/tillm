@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import subprocess
 from collections.abc import Iterable
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -131,18 +132,22 @@ def drive_koru_chat(
     execute: bool = True,
     model: str | None = None,
     execute_profile: str = "default",
+    timeout_seconds: float | None = None,
 ) -> dict[str, object]:
-    result = drive_shell_llm(
-        ShellDriveRequest(
-            client_id=client_id,
-            prompt=prompt,
-            project=project,
-            execute=execute,
-            dry_run=not execute,
-            model=model,
-            execute_profile=execute_profile,
-        )
+    request = ShellDriveRequest(
+        client_id=client_id,
+        prompt=prompt,
+        project=project,
+        execute=execute,
+        dry_run=not execute,
+        model=model,
+        execute_profile=execute_profile,
     )
+    if timeout_seconds is not None:
+        # Keep the dataclass default (900s) unless the caller asks otherwise —
+        # agentic refactors (god-module splits) routinely outlive 15 minutes.
+        request = replace(request, timeout_seconds=timeout_seconds)
+    result = drive_shell_llm(request)
     return result.to_dict()
 
 
