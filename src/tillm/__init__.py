@@ -16,6 +16,7 @@ from tillm.controller import (
     drive_shell_llm_many,
     save_prompt,
 )
+from tillm.headless import headless_client_ids, run_headless, supports_headless
 from tillm.registry import (
     ShellClientSpec,
     available_client_ids,
@@ -43,4 +44,7 @@ __all__ = [
     "normalize_client_id",
     "resolve_client_ids",
     "save_prompt",
+    "run_headless",
+    "supports_headless",
+    "headless_client_ids",
 ]

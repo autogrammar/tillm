@@ -1,0 +1,10 @@
+# local.dev.txt — locally developed dependencies of this project (generated 2026-07-04)
+# by ~/github/local.dev.sh — DO NOT EDIT; see ~/github/local.dev.md
+# project: nlp2tillm 0.1.0 (python) at /home/tom/github/semcod/tillm/packages/nlp2tillm
+# deps declared: 2 | with local source: 2
+
+## LOCAL DEPS  (dep | required | local source (version) | installed | status)
+dsl2tillm | >=0.1.0 | /home/tom/github/semcod/tillm/packages/dsl2tillm (0.1.0) | - | NOT-INSTALLED  [pyproject.toml]
+tillm | >=0.1.32 | /home/tom/github/semcod/tillm (0.1.39) | 0.1.38 editable | OK-EDITABLE  [pyproject.toml]
+
+## EXTERNAL DEPS (no local source, 0): -

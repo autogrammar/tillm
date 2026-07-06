@@ -236,3 +236,6 @@ __marimo__/
 # koru runtime artefacts (generated)
 .koru/
 .aider*
+
+# koru runtime artefacts (generated)
+.planfile/.koru/

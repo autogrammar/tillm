@@ -1,0 +1,14 @@
+# local.dev.txt — locally developed dependencies of this project (generated 2026-07-04)
+# by ~/github/local.dev.sh — DO NOT EDIT; see ~/github/local.dev.md
+# project: tillm 0.1.39 (python) at /home/tom/github/semcod/tillm
+# deps declared: 10 | with local source: 6
+
+## LOCAL DEPS  (dep | required | local source (version) | installed | status)
+costs | >=0.1.20 | /home/tom/github/semcod/costs (0.1.53) | 0.1.51 non-editable | STALE-INSTALL (local 0.1.53) -> fix: pip install -e /home/tom/github/semcod/costs  [pyproject.toml[dev]]
+env2llm | >=0.1.12 | /home/tom/github/semcod/env2llm (0.1.13) | - | NOT-INSTALLED  [pyproject.toml[env]]
+goal | >=2.1.0 | /home/tom/github/semcod/goal (2.1.266) | 2.1.246 non-editable | STALE-INSTALL (local 2.1.266) -> fix: pip install -e /home/tom/github/semcod/goal  [pyproject.toml[dev]]
+pfix | >=0.1.60 | /home/tom/github/semcod/pfix (0.1.76) | 0.1.73 non-editable | STALE-INSTALL (local 0.1.76) -> fix: pip install -e /home/tom/github/semcod/pfix  [pyproject.toml[dev]]
+planfile | >=0.1.100 | /home/tom/github/semcod/planfile (0.1.106) | 0.1.103 non-editable | STALE-INSTALL (local 0.1.106) -> fix: pip install -e /home/tom/github/semcod/planfile  [pyproject.toml[planfile]]
+testql | >=1.2.0 | /home/tom/github/oqlos/testql (1.2.60) | 1.2.59 non-editable | STALE-INSTALL (local 1.2.60) -> fix: pip install -e /home/tom/github/oqlos/testql  [pyproject.toml[dev]]
+
+## EXTERNAL DEPS (no local source, 4): build, pytest, ruff, twine
