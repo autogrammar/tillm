@@ -239,3 +239,5 @@ __marimo__/
 
 # koru runtime artefacts (generated)
 .planfile/.koru/
+.cursor/
+.github/
