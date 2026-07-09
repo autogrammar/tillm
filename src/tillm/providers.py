@@ -410,6 +410,148 @@ def resolve_request_provider(explicit: str | None = None) -> str | None:
     return normalize_provider_id(raw) if raw else None
 
 
+# Sentinel passed on ShellDriveRequest.provider to force native client auth (e.g.
+# claude-code subscription login) with no tillm env overlay.
+SUBSCRIPTION_DRIVE_PROVIDER = "__subscription__"
+
+_SUBSCRIPTION_ORDER_TOKENS = frozenset(
+    {"subscription", "claude-subscription", "native", "claude-native"}
+)
+
+# Clients that can use the subscription/native attempt (no provider overlay).
+_SUBSCRIPTION_CLIENTS = frozenset({"claude-code"})
+
+_PROVIDER_EXHAUSTION_MARKERS = (
+    "429",
+    "402",
+    "limit exhausted",
+    "rate limit",
+    "requires more credits",
+    "insufficient credits",
+    "insufficient quota",
+    "quota exceeded",
+    "billing",
+    "weekly/monthly limit",
+    "usage limit",
+    "credit balance",
+)
+
+
+def is_subscription_order_token(token: str) -> bool:
+    return (token or "").strip().lower() in _SUBSCRIPTION_ORDER_TOKENS
+
+
+def provider_compatible_with_client(client_id: str, provider_id: str) -> bool:
+    """Whether ``provider_id`` (or subscription sentinel) can drive ``client_id``."""
+    if provider_id == SUBSCRIPTION_DRIVE_PROVIDER:
+        return (client_id or "").strip().lower() in _SUBSCRIPTION_CLIENTS
+    protocol = client_protocol(client_id)
+    if protocol is None:
+        return False
+    try:
+        spec = get_provider_spec(provider_id)
+    except UnknownProviderError:
+        return False
+    if protocol not in spec.protocols():
+        # openrouter fallback: claude-code can hand off to aider when available.
+        if (
+            provider_id == "openrouter"
+            and (client_id or "").strip().lower() == "claude-code"
+        ):
+            from tillm.compat import is_client_available
+
+            return is_client_available("aider")
+        return False
+    if spec.kind == "api" and not resolve_provider_token(spec.id):
+        return False
+    return True
+
+
+def resolve_drive_client_id(client_id: str, provider_id: str | None) -> str:
+    """Client to spawn for a provider attempt (openrouter may switch claude-code → aider)."""
+    if (
+        provider_id == "openrouter"
+        and (client_id or "").strip().lower() == "claude-code"
+    ):
+        from tillm.compat import is_client_available
+
+        if is_client_available("aider"):
+            return "aider"
+    return client_id
+
+
+def resolve_drive_model(
+    client_id: str,
+    provider_id: str | None,
+    requested: str | None,
+) -> str | None:
+    """Pick a model for a provider attempt (avoid openrouter/ prefixes on z.ai)."""
+    model = (requested or "").strip()
+    if provider_id in {None, SUBSCRIPTION_DRIVE_PROVIDER}:
+        return model or None
+    if not model:
+        return provider_default_model(provider_id)
+    if provider_id == "openrouter":
+        return model if model.startswith("openrouter/") else f"openrouter/{model}"
+    if model.startswith("openrouter/"):
+        return provider_default_model(provider_id)
+    return model
+
+
+def resolve_provider_drive_attempts(
+    client_id: str,
+    *,
+    explicit_provider: str | None = None,
+) -> tuple[str | None, ...]:
+    """Ordered provider attempts for a drive (subscription → z.ai → openrouter, …).
+
+  Precedence:
+  - explicit ``--provider`` on CLI → single attempt, no automatic fallback
+  - ``TILLM_PROVIDER_ORDER`` (comma-separated) when set
+  - else single ``TILLM_PROVIDER`` / stored default (legacy behaviour)
+    """
+    if (explicit_provider or "").strip():
+        token = explicit_provider.strip()
+        if is_subscription_order_token(token):
+            return (SUBSCRIPTION_DRIVE_PROVIDER,)
+        return (normalize_provider_id(token),)
+
+    order_raw = os.environ.get("TILLM_PROVIDER_ORDER", "").strip()
+    if order_raw:
+        attempts: list[str | None] = []
+        for raw in order_raw.split(","):
+            token = raw.strip()
+            if not token:
+                continue
+            if is_subscription_order_token(token):
+                candidate = SUBSCRIPTION_DRIVE_PROVIDER
+            else:
+                try:
+                    get_provider_spec(token)
+                except UnknownProviderError:
+                    continue
+                candidate = normalize_provider_id(token)
+            if not provider_compatible_with_client(client_id, candidate):
+                continue
+            if candidate not in attempts:
+                attempts.append(candidate)
+        if attempts:
+            return tuple(attempts)
+
+    single = resolve_request_provider(None)
+    if single and provider_compatible_with_client(client_id, single):
+        return (single,)
+    if (client_id or "").strip().lower() in _SUBSCRIPTION_CLIENTS:
+        return (SUBSCRIPTION_DRIVE_PROVIDER,)
+    return ()
+
+
+def is_provider_exhaustion(*, stdout: str = "", stderr: str = "", message: str = "") -> bool:
+    """True when failure looks like quota/rate-limit/credits (try next provider)."""
+    blob = f"{stdout}\n{stderr}\n{message}".lower()
+    return any(marker in blob for marker in _PROVIDER_EXHAUSTION_MARKERS)
+
+
 # --------------------------------------------------------------------------
 # Connectivity probe
 # --------------------------------------------------------------------------
@@ -750,18 +892,25 @@ __all__ = [
     "ProviderSpec",
     "ProbeResult",
     "UnknownProviderError",
+    "SUBSCRIPTION_DRIVE_PROVIDER",
     "client_protocol",
     "get_provider_spec",
     "DiagnosisItem",
     "ModelListing",
     "ProviderDiagnosis",
     "diagnose_provider",
+    "is_provider_exhaustion",
+    "is_subscription_order_token",
     "iter_provider_specs",
     "list_provider_models",
     "normalize_provider_id",
     "probe_provider",
     "get_default_provider",
+    "provider_compatible_with_client",
     "provider_default_model",
+    "resolve_drive_model",
+    "resolve_drive_client_id",
+    "resolve_provider_drive_attempts",
     "set_default_provider",
     "provider_env_overlay",
     "resolve_provider_token",

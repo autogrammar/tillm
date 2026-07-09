@@ -8,7 +8,7 @@ import shutil
 import subprocess
 import time
 from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -131,9 +131,11 @@ class ShellDriveResult:
     stdout: str = ""
     stderr: str = ""
     message: str = ""
+    provider: str | None = None
+    provider_attempts: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        payload: dict[str, object] = {
             "ok": self.ok,
             "client_id": self.client_id,
             "command": list(self.command),
@@ -147,6 +149,11 @@ class ShellDriveResult:
             "message": self.message,
             "backend": "tillm_shell",
         }
+        if self.provider is not None:
+            payload["provider"] = self.provider
+        if self.provider_attempts:
+            payload["provider_attempts"] = list(self.provider_attempts)
+        return payload
 
 
 @dataclass(frozen=True)
@@ -274,6 +281,7 @@ def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
         stdin_text = request.prompt.strip() + "\n"
 
     from tillm.providers import (
+        SUBSCRIPTION_DRIVE_PROVIDER,
         client_protocol,
         get_provider_spec,
         provider_env_overlay,
@@ -282,17 +290,24 @@ def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
 
     env_overlay: dict[str, str] = {}
     explicit_provider = bool((request.provider or "").strip())
-    provider = resolve_request_provider(request.provider)
-    if provider:
-        # An implicit provider (TILLM_PROVIDER env or stored default) must not
-        # break clients it cannot serve — skip the overlay for unmapped or
-        # protocol-incompatible clients. An explicit --provider still raises.
-        protocol = client_protocol(spec.id)
-        compatible = (
-            protocol is not None and protocol in get_provider_spec(provider).protocols()
-        )
-        if explicit_provider or compatible:
+    if request.provider == SUBSCRIPTION_DRIVE_PROVIDER:
+        env_overlay = {}
+    elif request.provider:
+        provider = resolve_request_provider(request.provider)
+        if provider:
             env_overlay = provider_env_overlay(spec.id, provider)
+    else:
+        provider = resolve_request_provider(None)
+        if provider:
+            # An implicit provider (TILLM_PROVIDER env or stored default) must not
+            # break clients it cannot serve — skip the overlay for unmapped or
+            # protocol-incompatible clients. An explicit --provider still raises.
+            protocol = client_protocol(spec.id)
+            compatible = (
+                protocol is not None and protocol in get_provider_spec(provider).protocols()
+            )
+            if explicit_provider or compatible:
+                env_overlay = provider_env_overlay(spec.id, provider)
 
     return ShellDrivePlan(
         spec=spec,
@@ -418,7 +433,7 @@ def drive_shell_llm_many(request: MultiShellDriveRequest) -> MultiShellDriveResu
     )
 
 
-def drive_shell_llm(request: ShellDriveRequest) -> ShellDriveResult:
+def _drive_shell_llm_once(request: ShellDriveRequest) -> ShellDriveResult:
     plan = build_drive_plan(request)
     backend = resolve_backend(request.backend, spec=plan.spec)
     if backend == "docker":
@@ -435,6 +450,65 @@ def drive_shell_llm(request: ShellDriveRequest) -> ShellDriveResult:
             message="http backend not implemented yet; use binary or docker",
         )
     return run_binary_drive(request, plan)
+
+
+def drive_shell_llm(request: ShellDriveRequest) -> ShellDriveResult:
+    from tillm.providers import (
+        SUBSCRIPTION_DRIVE_PROVIDER,
+        is_provider_exhaustion,
+        resolve_drive_client_id,
+        resolve_drive_model,
+        resolve_provider_drive_attempts,
+    )
+
+    attempts = resolve_provider_drive_attempts(
+        request.client_id,
+        explicit_provider=request.provider,
+    )
+    if not attempts:
+        return _drive_shell_llm_once(request)
+
+    attempt_labels = tuple(
+        "subscription"
+        if token == SUBSCRIPTION_DRIVE_PROVIDER
+        else str(token)
+        for token in attempts
+    )
+    last: ShellDriveResult | None = None
+    for provider_token in attempts:
+        drive_client = resolve_drive_client_id(request.client_id, provider_token)
+        attempt_request = replace(
+            request,
+            client_id=drive_client,
+            provider=provider_token,
+            model=resolve_drive_model(
+                drive_client,
+                provider_token,
+                request.model,
+            ),
+        )
+        result = _drive_shell_llm_once(attempt_request)
+        label = (
+            "subscription"
+            if provider_token == SUBSCRIPTION_DRIVE_PROVIDER
+            else provider_token
+        )
+        result = replace(
+            result,
+            provider=label if result.ok else result.provider,
+            provider_attempts=attempt_labels,
+        )
+        if result.ok:
+            return replace(result, provider=label)
+        if not is_provider_exhaustion(
+            stdout=result.stdout,
+            stderr=result.stderr,
+            message=result.message,
+        ):
+            return result
+        last = result
+    assert last is not None
+    return last
 
 
 def result_from_error(client_id: str, exc: Exception) -> dict[str, Any]:

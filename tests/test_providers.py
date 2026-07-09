@@ -293,3 +293,42 @@ class TestDiagnostics:
         monkeypatch.setattr(prov, "_http_json", fake_http)
         diagnosis = prov.diagnose_provider("z.ai")
         assert diagnosis.ok, [vars(i) for i in diagnosis.items]
+
+
+class TestProviderOrder:
+    def test_order_skips_subscription_for_aider(self, monkeypatch):
+        monkeypatch.setenv("TILLM_PROVIDER_ORDER", "subscription,z.ai,openrouter")
+        prov.save_provider_token("z.ai", "sk-zai")
+        monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or")
+        attempts = prov.resolve_provider_drive_attempts("aider")
+        assert attempts == ("z.ai", "openrouter")
+
+    def test_order_includes_subscription_for_claude_code(self, monkeypatch):
+        monkeypatch.setenv("TILLM_PROVIDER_ORDER", "subscription,z.ai,openrouter")
+        prov.save_provider_token("z.ai", "sk-zai")
+        monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or")
+        attempts = prov.resolve_provider_drive_attempts("claude-code")
+        assert attempts[0] == prov.SUBSCRIPTION_DRIVE_PROVIDER
+        assert "z.ai" in attempts
+        assert "openrouter" in attempts
+
+    def test_explicit_provider_disables_order(self, monkeypatch):
+        monkeypatch.setenv("TILLM_PROVIDER_ORDER", "subscription,z.ai,openrouter")
+        attempts = prov.resolve_provider_drive_attempts(
+            "aider",
+            explicit_provider="openrouter",
+        )
+        assert attempts == ("openrouter",)
+
+    def test_exhaustion_detection(self):
+        assert prov.is_provider_exhaustion(stderr="429 Weekly/Monthly Limit Exhausted")
+        assert prov.is_provider_exhaustion(stderr="402 requires more credits")
+        assert not prov.is_provider_exhaustion(stderr="file not found")
+
+    def test_resolve_drive_model_swaps_openrouter_prefix_on_zai(self):
+        model = prov.resolve_drive_model(
+            "aider",
+            "z.ai",
+            "openrouter/deepseek/deepseek-v4-pro",
+        )
+        assert model == "glm-4.7"

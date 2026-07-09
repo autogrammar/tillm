@@ -808,3 +808,54 @@ def test_drive_without_prompt_writes_tillm_log(
     assert event["ok"] is False
     latest = json.loads((log_root / "latest.json").read_text(encoding="utf-8"))
     assert latest["phase"] == "prompt_error"
+
+
+def test_drive_provider_fallback_on_exhaustion(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    from tillm.controller import ShellDriveRequest, ShellDriveResult, drive_shell_llm
+
+    monkeypatch.setenv("TILLM_PROVIDER_ORDER", "z.ai,openrouter")
+    monkeypatch.setenv("ZAI_API_KEY", "sk-zai")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or")
+
+    calls: list[str | None] = []
+
+    def fake_once(request: ShellDriveRequest) -> ShellDriveResult:
+        provider = request.provider
+        calls.append(provider)
+        if provider == "z.ai":
+            return ShellDriveResult(
+                ok=False,
+                client_id="aider",
+                command=("aider",),
+                prompt_path=tmp_path / "p.md",
+                executed=True,
+                dry_run=False,
+                stderr="429 Weekly/Monthly Limit Exhausted",
+                message="client command failed",
+            )
+        return ShellDriveResult(
+            ok=True,
+            client_id="aider",
+            command=("aider",),
+            prompt_path=tmp_path / "p.md",
+            executed=True,
+            dry_run=False,
+            message="completed",
+        )
+
+    monkeypatch.setattr("tillm.controller._drive_shell_llm_once", fake_once)
+    result = drive_shell_llm(
+        ShellDriveRequest(
+            client_id="aider",
+            prompt="ok",
+            project=tmp_path,
+            execute=True,
+        )
+    )
+    assert calls == ["z.ai", "openrouter"]
+    assert result.ok is True
+    assert result.provider == "openrouter"
+    assert result.provider_attempts == ("z.ai", "openrouter")
