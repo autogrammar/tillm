@@ -248,6 +248,24 @@ def _normalize_model_for_client(client_id: str, model: str) -> str:
     return f"claude-{lowered}"
 
 
+def _model_for_plan(request: ShellDriveRequest, client_id: str) -> str:
+    """Resolve the model argument for a drive, honouring the active provider.
+
+    The ``claude-`` prefix is an Anthropic naming convention, so it may only be
+    applied when Anthropic actually serves the request. A third-party provider
+    overlay (z.ai, DeepSeek, …) drives claude-code through an
+    Anthropic-*compatible* endpoint but keeps its own model ids, and prefixing
+    those yields an unknown-model API error (e.g. ``claude-glm-5.2``).
+    """
+    from tillm.providers import SUBSCRIPTION_DRIVE_PROVIDER
+
+    model = (request.model or "").strip()
+    provider = (request.provider or "").strip()
+    if provider and provider != SUBSCRIPTION_DRIVE_PROVIDER:
+        return model
+    return _normalize_model_for_client(client_id, model)
+
+
 def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
     bootstrap_project_env(request.project)
     spec = _resolve_spec(request.client_id)
@@ -263,7 +281,7 @@ def build_drive_plan(request: ShellDriveRequest) -> ShellDrivePlan:
         _resolve_execute_args(spec, execute=request.execute, profile=execute_profile)
     )
     model_args: list[str] = []
-    model = _normalize_model_for_client(spec.id, (request.model or "").strip())
+    model = _model_for_plan(request, spec.id)
     if model:
         if not spec.model_flag:
             raise ClientNotReadyError(

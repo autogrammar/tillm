@@ -255,6 +255,46 @@ def test_build_drive_plan_forces_model_flag(tmp_path: Path) -> None:
             )
 
 
+def test_build_drive_plan_keeps_third_party_provider_model_unprefixed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A provider overlay drives claude-code through an Anthropic-*compatible*
+    endpoint but keeps its own model ids. Prefixing them yields an
+    unknown-model API error (``claude-glm-5.2``), so only a subscription /
+    native attempt may apply the ``claude-`` convention."""
+    import shutil
+    from unittest.mock import patch
+
+    from tillm.providers import SUBSCRIPTION_DRIVE_PROVIDER
+
+    monkeypatch.setenv("ZAI_API_KEY", "test-token")
+
+    with patch.object(shutil, "which", lambda name: f"/usr/bin/{name}"):
+        overlay_plan = build_drive_plan(
+            ShellDriveRequest(
+                client_id="claude-code",
+                prompt="Fix PLF-1",
+                project=tmp_path,
+                model="glm-5.2",
+                provider="z.ai",
+            )
+        )
+        assert overlay_plan.argv[overlay_plan.argv.index("--model") + 1] == "glm-5.2"
+
+        subscription_plan = build_drive_plan(
+            ShellDriveRequest(
+                client_id="claude-code",
+                prompt="Fix PLF-1",
+                project=tmp_path,
+                model="sonnet-5",
+                provider=SUBSCRIPTION_DRIVE_PROVIDER,
+            )
+        )
+        index = subscription_plan.argv.index("--model")
+        assert subscription_plan.argv[index + 1] == "claude-sonnet-5"
+
+
 def test_build_drive_plan_uses_message_file_for_aider(tmp_path: Path) -> None:
     import shutil
     from unittest.mock import patch
