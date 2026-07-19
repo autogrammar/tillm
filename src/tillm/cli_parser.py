@@ -154,6 +154,23 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Import a missing store token and write exports; default is a dry-run plan.",
     )
     p_sync.add_argument("--format", choices=("text", "json"), default="text")
+    p_order = provider_sub.add_parser(
+        "order",
+        help=(
+            "Show or set the persisted fallback queue (priority order of "
+            "providers for drives). No args shows it; args set it, e.g. "
+            "`tillm provider order subscription z.ai minimax`."
+        ),
+    )
+    p_order.add_argument(
+        "tokens",
+        nargs="*",
+        help="Provider ids/aliases in priority order; `subscription` = native claude login.",
+    )
+    p_order.add_argument(
+        "--clear", action="store_true", help="Remove the persisted queue."
+    )
+    p_order.add_argument("--format", choices=("text", "json"), default="text")
 
     nlp = sub.add_parser("nlp", help="Map natural language to TILLM drive DSL.")
     nlp.add_argument("text", nargs="+", help="Natural-language control request.")

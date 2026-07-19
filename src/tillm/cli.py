@@ -249,6 +249,40 @@ def _sync_matrix(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
+def _provider_order(args: argparse.Namespace) -> int:
+    from tillm.providers import (
+        UnknownProviderError,
+        get_stored_provider_order,
+        set_provider_order,
+    )
+
+    if args.clear:
+        set_provider_order([])
+        print("provider order cleared")
+        return 0
+    if args.tokens:
+        tokens: list[str] = []
+        for raw in args.tokens:
+            tokens.extend(part for part in raw.split(",") if part.strip())
+        try:
+            set_provider_order(tokens)
+        except UnknownProviderError as exc:
+            print(f"tillm: {exc}", file=sys.stderr)
+            return 2
+    stored = get_stored_provider_order()
+    env_order = os.environ.get("TILLM_PROVIDER_ORDER", "").strip()
+    if getattr(args, "format", "text") == "json":
+        print(json.dumps({"stored": list(stored), "env": env_order or None}, indent=2))
+        return 0
+    if stored:
+        print("order (stored): " + " → ".join(stored))
+    else:
+        print("order (stored): (none — single TILLM_PROVIDER/default applies)")
+    if env_order:
+        print(f"env TILLM_PROVIDER_ORDER overrides it: {env_order}")
+    return 0
+
+
 def _provider_action(args: argparse.Namespace) -> int:
     from tillm.providers import (
         UnknownProviderError,
@@ -259,6 +293,9 @@ def _provider_action(args: argparse.Namespace) -> int:
 
     if args.provider_action == "sync" and not args.provider_id:
         return _sync_matrix(args)
+
+    if args.provider_action == "order":
+        return _provider_order(args)
 
     try:
         spec = get_provider_spec(args.provider_id)

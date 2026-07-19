@@ -332,3 +332,41 @@ class TestProviderOrder:
             "openrouter/deepseek/deepseek-v4-pro",
         )
         assert model == "glm-4.7"
+
+
+class TestProviderOrder:
+    """Persisted fallback queue: `tillm provider order`."""
+
+    def test_set_normalizes_aliases_dedupes_and_roundtrips(self):
+        prov.set_provider_order(["subscription", "zai", "GLM", "minimax"])
+        assert prov.get_stored_provider_order() == ("subscription", "z.ai", "minimax")
+
+    def test_unknown_token_raises(self):
+        with pytest.raises(prov.UnknownProviderError):
+            prov.set_provider_order(["z.ai", "nope"])
+
+    def test_clear(self):
+        prov.set_provider_order(["z.ai"])
+        prov.set_provider_order([])
+        assert prov.get_stored_provider_order() == ()
+
+    def test_stored_order_drives_attempts_when_env_unset(self, monkeypatch):
+        monkeypatch.delenv("TILLM_PROVIDER_ORDER", raising=False)
+        prov.save_provider_token("z.ai", "tok")
+        prov.set_provider_order(["subscription", "z.ai", "minimax"])
+        attempts = prov.resolve_provider_drive_attempts("claude-code")
+        # minimax dropped: no token → not compatible
+        assert attempts == (prov.SUBSCRIPTION_DRIVE_PROVIDER, "z.ai")
+
+    def test_env_order_wins_over_stored(self, monkeypatch):
+        prov.save_provider_token("z.ai", "tok")
+        prov.save_provider_token("deepseek", "tok2")
+        prov.set_provider_order(["z.ai"])
+        monkeypatch.setenv("TILLM_PROVIDER_ORDER", "deepseek")
+        assert prov.resolve_provider_drive_attempts("claude-code") == ("deepseek",)
+
+    def test_order_preserved_alongside_default_provider(self):
+        prov.set_default_provider("z.ai")
+        prov.set_provider_order(["z.ai", "openrouter"])
+        assert prov.get_default_provider() == "z.ai"
+        assert prov.get_stored_provider_order() == ("z.ai", "openrouter")

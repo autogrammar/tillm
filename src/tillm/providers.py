@@ -334,6 +334,44 @@ def get_default_provider() -> str | None:
     return None
 
 
+def set_provider_order(order: list[str]) -> Path:
+    """Persist the fallback queue used when ``TILLM_PROVIDER_ORDER`` is unset.
+
+    Tokens are provider ids/aliases or a subscription token (``subscription``).
+    Raises ``UnknownProviderError`` on anything else, so a typo cannot
+    silently drop a provider from the queue.
+    """
+    normalized: list[str] = []
+    for raw in order:
+        token = (raw or "").strip()
+        if not token:
+            continue
+        if is_subscription_order_token(token):
+            candidate = "subscription"
+        else:
+            get_provider_spec(token)  # raises UnknownProviderError
+            candidate = normalize_provider_id(token)
+        if candidate not in normalized:
+            normalized.append(candidate)
+    store = _load_store()
+    entry = dict(store.get("_default") or {})
+    if normalized:
+        entry["order"] = normalized
+    else:
+        entry.pop("order", None)
+    store["_default"] = entry
+    return _write_store(store)
+
+
+def get_stored_provider_order() -> tuple[str, ...]:
+    entry = _load_store().get("_default")
+    if isinstance(entry, dict):
+        raw = entry.get("order")
+        if isinstance(raw, list):
+            return tuple(str(item).strip() for item in raw if str(item).strip())
+    return ()
+
+
 def provider_default_model(provider_id: str) -> str | None:
     stored = stored_provider_entry(provider_id).get("model", "")
     if stored.strip():
@@ -508,6 +546,7 @@ def resolve_provider_drive_attempts(
   Precedence:
   - explicit ``--provider`` on CLI → single attempt, no automatic fallback
   - ``TILLM_PROVIDER_ORDER`` (comma-separated) when set
+  - stored order (``tillm provider order …``) when configured
   - else single ``TILLM_PROVIDER`` / stored default (legacy behaviour)
     """
     if (explicit_provider or "").strip():
@@ -517,9 +556,14 @@ def resolve_provider_drive_attempts(
         return (normalize_provider_id(token),)
 
     order_raw = os.environ.get("TILLM_PROVIDER_ORDER", "").strip()
-    if order_raw:
+    order_tokens = (
+        [raw for raw in order_raw.split(",")]
+        if order_raw
+        else list(get_stored_provider_order())
+    )
+    if order_tokens:
         attempts: list[str | None] = []
-        for raw in order_raw.split(","):
+        for raw in order_tokens:
             token = raw.strip()
             if not token:
                 continue

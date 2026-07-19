@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `tillm provider sync` (no provider id) — machine-wide matrix: every
+  registered provider × every config surface, with `token_url` hints for
+  providers without a key; Qoder detection now ignores the cached BYOK
+  catalog (only real user config counts).
+- `tillm provider order` — persist the provider fallback queue in the store
+  (`subscription z.ai minimax …`); drives use it when `TILLM_PROVIDER_ORDER`
+  is unset. Explicit `--provider` still disables fallback.
 - `tillm provider sync` + `tillm.surfaces` — reconcile a provider across tool
   configs on the machine at both levels: terminal (claude-code settings,
   codex `config.toml`, opencode config — read/write) and GUI (JetBrains
@@ -38,6 +45,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Circular import between `tillm.controller` and `tillm.transports.binary` (lazy import in transports)
 - `uri2tillm` parser: `source` from URI `netloc` (aligned with `gillm` pattern)
+
+## [0.1.42] - 2026-07-19
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Test
+- Update tests/test_providers.py
 
 ## [0.1.41] - 2026-07-19
 
