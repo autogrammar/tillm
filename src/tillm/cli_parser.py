@@ -128,6 +128,32 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p_doctor.add_argument("provider_id")
     p_doctor.add_argument("--format", choices=("text", "json"), default="text")
+    p_sync = provider_sub.add_parser(
+        "sync",
+        help=(
+            "Reconcile the provider across tool configs on this machine "
+            "(terminal: claude-code/codex/opencode; GUI: JetBrains/Qoder). "
+            "Dry-run by default; --apply writes."
+        ),
+    )
+    p_sync.add_argument(
+        "provider_id",
+        nargs="?",
+        default=None,
+        help="Provider id, e.g. z.ai. Omit for a machine-wide matrix of all providers.",
+    )
+    p_sync.add_argument(
+        "--level",
+        choices=("terminal", "gui"),
+        default=None,
+        help="Only surfaces of this level (default: both).",
+    )
+    p_sync.add_argument(
+        "--apply",
+        action="store_true",
+        help="Import a missing store token and write exports; default is a dry-run plan.",
+    )
+    p_sync.add_argument("--format", choices=("text", "json"), default="text")
 
     nlp = sub.add_parser("nlp", help="Map natural language to TILLM drive DSL.")
     nlp.add_argument("text", nargs="+", help="Natural-language control request.")

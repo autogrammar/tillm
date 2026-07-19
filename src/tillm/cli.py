@@ -205,6 +205,50 @@ def _providers_list(args: argparse.Namespace) -> int:
     return 0
 
 
+_SYNC_SURFACE_SHORT = {
+    "claude-settings": "claude",
+    "codex-config": "codex",
+    "opencode-config": "opencode",
+    "jetbrains-openai-like": "jetbrains",
+    "qoder": "qoder",
+}
+
+_SYNC_ACTION_MARKS = {
+    "ok": "✓",
+    "export": "→",
+    "import-token": "←",
+    "manual": "⚠",
+    "skip": "·",
+}
+
+
+def _sync_matrix(args: argparse.Namespace) -> int:
+    from tillm.surfaces import sync_all
+
+    matrix = sync_all(level=args.level, apply=args.apply)
+    if getattr(args, "format", "text") == "json":
+        print(json.dumps(matrix, indent=2))
+        return 0
+    mode = "applied" if args.apply else "plan (dry-run; use --apply)"
+    print(f"provider sync matrix — {mode}")
+    failures = 0
+    for report in matrix["providers"]:
+        store_mark = "✓" if report["store_token"] else "✗"
+        cells = []
+        for step in report["steps"]:
+            mark = _SYNC_ACTION_MARKS.get(step["action"], "?")
+            if args.apply and step["action"] in {"export", "import-token"}:
+                mark = "✓" if step.get("done") else "✗"
+                failures += 0 if step.get("done") else 1
+            cells.append(f"{mark}{_SYNC_SURFACE_SHORT.get(step['surface_id'], step['surface_id'])}")
+        line = f"  {store_mark} {report['provider']:<12} {' '.join(cells)}"
+        if not report["store_token"] and report.get("token_url"):
+            line += f"   token: {report['token_url']}"
+        print(line)
+    print("  legend: ✓ in sync  → export pending  ← import pending  ⚠ manual (IDE keychain)  · no token")
+    return 1 if failures else 0
+
+
 def _provider_action(args: argparse.Namespace) -> int:
     from tillm.providers import (
         UnknownProviderError,
@@ -212,6 +256,9 @@ def _provider_action(args: argparse.Namespace) -> int:
         probe_provider,
         save_provider_token,
     )
+
+    if args.provider_action == "sync" and not args.provider_id:
+        return _sync_matrix(args)
 
     try:
         spec = get_provider_spec(args.provider_id)
@@ -285,6 +332,50 @@ def _provider_action(args: argparse.Namespace) -> int:
                 if item.fix:
                     print(f"     fix: {item.fix}")
         return 0 if diagnosis.ok else 1
+
+    if args.provider_action == "sync":
+        from tillm.surfaces import apply_sync, plan_sync
+
+        run = apply_sync if args.apply else plan_sync
+        report = run(spec.id, level=args.level)
+        if getattr(args, "format", "text") == "json":
+            print(json.dumps(report, indent=2))
+        else:
+            store_mark = "✓" if report["store_token"] else "✗"
+            mode = "applied" if args.apply else "plan (dry-run; use --apply)"
+            print(f"{spec.id}: store token {store_mark} — {mode}")
+            states = {state["surface_id"]: state for state in report["states"]}
+            marks = {
+                "ok": "✓",
+                "export": "→",
+                "import-token": "←",
+                "manual": "⚠",
+                "skip": "·",
+            }
+            for step in report["steps"]:
+                state = states.get(step["surface_id"], {})
+                mark = marks.get(step["action"], "?")
+                if args.apply and step["action"] in {"export", "import-token"}:
+                    mark = "✓" if step.get("done") else "✗"
+                flags = []
+                if state.get("configured"):
+                    flags.append("configured")
+                if state.get("has_token"):
+                    flags.append("token")
+                where = state.get("path") or "(no config file)"
+                print(
+                    f"  {mark} [{state.get('level', '?'):<8}] "
+                    f"{step['action']:<12} {state.get('label', step['surface_id'])}"
+                )
+                print(f"      {where}  {'+'.join(flags) or '-'}")
+                if step.get("detail"):
+                    print(f"      {step['detail']}")
+        problems = any(
+            step["action"] == "manual"
+            or (args.apply and step["action"] in {"export", "import-token"} and not step.get("done"))
+            for step in report["steps"]
+        )
+        return 1 if problems else 0
 
     raise AssertionError(args.provider_action)
 

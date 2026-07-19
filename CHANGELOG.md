@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `tillm provider sync` + `tillm.surfaces` — reconcile a provider across tool
+  configs on the machine at both levels: terminal (claude-code settings,
+  codex `config.toml`, opencode config — read/write) and GUI (JetBrains
+  AI Assistant OpenAI-like, Qoder BYOK — detect/report; keys live in the IDE
+  keychain). Store stays the source of truth: imports a missing store token
+  from a surface, exports base URL + token to stale writable surfaces.
+  Dry-run by default; `--apply` writes; `--level terminal|gui` filters.
 - `tillm.project_env` — auto-load `<project>/.env`, OpenRouter bridges, optional env2llm map refresh
 - `OPENROUTER_API_KEY` accepted for aider readiness in registry
 - Optional extra `pip install tillm[env]` → `env2llm>=0.1.12`
@@ -31,6 +38,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Circular import between `tillm.controller` and `tillm.transports.binary` (lazy import in transports)
 - `uri2tillm` parser: `source` from URI `netloc` (aligned with `gillm` pattern)
+
+## [0.1.41] - 2026-07-19
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Test
+- Update tests/test_surfaces.py
 
 ## [0.1.40] - 2026-07-19
 
