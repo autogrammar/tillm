@@ -233,3 +233,42 @@ class TestCliSync:
         assert code in (0, 1)  # 1 when GUI surfaces report "manual"
         assert payload["store_token"] is True
         assert "sk-claude" not in json.dumps(payload)
+
+
+class TestSurfaceSelector:
+    def test_alias_normalization(self):
+        assert surf.normalize_surface_ids(["claude", "codex-config"]) == frozenset(
+            {"claude-settings", "codex-config"}
+        )
+        assert surf.normalize_surface_ids(None) is None
+        assert surf.normalize_surface_ids([]) is None
+
+    def test_unknown_surface_raises(self):
+        with pytest.raises(surf.UnknownSurfaceError):
+            surf.normalize_surface_ids(["notepad"])
+
+    def test_apply_with_surface_filter_leaves_claude_alone(self, _sandbox):
+        prov.save_provider_token("z.ai", "sk-stored")
+        surf.apply_sync("z.ai", only=frozenset({"codex-config", "opencode-config"}))
+        assert not (_sandbox / ".claude" / "settings.json").exists()
+        assert (_sandbox / ".codex" / "config.toml").exists()
+        assert (_sandbox / ".config/opencode/opencode.json").exists()
+
+    def test_cli_surface_filter(self, capsys, _sandbox):
+        from tillm.cli import main
+
+        prov.save_provider_token("z.ai", "sk-stored")
+        code = main(
+            ["provider", "sync", "z.ai", "--apply", "--surface", "codex", "--surface", "opencode"]
+        )
+        capsys.readouterr()
+        assert code == 0
+        assert not (_sandbox / ".claude" / "settings.json").exists()
+        assert (_sandbox / ".codex" / "config.toml").exists()
+
+    def test_cli_unknown_surface_is_error(self, capsys):
+        from tillm.cli import main
+
+        code = main(["provider", "sync", "z.ai", "--surface", "notepad"])
+        assert code == 2
+        assert "unknown surface" in capsys.readouterr().err

@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `tillm provider sync --surface NAME` (repeatable) — restrict the sync to
+  chosen surfaces (`claude`, `codex`, `opencode`, `jetbrains`, `qoder`),
+  e.g. export to codex/opencode without repointing claude settings.
 - `tillm provider sync` (no provider id) — machine-wide matrix: every
   registered provider × every config surface, with `token_url` hints for
   providers without a key; Qoder detection now ignores the cached BYOK
@@ -45,6 +48,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Circular import between `tillm.controller` and `tillm.transports.binary` (lazy import in transports)
 - `uri2tillm` parser: `source` from URI `netloc` (aligned with `gillm` pattern)
+
+## [0.1.43] - 2026-07-19
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Test
+- Update tests/test_surfaces.py
 
 ## [0.1.42] - 2026-07-19
 

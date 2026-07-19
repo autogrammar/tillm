@@ -223,9 +223,14 @@ _SYNC_ACTION_MARKS = {
 
 
 def _sync_matrix(args: argparse.Namespace) -> int:
-    from tillm.surfaces import sync_all
+    from tillm.surfaces import UnknownSurfaceError, normalize_surface_ids, sync_all
 
-    matrix = sync_all(level=args.level, apply=args.apply)
+    try:
+        only = normalize_surface_ids(args.surface)
+    except UnknownSurfaceError as exc:
+        print(f"tillm: {exc}", file=sys.stderr)
+        return 2
+    matrix = sync_all(level=args.level, only=only, apply=args.apply)
     if getattr(args, "format", "text") == "json":
         print(json.dumps(matrix, indent=2))
         return 0
@@ -371,10 +376,20 @@ def _provider_action(args: argparse.Namespace) -> int:
         return 0 if diagnosis.ok else 1
 
     if args.provider_action == "sync":
-        from tillm.surfaces import apply_sync, plan_sync
+        from tillm.surfaces import (
+            UnknownSurfaceError,
+            apply_sync,
+            normalize_surface_ids,
+            plan_sync,
+        )
 
+        try:
+            only = normalize_surface_ids(args.surface)
+        except UnknownSurfaceError as exc:
+            print(f"tillm: {exc}", file=sys.stderr)
+            return 2
         run = apply_sync if args.apply else plan_sync
-        report = run(spec.id, level=args.level)
+        report = run(spec.id, level=args.level, only=only)
         if getattr(args, "format", "text") == "json":
             print(json.dumps(report, indent=2))
         else:

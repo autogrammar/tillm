@@ -153,6 +153,17 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Import a missing store token and write exports; default is a dry-run plan.",
     )
+    p_sync.add_argument(
+        "--surface",
+        action="append",
+        default=None,
+        metavar="NAME",
+        help=(
+            "Only these surfaces (repeatable): claude, codex, opencode, "
+            "jetbrains, qoder — e.g. `--surface codex --surface opencode` "
+            "to export without touching claude settings."
+        ),
+    )
     p_sync.add_argument("--format", choices=("text", "json"), default="text")
     p_order = provider_sub.add_parser(
         "order",

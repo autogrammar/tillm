@@ -430,10 +430,43 @@ _SURFACES = (
 )
 
 
-def iter_surfaces(*, level: str | None = None):
+# Short aliases accepted by --surface (full ids work too).
+SURFACE_ALIASES = {
+    "claude": ClaudeSettingsSurface.id,
+    "codex": CodexConfigSurface.id,
+    "opencode": OpencodeConfigSurface.id,
+    "jetbrains": JetBrainsOpenAILikeSurface.id,
+    "qoder": QoderSurface.id,
+}
+
+
+class UnknownSurfaceError(ValueError):
+    pass
+
+
+def normalize_surface_ids(names) -> frozenset[str] | None:
+    """Resolve user-supplied surface names/aliases; None means "all"."""
+    if not names:
+        return None
+    known = {surface.id for surface in _SURFACES}
+    resolved = set()
+    for raw in names:
+        token = (raw or "").strip().lower()
+        token = SURFACE_ALIASES.get(token, token)
+        if token not in known:
+            options = ", ".join(sorted(known | set(SURFACE_ALIASES)))
+            raise UnknownSurfaceError(f"unknown surface {raw!r} (known: {options})")
+        resolved.add(token)
+    return frozenset(resolved)
+
+
+def iter_surfaces(*, level: str | None = None, only=None):
     for surface in _SURFACES:
-        if level is None or surface.level == level:
-            yield surface
+        if level is not None and surface.level != level:
+            continue
+        if only is not None and surface.id not in only:
+            continue
+        yield surface
 
 
 # --------------------------------------------------------------------------
@@ -451,7 +484,9 @@ def _surface_in_sync(surface, spec: ProviderSpec, store_token: str) -> bool:
     return own_token == store_token
 
 
-def plan_sync(provider_id: str, *, level: str | None = None) -> dict:
+def plan_sync(
+    provider_id: str, *, level: str | None = None, only=None
+) -> dict:
     """Dry-run reconciliation of ``provider_id`` across surfaces.
 
     Returns ``{"provider", "store_token", "states", "steps"}`` where each
@@ -463,7 +498,7 @@ def plan_sync(provider_id: str, *, level: str | None = None) -> dict:
     states: list[SurfaceState] = []
     steps: list[SyncStep] = []
     import_pending = store_token is None
-    for surface in iter_surfaces(level=level):
+    for surface in iter_surfaces(level=level, only=only):
         if not surface.applicable(spec):
             continue
         state = surface.read(spec)
@@ -499,7 +534,9 @@ def plan_sync(provider_id: str, *, level: str | None = None) -> dict:
     }
 
 
-def sync_all(*, level: str | None = None, apply: bool = False) -> dict:
+def sync_all(
+    *, level: str | None = None, only=None, apply: bool = False
+) -> dict:
     """Machine-wide matrix: run :func:`plan_sync` (or :func:`apply_sync`)
     for every registered provider that has at least one applicable surface.
 
@@ -511,7 +548,7 @@ def sync_all(*, level: str | None = None, apply: bool = False) -> dict:
     runner = apply_sync if apply else plan_sync
     reports: list[dict] = []
     for spec in iter_provider_specs():
-        report = runner(spec.id, level=level)
+        report = runner(spec.id, level=level, only=only)
         relevant = report["store_token"] or any(
             state["present"] for state in report["states"]
         )
@@ -524,14 +561,16 @@ def sync_all(*, level: str | None = None, apply: bool = False) -> dict:
     return {"applied": apply, "level": level, "providers": reports}
 
 
-def apply_sync(provider_id: str, *, level: str | None = None) -> dict:
+def apply_sync(
+    provider_id: str, *, level: str | None = None, only=None
+) -> dict:
     """Execute :func:`plan_sync`: import a missing store token first, then
     export to every writable surface that is missing or stale. The import
     re-plans, so one run takes a surface token all the way out to the other
     surfaces."""
     spec = get_provider_spec(provider_id)
-    surfaces = {surface.id: surface for surface in iter_surfaces(level=level)}
-    plan = plan_sync(provider_id, level=level)
+    surfaces = {surface.id: surface for surface in iter_surfaces(level=level, only=only)}
+    plan = plan_sync(provider_id, level=level, only=only)
     import_result: dict | None = None
     for step in plan["steps"]:
         if step["action"] != "import-token":
@@ -540,7 +579,7 @@ def apply_sync(provider_id: str, *, level: str | None = None) -> dict:
         if token:
             save_provider_token(spec.id, token)
             import_result = {**step, "done": True}
-            plan = plan_sync(provider_id, level=level)  # exports now unblocked
+            plan = plan_sync(provider_id, level=level, only=only)  # exports now unblocked
         else:
             import_result = {**step, "done": False, "detail": "token vanished"}
         break
