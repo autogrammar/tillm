@@ -32,6 +32,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Circular import between `tillm.controller` and `tillm.transports.binary` (lazy import in transports)
 - `uri2tillm` parser: `source` from URI `netloc` (aligned with `gillm` pattern)
 
+## [0.1.40] - 2026-07-19
+
+### Docs
+- Update README.md
+
+### Test
+- Update tests/conftest.py
+- Update tests/test_cli_output.py
+- Update tests/test_cli_parser.py
+
+### Other
+- Update uv.lock
+
 ## [0.1.39] - 2026-07-03
 
 ### Docs
