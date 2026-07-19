@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tillm"
-version = "0.1.43"
+version = "0.1.44"
 description = "Text-interface LLM control plane for semcod/coru shell automation (pair with gillm for GUI)."
 readme = "README.md"
 requires-python = ">=3.11"

@@ -24,6 +24,7 @@ import json
 import os
 import re
 import stat
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -196,7 +197,10 @@ class CodexConfigSurface:
             has_token=bool(os.environ.get(spec.token_env, "").strip()),
             model=None,
             writable=self.writable,
-            detail=f"token via env {spec.token_env}; select with `codex -c model_provider={_provider_slug(spec)}`",
+            detail=(
+                f"token via env {spec.token_env}; select with "
+                f"`codex -c model_provider={_provider_slug(spec)}`"
+            ),
         )
 
     def read_token(self, spec: ProviderSpec) -> str | None:
@@ -444,7 +448,7 @@ class UnknownSurfaceError(ValueError):
     pass
 
 
-def normalize_surface_ids(names) -> frozenset[str] | None:
+def normalize_surface_ids(names: Iterable[str] | None) -> frozenset[str] | None:
     """Resolve user-supplied surface names/aliases; None means "all"."""
     if not names:
         return None
@@ -460,7 +464,9 @@ def normalize_surface_ids(names) -> frozenset[str] | None:
     return frozenset(resolved)
 
 
-def iter_surfaces(*, level: str | None = None, only=None):
+def iter_surfaces(
+    *, level: str | None = None, only: frozenset[str] | None = None
+):
     for surface in _SURFACES:
         if level is not None and surface.level != level:
             continue
@@ -485,7 +491,10 @@ def _surface_in_sync(surface, spec: ProviderSpec, store_token: str) -> bool:
 
 
 def plan_sync(
-    provider_id: str, *, level: str | None = None, only=None
+    provider_id: str,
+    *,
+    level: str | None = None,
+    only: frozenset[str] | None = None,
 ) -> dict:
     """Dry-run reconciliation of ``provider_id`` across surfaces.
 
@@ -505,7 +514,11 @@ def plan_sync(
         states.append(state)
         if import_pending and surface.read_token(spec):
             steps.append(
-                SyncStep(surface.id, "import-token", f"copy token into tillm store from {state.path}")
+                SyncStep(
+                    surface.id,
+                    "import-token",
+                    f"copy token into tillm store from {state.path}",
+                )
             )
             import_pending = False
         elif not state.writable:
@@ -535,7 +548,10 @@ def plan_sync(
 
 
 def sync_all(
-    *, level: str | None = None, only=None, apply: bool = False
+    *,
+    level: str | None = None,
+    only: frozenset[str] | None = None,
+    apply: bool = False,
 ) -> dict:
     """Machine-wide matrix: run :func:`plan_sync` (or :func:`apply_sync`)
     for every registered provider that has at least one applicable surface.
@@ -558,18 +574,29 @@ def sync_all(
         report["kind"] = spec.kind
         report["token_url"] = spec.token_url
         reports.append(report)
-    return {"applied": apply, "level": level, "providers": reports}
+    selected = [surface.id for surface in iter_surfaces(level=level, only=only)]
+    return {
+        "applied": apply,
+        "level": level,
+        "surfaces": selected,
+        "providers": reports,
+    }
 
 
 def apply_sync(
-    provider_id: str, *, level: str | None = None, only=None
+    provider_id: str,
+    *,
+    level: str | None = None,
+    only: frozenset[str] | None = None,
 ) -> dict:
     """Execute :func:`plan_sync`: import a missing store token first, then
     export to every writable surface that is missing or stale. The import
     re-plans, so one run takes a surface token all the way out to the other
     surfaces."""
     spec = get_provider_spec(provider_id)
-    surfaces = {surface.id: surface for surface in iter_surfaces(level=level, only=only)}
+    surfaces = {
+        surface.id: surface for surface in iter_surfaces(level=level, only=only)
+    }
     plan = plan_sync(provider_id, level=level, only=only)
     import_result: dict | None = None
     for step in plan["steps"]:

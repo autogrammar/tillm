@@ -118,7 +118,6 @@ class TestPlanSync:
         terminal_only = surf.plan_sync("z.ai", level="terminal")
         assert {s["level"] for s in terminal_only["states"]} == {"terminal"}
 
-
 class TestApplySync:
     def test_import_then_export_in_one_run(self, _sandbox):
         _write_claude_settings(_sandbox, token="sk-claude")
@@ -172,7 +171,6 @@ class TestApplySync:
         report = surf.apply_sync("z.ai", level="terminal")
         assert all(step["action"] == "ok" for step in report["steps"])
 
-
 class TestSyncAll:
     def test_matrix_covers_providers_with_present_surfaces(self, _sandbox):
         _write_claude_settings(_sandbox, token="sk-claude")
@@ -193,7 +191,7 @@ class TestSyncAll:
 
     def test_apply_all_syncs_only_providers_with_tokens(self, _sandbox):
         _write_claude_settings(_sandbox, token="sk-claude")
-        matrix = surf.sync_all(apply=True)
+        surf.sync_all(apply=True)
         assert prov.resolve_provider_token("z.ai") == "sk-claude"
         # no token materialised out of thin air for the others
         assert prov.resolve_provider_token("minimax") is None
@@ -201,6 +199,18 @@ class TestSyncAll:
             (_sandbox / ".config/opencode/opencode.json").read_text(encoding="utf-8")
         )
         assert list(opencode["provider"]) == ["zai"]
+
+    def test_matrix_reports_selected_surfaces(self, _sandbox):
+        (_sandbox / ".codex").mkdir()
+        (_sandbox / ".codex" / "config.toml").write_text("", encoding="utf-8")
+        only = surf.normalize_surface_ids(("codex",))
+        matrix = surf.sync_all(only=only)
+        assert matrix["surfaces"] == ["codex-config"]
+        assert all(
+            state["surface_id"] == "codex-config"
+            for report in matrix["providers"]
+            for state in report["states"]
+        )
 
 
 class TestCliSync:
@@ -233,7 +243,6 @@ class TestCliSync:
         assert code in (0, 1)  # 1 when GUI surfaces report "manual"
         assert payload["store_token"] is True
         assert "sk-claude" not in json.dumps(payload)
-
 
 class TestSurfaceSelector:
     def test_alias_normalization(self):

@@ -33,6 +33,24 @@ xai, groq, mistral, minimax, qwen, ollama) ordered by popularity, with token
 page links, model select-lists (Enter keeps the current value) and an optional
 stored default provider used by every drive.
 
+## Machine configuration sync
+
+`tillm provider sync` reconciles the token store with terminal configs
+(Claude Code, Codex, opencode) and reports GUI configs (JetBrains, Qoder).
+It is a dry-run unless `--apply` is passed. Omitting the provider prints the
+machine-wide provider/surface matrix.
+
+```bash
+tillm provider sync
+tillm provider sync z.ai --level terminal
+tillm provider sync z.ai --surface codex --surface opencode --apply
+```
+
+`--surface` is repeatable and accepts `claude`, `codex`, `opencode`,
+`jetbrains`, `qoder`, or the full surface IDs shown in JSON output. It is
+useful when selected configs should be updated without repointing every
+manually launched `claude` through `~/.claude/settings.json`.
+
 ## Localization
 
 CLI messages default to **English**; `pl` and `de` catalogs ship in

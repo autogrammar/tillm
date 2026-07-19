@@ -9,8 +9,11 @@ from __future__ import annotations
 
 import pytest
 
-from tillm.cli import _EXTRA_ARG_OPTION, _build_parser, _normalize_extra_arg_tokens
-
+from tillm.cli import (
+    _EXTRA_ARG_OPTION,
+    _build_parser,
+    _normalize_extra_arg_tokens,
+)
 
 # ---------------------------------------------------------------------------
 # _normalize_extra_arg_tokens
@@ -160,3 +163,17 @@ def test_parser_provider_supports_test_models_doctor() -> None:
     for sub in ("test", "models", "doctor"):
         args = _parse("provider", sub, "z.ai")
         assert args.provider_action == sub
+
+
+def test_parser_provider_sync_accepts_repeatable_surfaces() -> None:
+    args = _parse(
+        "provider",
+        "sync",
+        "z.ai",
+        "--surface",
+        "codex",
+        "--surface",
+        "opencode",
+    )
+    assert args.provider_action == "sync"
+    assert args.surface == ["codex", "opencode"]
