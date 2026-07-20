@@ -1995,7 +1995,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess" },
+    { name = "ptyprocess", marker = "sys_platform != 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
@@ -2044,7 +2044,7 @@ wheels = [
 
 [[package]]
 name = "planfile"
-version = "0.1.115"
+version = "0.1.117"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filelock" },
@@ -2058,9 +2058,9 @@ dependencies = [
     { name = "rich" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b7/4c/d1c3f727942b7413adf52da66b75a342bb4cbbb006873e977df030645273/planfile-0.1.115.tar.gz", hash = "sha256:7b672091fac0a61ffc6db27e8361909181c3b8e96118116bab4c9774cb060841", size = 257575, upload-time = "2026-07-16T09:16:27.711Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/a0/b84dc6ce2abf05412dc15021bea08ca87cf76250678f0ac30968552c4933/planfile-0.1.117.tar.gz", hash = "sha256:3461c7d8dde6f68ebce19901791a95b4e486df612254b69c92240fd1631a8335", size = 267346, upload-time = "2026-07-20T08:26:41.109Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/67/ca/8db5511b1eb393f0cbe2a46b1f017d5cafa3bf89561bb5151ed25922fd33/planfile-0.1.115-py3-none-any.whl", hash = "sha256:a02125bb1db9427d960b30593610b7bb82c72f9fc2c2cdc2c9f748f6fc81f823", size = 251988, upload-time = "2026-07-16T09:16:25.407Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/95/942617cd2131f29bdc134ab694e2afa59cf46a294562f465405fb70c5898/planfile-0.1.117-py3-none-any.whl", hash = "sha256:99388abba094146bead15b92fe3363892147e5e7b794e40aa6d84b2c3f16906d", size = 259055, upload-time = "2026-07-20T08:26:39.225Z" },
 ]
 
 [[package]]
@@ -2952,8 +2952,8 @@ name = "secretstorage"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cryptography" },
-    { name = "jeepney" },
+    { name = "cryptography", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "jeepney", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1c/03/e834bcd866f2f8a49a85eaff47340affa3bfa391ee9912a952a1faa68c7b/secretstorage-3.5.0.tar.gz", hash = "sha256:f04b8e4689cbce351744d5537bf6b1329c6fc68f91fa666f60a380edddcd11be", size = 19884, upload-time = "2025-11-23T19:02:53.191Z" }
 wheels = [
@@ -3139,7 +3139,7 @@ requires-dist = [
     { name = "env2llm", marker = "extra == 'env'", specifier = ">=0.1.12" },
     { name = "goal", marker = "extra == 'dev'", specifier = ">=2.1.0" },
     { name = "pfix", marker = "extra == 'dev'", specifier = ">=0.1.60" },
-    { name = "planfile", marker = "extra == 'planfile'", specifier = ">=0.1.100" },
+    { name = "planfile", marker = "extra == 'planfile'", specifier = ">=0.1.117" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0,<10.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.11,<0.16" },
     { name = "testql", marker = "extra == 'dev'", specifier = ">=1.2.0" },

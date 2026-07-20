@@ -15,7 +15,7 @@ dependencies = []
 
 [project.optional-dependencies]
 env = ["env2llm>=0.1.12"]
-planfile = ["planfile>=0.1.100"]
+planfile = ["planfile>=0.1.117"]
 dev = [
     "build>=1.0,<2.0",
     "pytest>=8.0,<10.0",
