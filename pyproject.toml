@@ -24,7 +24,7 @@ dev = [
     "goal>=2.1.0",
     "costs>=0.1.20",
     "pfix>=0.1.60",
-    "testql>=1.2.63; python_version < '3.14'",
+    "testql>=1.2.64; python_version < '3.14'",
     "env2llm>=0.1.12",
 ]
 
