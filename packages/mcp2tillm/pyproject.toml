@@ -12,7 +12,7 @@ license = "Apache-2.0"
 dependencies = [
     "dsl2tillm>=0.1.0",
     "nlp2tillm>=0.1.0",
-    "mcp>=1.0",
+    "mcp>=1.0,<2",
 ]
 
 [project.optional-dependencies]
