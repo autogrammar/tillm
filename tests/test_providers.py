@@ -145,6 +145,24 @@ class TestProbe:
         assert result.ok is False
         assert "no token" in result.detail
 
+    def test_openrouter_probe_sends_application_headers(self, monkeypatch):
+        prov.save_provider_token("openrouter", "sk-or")
+        monkeypatch.setenv("OPENROUTER_APP_NAME", "tillm-test")
+        monkeypatch.setenv("OPENROUTER_APP_URL", "https://example.test/tillm")
+        calls = []
+
+        def fake_http(url, **kwargs):
+            calls.append((url, kwargs))
+            return 200, '{"data": []}'
+
+        monkeypatch.setattr(prov, "_http_json", fake_http)
+        result = prov.probe_provider("openrouter")
+
+        assert result.ok is True
+        headers = calls[0][1]["headers"]
+        assert headers["HTTP-Referer"] == "https://example.test/tillm"
+        assert headers["X-OpenRouter-Title"] == "tillm-test"
+
     def test_probe_anthropic_endpoint_success(self, monkeypatch):
         prov.save_provider_token("z.ai", "sk-zai")
         calls: list[str] = []

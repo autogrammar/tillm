@@ -718,9 +718,19 @@ def probe_provider(provider_id: str, *, model: str | None = None) -> ProbeResult
         )
 
     if spec.openai_base_url:
+        headers = {"Authorization": f"Bearer {token}"}
+        if spec.id == "openrouter":
+            headers.update(
+                {
+                    "HTTP-Referer": os.getenv(
+                        "OPENROUTER_APP_URL", "https://github.com/autogrammar/tillm"
+                    ),
+                    "X-OpenRouter-Title": os.getenv("OPENROUTER_APP_NAME", "tillm"),
+                }
+            )
         status, body = _http_json(
             f"{spec.openai_base_url.rstrip('/')}/models",
-            headers={"Authorization": f"Bearer {token}"},
+            headers=headers,
         )
         ok = status == 200
         return ProbeResult(
