@@ -12,6 +12,7 @@ CLIENT_PROTOCOLS: dict[str, str] = {
     "aider": "openai",
     "codex": "openai",
     "qwen-code": "openai",
+    "crush": "openai",
 }
 
 # Sentinel passed on ShellDriveRequest.provider to force native client auth.
