@@ -198,8 +198,13 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         commands=("opencode",),
         prompt_mode="stdin",
         aliases=("open-code",),
+        model_flag="-m",
         execute_args=("run", "--dangerously-skip-permissions"),
-        notes="Non-interactive via opencode run; prompt is read from stdin when omitted.",
+        notes=(
+            "Non-interactive via opencode run; prompt is read from stdin when "
+            "omitted. Models use opencode's provider/model form (e.g. "
+            "zai/glm-5.3)."
+        ),
     ),
     ShellClientSpec(
         id="crush",

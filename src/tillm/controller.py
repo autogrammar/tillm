@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from pathlib import Path
 
 from tillm.controller_drive import (
     _drive_shell_llm_once,
@@ -67,6 +68,33 @@ def drive_shell_llm(request: ShellDriveRequest) -> ShellDriveResult:
                 request.model,
             ),
         )
+        if (
+            len(attempts) > 1
+            and not request.dry_run
+            and provider_token != SUBSCRIPTION_DRIVE_PROVIDER
+        ):
+            # A client like opencode retries provider 429s internally for the
+            # whole quota window, which would defeat this failover loop — so
+            # cheap-probe the completion endpoint and skip a dead provider
+            # before the client ever starts.
+            from tillm.providers import probe_provider_completion
+
+            probe = probe_provider_completion(provider_token)
+            if not probe.ok and is_provider_exhaustion(
+                stdout="", stderr="", message=probe.detail
+            ):
+                last = ShellDriveResult(
+                    ok=False,
+                    client_id=drive_client,
+                    command=(),
+                    prompt_path=Path(""),
+                    executed=False,
+                    dry_run=False,
+                    provider=provider_token,
+                    provider_attempts=attempt_labels,
+                    message=f"{provider_token} preflight exhausted: {probe.detail}",
+                )
+                continue
         result = _drive_shell_llm_once(attempt_request)
         label = (
             "subscription"

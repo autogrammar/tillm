@@ -30,6 +30,10 @@ def fake_claude(tmp_path, monkeypatch):
     script.chmod(script.stat().st_mode | stat.S_IXUSR)
     monkeypatch.setenv("PATH", f"{bin_dir}:{os.environ['PATH']}")
     monkeypatch.setenv("TILLM_CONFIG_DIR", str(tmp_path / "cfg"))
+    monkeypatch.delenv("ZAI_CODING_API_KEY", raising=False)
+    from tillm import providers_store
+
+    monkeypatch.setattr(providers_store, "_subllm_credential", lambda name: None)
     project = tmp_path / "proj"
     project.mkdir()
     return project
@@ -56,7 +60,7 @@ class TestDriveProviderE2E:
         assert result["ok"] is True
         assert "base=https://api.z.ai/api/anthropic" in result["stdout"]
         assert "token=sk-e2e" in result["stdout"]
-        assert "model=glm-4.7" in result["stdout"]
+        assert "model=glm-5.3" in result["stdout"]
 
     def test_matrix_path_receives_zai_env(self, fake_claude, capsys, monkeypatch):
         monkeypatch.setenv("ZAI_API_KEY", "sk-e2e")

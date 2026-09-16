@@ -13,6 +13,7 @@ CLIENT_PROTOCOLS: dict[str, str] = {
     "codex": "openai",
     "qwen-code": "openai",
     "crush": "openai",
+    "opencode": "openai",
 }
 
 # Sentinel passed on ShellDriveRequest.provider to force native client auth.
@@ -56,6 +57,9 @@ class ProviderSpec:
     default_model: str | None = None
     aliases: tuple[str, ...] = ()
     notes: str = ""
+    # Secondary env vars consulted after ``token_env`` when resolving a token
+    # (e.g. ZAI_CODING_API_KEY as a fallback for ZAI_API_KEY).
+    alt_token_envs: tuple[str, ...] = ()
 
     def protocols(self) -> tuple[str, ...]:
         out = []

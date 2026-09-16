@@ -55,12 +55,37 @@ def stored_provider_entry(provider_id: str) -> dict:
     return dict(entry) if isinstance(entry, dict) else {}
 
 
+def _subllm_credential(env_name: str) -> str | None:
+    """Best-effort lookup in the shared SubLLM credential store.
+
+    ``subactor/subllm`` owns the workspace credential file (``subllm/.env``);
+    when it is importable its resolution (shared file, then process env)
+    supplies the provider token. Any failure degrades to ``None``.
+    """
+    try:
+        from subllm import credential_value
+    except ImportError:
+        return None
+    try:
+        value = credential_value(env_name)
+    except Exception:
+        return None
+    return (value or "").strip() or None
+
+
 def resolve_provider_token(provider_id: str) -> str | None:
-    """Env var wins over the stored token."""
+    """Env var > SubLLM credential store > alternate env vars > stored token."""
     spec = get_provider_spec(provider_id)
     env_token = os.environ.get(spec.token_env, "").strip()
     if env_token:
         return env_token
+    subllm_token = _subllm_credential(spec.token_env)
+    if subllm_token:
+        return subllm_token
+    for name in spec.alt_token_envs:
+        alt = os.environ.get(name, "").strip()
+        if alt:
+            return alt
     stored = stored_provider_entry(provider_id).get("token", "")
     return stored.strip() or None
 

@@ -23,6 +23,7 @@ from tillm.providers_probe import (
     diagnose_provider,
     list_provider_models,
     probe_provider,
+    probe_provider_completion,
 )
 from tillm.providers_registry import (
     get_provider_spec,
@@ -80,6 +81,7 @@ __all__ = [
     "list_provider_models",
     "normalize_provider_id",
     "probe_provider",
+    "probe_provider_completion",
     "get_default_provider",
     "get_stored_provider_order",
     "provider_compatible_with_client",

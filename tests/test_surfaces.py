@@ -21,7 +21,12 @@ def _sandbox(tmp_path, monkeypatch):
     monkeypatch.setenv("TILLM_CONFIG_DIR", str(tmp_path / ".config" / "tillm"))
     for spec in prov.iter_provider_specs():
         monkeypatch.delenv(spec.token_env, raising=False)
+        for alt_env in spec.alt_token_envs:
+            monkeypatch.delenv(alt_env, raising=False)
     monkeypatch.delenv("TILLM_PROVIDER", raising=False)
+    from tillm import providers_store
+
+    monkeypatch.setattr(providers_store, "_subllm_credential", lambda name: None)
     return tmp_path
 
 

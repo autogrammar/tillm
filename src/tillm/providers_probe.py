@@ -8,7 +8,11 @@ import urllib.error
 import urllib.request
 
 from tillm.providers_registry import get_provider_spec
-from tillm.providers_store import resolve_provider_token, stored_provider_entry
+from tillm.providers_store import (
+    provider_default_model,
+    resolve_provider_token,
+    stored_provider_entry,
+)
 from tillm.providers_types import (
     _ANTHROPIC_VERSION,
     DiagnosisItem,
@@ -26,6 +30,7 @@ __all__ = [
     "diagnose_provider",
     "list_provider_models",
     "probe_provider",
+    "probe_provider_completion",
 ]
 
 
@@ -166,6 +171,62 @@ def probe_provider(provider_id: str, *, model: str | None = None) -> ProbeResult
         provider_id=spec.id,
         ok=True,
         detail="native provider; token present (no remote probe performed)",
+    )
+
+
+def probe_provider_completion(
+    provider_id: str, *, model: str | None = None, timeout: float = 15.0
+) -> ProbeResult:
+    """One-token chat completion probe; catches quota exhaustion ``/models`` misses."""
+    spec = get_provider_spec(provider_id)
+    if not spec.openai_base_url:
+        return ProbeResult(
+            provider_id=spec.id,
+            ok=True,
+            detail="no OpenAI-compatible endpoint to probe",
+        )
+    token = resolve_provider_token(spec.id)
+    if not token and spec.kind == "local":
+        token = "local"
+    if not token:
+        return ProbeResult(
+            provider_id=spec.id,
+            ok=False,
+            detail=f"no token ({spec.token_env})",
+        )
+    wire = (model or "").strip() or provider_default_model(spec.id) or (
+        spec.probe_models[0] if spec.probe_models else ""
+    )
+    if not wire:
+        return ProbeResult(provider_id=spec.id, ok=True, detail="no model to probe")
+    headers = {"Authorization": f"Bearer {token}"}
+    if spec.id == "openrouter":
+        headers.update(
+            {
+                "HTTP-Referer": os.getenv(
+                    "OPENROUTER_APP_URL", "https://github.com/autogrammar/tillm"
+                ),
+                "X-OpenRouter-Title": os.getenv("OPENROUTER_APP_NAME", "tillm"),
+            }
+        )
+    status, body = _http_json(
+        f"{spec.openai_base_url.rstrip('/')}/chat/completions",
+        method="POST",
+        headers=headers,
+        payload={
+            "model": wire,
+            "messages": [{"role": "user", "content": "ok"}],
+            "max_tokens": 1,
+            "stream": False,
+        },
+        timeout=timeout,
+    )
+    return ProbeResult(
+        provider_id=spec.id,
+        ok=status == 200,
+        detail=f"HTTP {status}" + ("" if status == 200 else f": {body[:200]}"),
+        model=wire,
+        endpoint=spec.openai_base_url,
     )
 
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 
 from tillm.providers_registry import get_provider_spec, normalize_provider_id
 from tillm.providers_store import (
@@ -65,6 +66,14 @@ def provider_env_overlay(client_id: str, provider_id: str) -> dict[str, str]:
         if spec.openai_base_url:
             overlay["OPENAI_API_BASE"] = spec.openai_base_url
             overlay["OPENAI_BASE_URL"] = spec.openai_base_url
+        if client_id == "opencode":
+            # opencode resolves provider credentials from its own config and
+            # models.dev env names (e.g. ZAI_API_KEY / ZHIPU_API_KEY in
+            # opencode.json), so it needs the provider's native token
+            # variables, not only the OpenAI shims.
+            for name in (spec.token_env, *spec.alt_token_envs):
+                if name not in overlay:
+                    overlay[name] = token or ""
     return overlay
 
 
@@ -116,6 +125,29 @@ def resolve_drive_client_id(client_id: str, provider_id: str | None) -> str:
     return client_id
 
 
+def _opencode_drive_model(provider_id: str, model: str) -> str | None:
+    """opencode ``-m`` takes ``provider/model``; prefix bare names with the slug."""
+    bare = model
+    prefix = re.sub(r"[^a-z0-9]+", "", provider_id.lower())
+    if provider_id == "openrouter":
+        if bare and "/" in bare and not bare.startswith("openrouter/"):
+            bare = ""  # qualified for another provider; use the default wire id
+        bare = bare or (provider_default_model(provider_id) or "")
+        if not bare:
+            return None
+        return bare if bare.startswith("openrouter/") else f"openrouter/{bare}"
+    if bare.startswith("openrouter/"):
+        bare = ""
+    if bare and "/" in bare and not bare.startswith(f"{prefix}/"):
+        bare = ""  # qualified for a different provider; use the default
+    bare = bare or (provider_default_model(provider_id) or "")
+    if not bare:
+        return None
+    if "/" in bare:
+        return bare
+    return f"{prefix}/{bare}"
+
+
 def resolve_drive_model(
     client_id: str,
     provider_id: str | None,
@@ -125,6 +157,8 @@ def resolve_drive_model(
     model = (requested or "").strip()
     if provider_id in {None, SUBSCRIPTION_DRIVE_PROVIDER}:
         return model or None
+    if (client_id or "").strip().lower() == "opencode":
+        return _opencode_drive_model(provider_id, model)
     if not model:
         return provider_default_model(provider_id)
     if provider_id == "openrouter":
