@@ -165,6 +165,18 @@ _PROVIDERS: tuple[ProviderSpec, ...] = (
         openai_base_url="http://localhost:11434/v1",
         notes="Local models, no token needed; requires `ollama serve`.",
     ),
+    ProviderSpec(
+        id="subllm",
+        label="SubLLM Proxy (local gateway)",
+        kind="local",
+        token_env="SUBLLM_API_KEY",
+        docs_url="https://github.com/subactor/subllm",
+        token_url="",
+        openai_base_url="http://localhost:11435/v1",
+        aliases=("subllm-proxy", "subactor-proxy"),
+        models=("glm-5.3", "gpt-5.6-sol", "deepseek-v4-pro", "composer-2.5", "claude-opus-5"),
+        notes="Local SubLLM proxy; routes to paid & local models without credentials.",
+    ),
 )
 
 
