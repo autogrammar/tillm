@@ -4,7 +4,9 @@
   "summary": "Adopt wellmanifest/new-project 0.20.35 governance standard",
   "workstream": "governance",
   "classification": {
-    "workType": "standard-adoption"
+    "kind": "SERVICE",
+    "priority": "P2",
+    "origin": "health"
   },
   "allowedPaths": [
     "**"
