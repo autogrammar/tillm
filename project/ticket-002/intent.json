@@ -20,5 +20,59 @@
   "stacks": [],
   "dependsOn": [],
   "conflictsWith": [],
-  "integrationTicket": null
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "f44dc71140533c0595584d7592f18e05e5bddf15",
+    "targetBranch": "main",
+    "outcome": "uv.lock pins planfile 0.1.126 per the queued Dependabot bump.",
+    "nonGoals": [
+      "No source or workflow changes."
+    ],
+    "complexity": "XS",
+    "estimatedMinutes": 10,
+    "budgets": {
+      "maxImplementationFiles": 2,
+      "maxAffectedComponents": 1,
+      "maxPublicInterfaceChanges": 0,
+      "maxRuntimeDependencies": 0
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "Apply the Dependabot lockfile update.",
+      "components": [
+        {
+          "name": "packaging",
+          "paths": [
+            "uv.lock"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [],
+      "dataChanges": [],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "git revert"
+    },
+    "runtimeDependencies": [],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "grep -n \"planfile\" uv.lock"
+        ],
+        "evidence": "uv.lock records planfile 0.1.126."
+      },
+      {
+        "criterion": "AC-02",
+        "commands": [
+          "bash project/governance-check.sh --base origin/main --head HEAD"
+        ],
+        "evidence": "governance gate GOV-PASS."
+      }
+    ]
+  }
 }
