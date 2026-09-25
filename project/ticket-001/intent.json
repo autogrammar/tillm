@@ -61,9 +61,18 @@
     "runtimeDependencies": [],
     "validation": [
       {
-        "command": "bash project/governance-check.sh",
-        "purpose": "Verify governance compliance",
-        "verifies": "governance"
+        "criterion": "AC-01",
+        "commands": [
+          "python3 -c \"import json; json.load(open('.governance/manifest.lock.json'))\""
+        ],
+        "evidence": "Governance adoption lock parses and pins the 0.20.35 standard revision."
+      },
+      {
+        "criterion": "AC-02",
+        "commands": [
+          "bash project/governance-check.sh --base origin/main --head HEAD"
+        ],
+        "evidence": "Governance gate reports GOV-PASS with 0 errors and 0 warnings."
       }
     ]
   }
