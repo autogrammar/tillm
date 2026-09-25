@@ -2,7 +2,7 @@
 
 - **ID**: ticket-002
 - **Owner**: unresolved:human
-- **Status**: IN_PROGRESS
+- **Status**: DONE
 - **Workflow state**: EDIT
 - **Created**: 2026-09-25
 
