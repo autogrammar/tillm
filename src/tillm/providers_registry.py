@@ -65,9 +65,12 @@ _PROVIDERS: tuple[ProviderSpec, ...] = (
         docs_url="https://ai.google.dev/gemini-api/docs",
         token_url="https://aistudio.google.com/app/apikey",
         openai_base_url="https://generativelanguage.googleapis.com/v1beta/openai",
+        probe_models=("gemini-3.8-flash", "gemini-3-flash-preview"),
+        default_model="gemini-3.8-flash",
         aliases=("gemini",),
-        models=("gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash"),
+        models=("gemini-3.8-flash", "gemini-3-flash-preview"),
         notes="gemini-cli native; OpenAI-compatible endpoint for aider/codex.",
+        alt_token_envs=("GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY"),
     ),
     ProviderSpec(
         id="openrouter",

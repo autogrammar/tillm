@@ -39,6 +39,10 @@ PROVIDER_EXHAUSTION_MARKERS = (
     "weekly/monthly limit",
     "usage limit",
     "credit balance",
+    "user not found",
+    "insufficient account funds",
+    "account funds",
+    "insufficient balance",
 )
 
 

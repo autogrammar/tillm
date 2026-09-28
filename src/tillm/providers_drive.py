@@ -100,7 +100,7 @@ def provider_compatible_with_client(client_id: str, provider_id: str) -> bool:
         return False
     if protocol not in spec.protocols():
         if (
-            provider_id == "openrouter"
+            provider_id in {"openrouter", "google"}
             and (client_id or "").strip().lower() == "claude-code"
         ):
             from tillm.compat import is_client_available
@@ -113,9 +113,9 @@ def provider_compatible_with_client(client_id: str, provider_id: str) -> bool:
 
 
 def resolve_drive_client_id(client_id: str, provider_id: str | None) -> str:
-    """Client to spawn for a provider attempt (openrouter may switch claude-code → aider)."""
+    """Client to spawn for a provider attempt (openrouter/google may switch claude-code → aider)."""
     if (
-        provider_id == "openrouter"
+        provider_id in {"openrouter", "google"}
         and (client_id or "").strip().lower() == "claude-code"
     ):
         from tillm.compat import is_client_available
@@ -159,13 +159,25 @@ def resolve_drive_model(
         return model or None
     if (client_id or "").strip().lower() == "opencode":
         return _opencode_drive_model(provider_id, model)
+    try:
+        spec = get_provider_spec(provider_id)
+        if model and model not in spec.models:
+            foreign_prefixes = ("glm-", "deepseek-", "claude-", "gpt-", "gemini-", "kimi-", "grok-")
+            if any(model.startswith(p) for p in foreign_prefixes):
+                if not any(model.startswith(p) for p in (spec.id, *spec.aliases)):
+                    model = ""
+    except Exception:
+        pass
     if not model:
-        return provider_default_model(provider_id)
+        model = provider_default_model(provider_id) or ""
     if provider_id == "openrouter":
         return model if model.startswith("openrouter/") else f"openrouter/{model}"
     if model.startswith("openrouter/"):
         return provider_default_model(provider_id)
-    return model
+    if (client_id or "").strip().lower() == "aider":
+        if provider_id == "google" and model and not model.startswith("openai/"):
+            return f"openai/{model}"
+    return model or None
 
 
 def resolve_provider_drive_attempts(
