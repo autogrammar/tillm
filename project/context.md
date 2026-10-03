@@ -3,29 +3,29 @@
 
 ## Overview
 
-- **Project**: /home/tom/github/semcod/tillm
+- **Project**: /home/tom/github/autogrammar/tillm
 - **Primary Language**: python
-- **Languages**: python: 39, json: 10, toml: 7, shell: 2, yaml: 2
+- **Languages**: python: 63, shell: 28, json: 10, txt: 7, toml: 7
 - **Analysis Mode**: static
-- **Total Functions**: 136
-- **Total Classes**: 18
-- **Modules**: 62
-- **Entry Points**: 47
+- **Total Functions**: 264
+- **Total Classes**: 32
+- **Modules**: 122
+- **Entry Points**: 94
 
 ## Architecture by Module
 
-### src.tillm.controller
+### src.tillm.surfaces_terminal
 - **Functions**: 18
-- **Classes**: 10
-- **File**: `controller.py`
+- **Classes**: 3
+- **File**: `surfaces_terminal.py`
 
 ### src.tillm.registry
-- **Functions**: 13
+- **Functions**: 14
 - **Classes**: 1
 - **File**: `registry.py`
 
 ### src.tillm.cli
-- **Functions**: 12
+- **Functions**: 13
 - **File**: `cli.py`
 
 ### packages.dsl2tillm.src.dsl2tillm.handlers
@@ -33,73 +33,73 @@
 - **Classes**: 1
 - **File**: `__init__.py`
 
+### src.tillm.providers_store
+- **Functions**: 11
+- **File**: `providers_store.py`
+
+### packages.mcp2tillm.src.mcp2tillm.server
+- **Functions**: 11
+- **Classes**: 1
+- **File**: `server.py`
+
 ### src.tillm.compat
 - **Functions**: 11
 - **File**: `compat.py`
+
+### src.tillm.surfaces_gui
+- **Functions**: 10
+- **Classes**: 2
+- **File**: `surfaces_gui.py`
+
+### src.tillm.controller_plan
+- **Functions**: 10
+- **File**: `controller_plan.py`
+
+### packages.dsl2tillm.src.dsl2tillm.grammar
+- **Functions**: 8
+- **File**: `grammar.py`
+
+### src.tillm.i18n
+- **Functions**: 8
+- **File**: `i18n.py`
+
+### src.tillm.project_env
+- **Functions**: 8
+- **File**: `project_env.py`
+
+### src.tillm.cli_output
+- **Functions**: 8
+- **File**: `cli_output.py`
+
+### src.tillm.providers_drive
+- **Functions**: 8
+- **File**: `providers_drive.py`
 
 ### src.tillm.validation
 - **Functions**: 8
 - **Classes**: 1
 - **File**: `validation.py`
 
+### src.tillm.providers_probe
+- **Functions**: 7
+- **File**: `providers_probe.py`
+
 ### packages.uri2tillm.src.uri2tillm.uri
 - **Functions**: 6
 - **File**: `uri.py`
 
-### packages.mcp2tillm.src.mcp2tillm.server
+### src.tillm.controller_drive
 - **Functions**: 6
-- **Classes**: 1
-- **File**: `server.py`
-
-### packages.dsl2tillm.src.dsl2tillm.grammar
-- **Functions**: 5
-- **File**: `grammar.py`
+- **File**: `controller_drive.py`
 
 ### packages.dsl2tillm.src.dsl2tillm.events
 - **Functions**: 5
 - **Classes**: 2
 - **File**: `events.py`
 
-### src.tillm.nlp
+### src.tillm.surfaces_io
 - **Functions**: 5
-- **Classes**: 1
-- **File**: `nlp.py`
-
-### src.tillm.transports.docker
-- **Functions**: 5
-- **File**: `docker.py`
-
-### packages.dsl2tillm.src.dsl2tillm.schema_registry
-- **Functions**: 4
-- **File**: `schema_registry.py`
-
-### packages.dsl2tillm.src.dsl2tillm.cli
-- **Functions**: 3
-- **File**: `cli.py`
-
-### packages.dsl2tillm.src.dsl2tillm.pb_codec
-- **Functions**: 3
-- **File**: `pb_codec.py`
-
-### packages.dsl2tillm.src.dsl2tillm.codec
-- **Functions**: 3
-- **File**: `codec.py`
-
-### packages.dsl2tillm.src.dsl2tillm.bus
-- **Functions**: 3
-- **File**: `bus.py`
-
-### packages.nlp2tillm.src.nlp2tillm.to_dsl
-- **Functions**: 2
-- **File**: `to_dsl.py`
-
-### project
-- **Functions**: 1
-- **File**: `project.sh`
-
-### packages.mcp2tillm.src.mcp2tillm.cli
-- **Functions**: 1
-- **File**: `cli.py`
+- **File**: `surfaces_io.py`
 
 ## Key Entry Points
 
@@ -111,94 +111,98 @@ Main execution flows into the system:
 ### packages.dsl2tillm.src.dsl2tillm.grammar.to_text
 - **Calls**: None.upper, payload.get, payload.get, payload.get, payload.get, payload.get, None.join, payload.get
 
+### packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
+- **Calls**: self.app.tool, self.app.tool, self.app.tool, self.app.tool, self.app.tool, self.app.tool, packages.mcp2tillm.src.mcp2tillm.server._guard_command, None.to_dict
+
+### src.tillm.headless.run_headless
+> Run ``prompt`` through ``client_id`` headless and return the result.
+
+``profile='automation'`` uses the client's unattended profile (e.g. ``claude -p
+
+- **Calls**: src.tillm.registry.normalize_client_id, src.tillm.registry.get_client_spec, ShellDriveRequest, src.tillm.controller.drive_shell_llm, result.to_dict, src.tillm.headless.supports_headless, d.get, d.get
+
 ### packages.nlp2tillm.src.nlp2tillm.cli.main
 - **Calls**: argparse.ArgumentParser, parser.add_subparsers, sub.add_parser, to.add_argument, to.add_argument, sub.add_parser, apply.add_argument, apply.add_argument
 
 ### packages.uri2tillm.src.uri2tillm.cli.main
 - **Calls**: argparse.ArgumentParser, parser.add_subparsers, sub.add_parser, decode.add_argument, decode.add_argument, sub.add_parser, run.add_argument, run.add_argument
 
+### src.tillm.surfaces_terminal.ClaudeSettingsSurface.read
+- **Calls**: self._path, src.tillm.surfaces_io.read_json, src.tillm.surfaces_io.as_dict, src.tillm.surfaces_io.same_url, SurfaceState, data.get, env.get, None.strip
+
+### src.tillm.surfaces_terminal.CodexConfigSurface.read
+- **Calls**: self._path, self._load, src.tillm.surfaces_io.as_dict, any, SurfaceState, data.get, path.exists, bool
+
 ### src.tillm.compat.launch_koru_agent
 > Launch a Koru agent through TILLM while preserving TTY behavior.
 
 Clients with a file/arg prompt contract receive the prompt directly.
 Stdin-only clie
-- **Calls**: src.tillm.registry.normalize_client_id, src.tillm.registry.get_client_spec, src.tillm.controller.save_prompt, print, print, print, ShellDriveRequest, src.tillm.controller.build_drive_plan
+- **Calls**: src.tillm.registry.normalize_client_id, src.tillm.registry.get_client_spec, src.tillm.controller_plan.save_prompt, print, print, print, ShellDriveRequest, src.tillm.controller_plan.build_drive_plan
 
-### packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
-- **Calls**: self.app.tool, self.app.tool, self.app.tool, self.app.tool, self.app.tool, self.app.tool, None.to_dict, packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+### src.tillm.surfaces_sync.apply_sync
+- **Calls**: src.tillm.providers_registry.get_provider_spec, src.tillm.surfaces_sync.plan_sync, None.read_token, src.tillm.providers_store.resolve_provider_token, getattr, src.tillm.surfaces_terminal.ClaudeSettingsSurface.write, results.append, None.to_dict
 
-### packages.dsl2tillm.src.dsl2tillm.events.EventStore.read_all
-- **Calls**: None.splitlines, self.path.is_file, json.loads, events.append, self.path.read_text, line.strip, StoredEvent, str
+### packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix
+- **Calls**: packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag
+
+### src.tillm.cli.main
+- **Calls**: None.parse_args, src.tillm.project_env.bootstrap_project_env, AssertionError, src.tillm.cli_parser._normalize_extra_arg_tokens, getattr, src.tillm.cli_output._print, src.tillm.cli._drive, src.tillm.cli._providers_list
+
+### src.tillm.surfaces_terminal.OpencodeConfigSurface.write
+- **Calls**: self._path, src.tillm.surfaces_io.read_json, src.tillm.surfaces_io.as_dict, src.tillm.surfaces_io.provider_slug, src.tillm.surfaces_io.as_dict, src.tillm.surfaces_io.as_dict, options.update, src.tillm.surfaces_io.write_private_json
 
 ### src.tillm.registry.ShellClientSpec.to_dict
 - **Calls**: self.command_path, self.missing_env_vars, list, list, list, list, list, list
 
-### src.tillm.cli.main
-- **Calls**: None.parse_args, AssertionError, src.tillm.cli._normalize_extra_arg_tokens, src.tillm.cli._print, src.tillm.cli._drive, src.tillm.cli._nlp, src.tillm.cli._print, src.tillm.cli._build_parser
+### packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.read_all
+- **Calls**: None.splitlines, self.path.is_file, json.loads, events.append, self.path.read_text, line.strip, StoredEvent, str
+
+### src.tillm.surfaces_terminal.OpencodeConfigSurface.read
+- **Calls**: self._path, self._entry, src.tillm.surfaces_io.as_dict, SurfaceState, entry.get, path.exists, bool, bool
+
+### src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read
+- **Calls**: self._paths, reversed, SurfaceState, tree.iter, ET.parse, bool, bool, src.tillm.surfaces_io.same_url
+
+### src.tillm.surfaces_terminal.OpencodeConfigSurface._entry
+- **Calls**: src.tillm.surfaces_io.as_dict, providers.values, None.get, src.tillm.surfaces_io.as_dict, src.tillm.surfaces_io.same_url, isinstance, entry.get, options.get
+
+### packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.append_command
+- **Calls**: StoredEvent, self.path.parent.mkdir, uuid.uuid4, self.path.open, fh.write, int, time.time, json.dumps
+
+### src.tillm.surfaces_gui.QoderSurface.read
+- **Calls**: self._paths, self._markers, reversed, SurfaceState, self._configured_text, any, bool, bool
+
+### src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token
+- **Calls**: src.tillm.surfaces_io.as_dict, src.tillm.surfaces_io.same_url, None.get, env.get, None.strip, src.tillm.surfaces_io.read_json, self._path, str
 
 ### src.tillm.compat.detect_koru_agent_rows
-> Return SLLM clients in Koru ``AgentOption.to_dict`` shape.
+> Return TILLM clients in Koru ``AgentOption.to_dict`` shape.
 - **Calls**: src.tillm.registry.detect_clients, row.get, str, bool, rows.append, row.get, bool, bool
 
-### packages.dsl2tillm.src.dsl2tillm.events.EventStore.append_command
-- **Calls**: StoredEvent, self.path.parent.mkdir, uuid.uuid4, self.path.open, fh.write, int, time.time, json.dumps
+### src.tillm.registry.ShellClientSpec.missing_env_vars
+- **Calls**: tuple, missing.append, self.has_auth_file, any, None.join, None.strip, None.strip, env.get
+
+### packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive
+- **Calls**: packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail, packages.dsl2tillm.src.dsl2tillm.grammar._flag
+
+### src.tillm.surfaces_gui.QoderSurface._markers
+- **Calls**: tuple, spec.id.lower, markers.append, alias.lower, None.lower, len, None.split, url.split
 
 ### packages.rest2tillm.src.rest2tillm.cli.main
 - **Calls**: argparse.ArgumentParser, parser.add_subparsers, sub.add_parser, serve.add_argument, serve.add_argument, parser.parse_args, uvicorn.run, packages.rest2tillm.src.rest2tillm.app.create_app
 
-### src.tillm.registry.ShellClientSpec.missing_env_vars
-- **Calls**: tuple, missing.append, any, None.join, None.strip, None.strip, env.get, env.get
+### src.tillm.surfaces_gui.QoderSurface._configured_text
+- **Calls**: tree.iter, None.lower, ET.parse, parts.append, option.get, None.join, option.get
+
+### src.tillm.surfaces_terminal.CodexConfigSurface.write
+- **Calls**: self._path, src.tillm.surfaces_io.provider_slug, path.parent.mkdir, path.write_text, self.read, path.exists, path.read_text
+
+### src.tillm.surfaces_terminal.OpencodeConfigSurface.read_token
+- **Calls**: src.tillm.surfaces_io.as_dict, None.strip, None.get, str, self._entry, token.startswith, options.get
 
 ### packages.uri2tillm.src.uri2tillm.uri.uri_for_client
 - **Calls**: query_parts.append, query_parts.append, packages.uri2tillm.src.uri2tillm.uri._encode, None.join, packages.uri2tillm.src.uri2tillm.uri._encode, packages.uri2tillm.src.uri2tillm.uri._encode
-
-### src.tillm.compat.tool_registry_entries
-- **Calls**: src.tillm.registry.iter_client_specs, tuple, entries.append, list, list, list
-
-### packages.mcp2tillm.src.mcp2tillm.cli.main
-- **Calls**: argparse.ArgumentParser, parser.add_subparsers, sub.add_parser, parser.parse_args, packages.mcp2tillm.src.mcp2tillm.server.run_server
-
-### packages.uri2tillm.src.uri2tillm.uri.uri_for_cmd
-- **Calls**: None.join, packages.uri2tillm.src.uri2tillm.uri._encode, params.items, verb.upper, packages.uri2tillm.src.uri2tillm.uri._encode
-
-### packages.dsl2tillm.src.dsl2tillm.events.EventStore.for_workdir
-- **Calls**: None.resolve, events_dir.mkdir, cls, workdir.expanduser
-
-### src.tillm.controller.ShellDrivePlan.to_dict
-- **Calls**: list, self.shell_preview, str, str
-
-### src.tillm.controller._drive_one_client
-- **Calls**: ShellDriveRequest, src.tillm.controller.drive_shell_llm, src.tillm.controller.resolve_backend, src.tillm.controller._drive_result_from_exception
-
-### packages.dsl2tillm.src.dsl2tillm.cli.main
-- **Calls**: list, packages.dsl2tillm.src.dsl2tillm.cli._main_legacy, packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand
-
-### packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs
-- **Calls**: sorted, None.keys, packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
-
-### src.tillm.compat.is_client_available
-- **Calls**: src.tillm.registry.get_client_spec, bool, spec.command_path
-
-### src.tillm.compat.drive_koru_chat
-- **Calls**: src.tillm.controller.drive_shell_llm, result.to_dict, ShellDriveRequest
-
-### packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer.__post_init__
-- **Calls**: packages.mcp2tillm.src.mcp2tillm.server._require_fastmcp, FastMCP, self._register_tools
-
-### src.tillm.registry.ShellClientSpec.profile_execute_args
-- **Calls**: None.lower, ValueError, None.strip
-
-### packages.dsl2tillm.src.dsl2tillm.pb_codec.encode_protobuf
-- **Calls**: None.encode, json.dumps
-
-### packages.uri2tillm.src.uri2tillm.uri.is_tillm_uri
-- **Calls**: None.scheme.lower, urlparse
-
-### src.tillm.compat.shell_client_ids
-- **Calls**: tuple, src.tillm.registry.iter_client_specs
-
-### src.tillm.compat.shell_process_patterns
-- **Calls**: tuple, src.tillm.registry.iter_client_specs
 
 ## Process Flows
 
@@ -214,7 +218,31 @@ main [packages.cli2tillm.src.cli2tillm.cli]
 to_text [packages.dsl2tillm.src.dsl2tillm.grammar]
 ```
 
-### Flow 3: launch_koru_agent
+### Flow 3: _register_tools
+```
+_register_tools [packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer]
+```
+
+### Flow 4: run_headless
+```
+run_headless [src.tillm.headless]
+  └─ →> normalize_client_id
+  └─ →> get_client_spec
+      └─> normalize_client_id
+  └─ →> drive_shell_llm
+      └─ →> resolve_provider_drive_attempts
+          └─> resolve_request_provider
+          └─ →> is_subscription_order_token
+```
+
+### Flow 5: read
+```
+read [src.tillm.surfaces_terminal.ClaudeSettingsSurface]
+  └─ →> read_json
+  └─ →> as_dict
+```
+
+### Flow 6: launch_koru_agent
 ```
 launch_koru_agent [src.tillm.compat]
   └─ →> normalize_client_id
@@ -224,74 +252,113 @@ launch_koru_agent [src.tillm.compat]
       └─> _prompt_root
 ```
 
-### Flow 4: _register_tools
+### Flow 7: apply_sync
 ```
-_register_tools [packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer]
+apply_sync [src.tillm.surfaces_sync]
+  └─> plan_sync
+      └─ →> get_provider_spec
+          └─> normalize_provider_id
+      └─ →> resolve_provider_token
+  └─ →> get_provider_spec
+      └─> normalize_provider_id
+  └─ →> resolve_provider_token
+      └─ →> get_provider_spec
+          └─> normalize_provider_id
 ```
 
-### Flow 5: read_all
+### Flow 8: _parse_drive_matrix
 ```
-read_all [packages.dsl2tillm.src.dsl2tillm.events.EventStore]
+_parse_drive_matrix [packages.dsl2tillm.src.dsl2tillm.grammar]
+  └─> _flag
+  └─> _flag
 ```
 
-### Flow 6: to_dict
+### Flow 9: write
+```
+write [src.tillm.surfaces_terminal.OpencodeConfigSurface]
+  └─ →> read_json
+  └─ →> as_dict
+```
+
+### Flow 10: to_dict
 ```
 to_dict [src.tillm.registry.ShellClientSpec]
 ```
 
-### Flow 7: detect_koru_agent_rows
-```
-detect_koru_agent_rows [src.tillm.compat]
-  └─ →> detect_clients
-      └─> normalize_client_id
-```
-
-### Flow 8: append_command
-```
-append_command [packages.dsl2tillm.src.dsl2tillm.events.EventStore]
-```
-
-### Flow 9: missing_env_vars
-```
-missing_env_vars [src.tillm.registry.ShellClientSpec]
-```
-
-### Flow 10: uri_for_client
-```
-uri_for_client [packages.uri2tillm.src.uri2tillm.uri]
-  └─> _encode
-  └─> _encode
-```
-
 ## Key Classes
 
-### src.tillm.registry.ShellClientSpec
-- **Methods**: 5
-- **Key Methods**: src.tillm.registry.ShellClientSpec.command_path, src.tillm.registry.ShellClientSpec.profile_execute_args, src.tillm.registry.ShellClientSpec.supported_execute_profiles, src.tillm.registry.ShellClientSpec.missing_env_vars, src.tillm.registry.ShellClientSpec.to_dict
+### src.tillm.surfaces_terminal.OpencodeConfigSurface
+> opencode JSON config with custom provider entry.
+- **Methods**: 7
+- **Key Methods**: src.tillm.surfaces_terminal.OpencodeConfigSurface._candidates, src.tillm.surfaces_terminal.OpencodeConfigSurface._path, src.tillm.surfaces_terminal.OpencodeConfigSurface.applicable, src.tillm.surfaces_terminal.OpencodeConfigSurface._entry, src.tillm.surfaces_terminal.OpencodeConfigSurface.read, src.tillm.surfaces_terminal.OpencodeConfigSurface.read_token, src.tillm.surfaces_terminal.OpencodeConfigSurface.write
 
-### packages.dsl2tillm.src.dsl2tillm.events.EventStore
+### src.tillm.surfaces_gui.QoderSurface
+> Qoder (JetBrains plugin) BYOK settings — detect-only.
+- **Methods**: 6
+- **Key Methods**: src.tillm.surfaces_gui.QoderSurface._paths, src.tillm.surfaces_gui.QoderSurface.applicable, src.tillm.surfaces_gui.QoderSurface._markers, src.tillm.surfaces_gui.QoderSurface.read, src.tillm.surfaces_gui.QoderSurface._configured_text, src.tillm.surfaces_gui.QoderSurface.read_token
+
+### src.tillm.surfaces_terminal.CodexConfigSurface
+> ``~/.codex/config.toml`` model_providers table.
+- **Methods**: 6
+- **Key Methods**: src.tillm.surfaces_terminal.CodexConfigSurface._path, src.tillm.surfaces_terminal.CodexConfigSurface.applicable, src.tillm.surfaces_terminal.CodexConfigSurface._load, src.tillm.surfaces_terminal.CodexConfigSurface.read, src.tillm.surfaces_terminal.CodexConfigSurface.read_token, src.tillm.surfaces_terminal.CodexConfigSurface.write
+
+### src.tillm.registry.ShellClientSpec
+- **Methods**: 6
+- **Key Methods**: src.tillm.registry.ShellClientSpec.command_path, src.tillm.registry.ShellClientSpec.profile_execute_args, src.tillm.registry.ShellClientSpec.supported_execute_profiles, src.tillm.registry.ShellClientSpec.has_auth_file, src.tillm.registry.ShellClientSpec.missing_env_vars, src.tillm.registry.ShellClientSpec.to_dict
+
+### src.tillm.surfaces_terminal.ClaudeSettingsSurface
+> ``~/.claude/settings.json`` env block for manually launched claude-code.
+- **Methods**: 5
+- **Key Methods**: src.tillm.surfaces_terminal.ClaudeSettingsSurface._path, src.tillm.surfaces_terminal.ClaudeSettingsSurface.applicable, src.tillm.surfaces_terminal.ClaudeSettingsSurface.read, src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token, src.tillm.surfaces_terminal.ClaudeSettingsSurface.write
+
+### packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore
 - **Methods**: 4
-- **Key Methods**: packages.dsl2tillm.src.dsl2tillm.events.EventStore.__init__, packages.dsl2tillm.src.dsl2tillm.events.EventStore.for_workdir, packages.dsl2tillm.src.dsl2tillm.events.EventStore.append_command, packages.dsl2tillm.src.dsl2tillm.events.EventStore.read_all
+- **Key Methods**: packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.__init__, packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.for_workdir, packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.append_command, packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.read_all
+
+### src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface
+> JetBrains AI Assistant OpenAI-like provider XML.
+- **Methods**: 4
+- **Key Methods**: src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface._paths, src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.applicable, src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read, src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read_token
 
 ### packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer
 - **Methods**: 3
 - **Key Methods**: packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer.__post_init__, packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools, packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer.run
 
-### src.tillm.controller.ShellDrivePlan
+### src.tillm.providers_types.ProviderSpec
 - **Methods**: 2
-- **Key Methods**: src.tillm.controller.ShellDrivePlan.shell_preview, src.tillm.controller.ShellDrivePlan.to_dict
+- **Key Methods**: src.tillm.providers_types.ProviderSpec.protocols, src.tillm.providers_types.ProviderSpec.compatible_clients
 
-### packages.dsl2tillm.src.dsl2tillm.result.DslResult
-- **Methods**: 1
-- **Key Methods**: packages.dsl2tillm.src.dsl2tillm.result.DslResult.to_dict
+### src.tillm.controller_types.ShellDrivePlan
+- **Methods**: 2
+- **Key Methods**: src.tillm.controller_types.ShellDrivePlan.shell_preview, src.tillm.controller_types.ShellDrivePlan.to_dict
 
 ### packages.dsl2tillm.src.dsl2tillm.events.StoredEvent
 - **Methods**: 1
 - **Key Methods**: packages.dsl2tillm.src.dsl2tillm.events.StoredEvent.to_dict
 
+### packages.dsl2tillm.src.dsl2tillm.result.DslResult
+- **Methods**: 1
+- **Key Methods**: packages.dsl2tillm.src.dsl2tillm.result.DslResult.to_dict
+
 ### packages.dsl2tillm.src.dsl2tillm.handlers.HandlerResult
 - **Methods**: 1
 - **Key Methods**: packages.dsl2tillm.src.dsl2tillm.handlers.HandlerResult.to_dict
+
+### src.tillm.surfaces_types.SurfaceState
+- **Methods**: 1
+- **Key Methods**: src.tillm.surfaces_types.SurfaceState.to_dict
+
+### src.tillm.surfaces_types.SyncStep
+- **Methods**: 1
+- **Key Methods**: src.tillm.surfaces_types.SyncStep.to_dict
+
+### src.tillm.providers_types.ProbeResult
+- **Methods**: 1
+- **Key Methods**: src.tillm.providers_types.ProbeResult.to_dict
+
+### src.tillm.providers_types.ProviderDiagnosis
+- **Methods**: 1
+- **Key Methods**: src.tillm.providers_types.ProviderDiagnosis.to_dict
 
 ### src.tillm.nlp.ShellIntent
 - **Methods**: 1
@@ -301,44 +368,9 @@ uri_for_client [packages.uri2tillm.src.uri2tillm.uri]
 - **Methods**: 1
 - **Key Methods**: src.tillm.validation.ValidationResult.to_dict
 
-### src.tillm.controller.ShellDriveResult
+### src.tillm.controller_types.ShellDriveResult
 - **Methods**: 1
-- **Key Methods**: src.tillm.controller.ShellDriveResult.to_dict
-
-### src.tillm.controller.MultiShellDriveResult
-- **Methods**: 1
-- **Key Methods**: src.tillm.controller.MultiShellDriveResult.to_dict
-
-### src.tillm.controller.TillmError
-> Base error for SLLM control failures.
-- **Methods**: 0
-- **Inherits**: RuntimeError
-
-### src.tillm.controller.UnknownClientError
-> Requested client is not registered.
-- **Methods**: 0
-- **Inherits**: TillmError
-
-### src.tillm.controller.ClientUnavailableError
-> Registered client command is not available in PATH.
-- **Methods**: 0
-- **Inherits**: TillmError
-
-### src.tillm.controller.ClientNotReadyError
-> Registered client is missing binary, env vars, or requested capability.
-- **Methods**: 0
-- **Inherits**: TillmError
-
-### src.tillm.controller.UnknownProfileError
-> Requested execute profile is not registered for the client.
-- **Methods**: 0
-- **Inherits**: TillmError
-
-### src.tillm.controller.ShellDriveRequest
-- **Methods**: 0
-
-### src.tillm.controller.MultiShellDriveRequest
-- **Methods**: 0
+- **Key Methods**: src.tillm.controller_types.ShellDriveResult.to_dict
 
 ## Data Transformation Functions
 
@@ -353,17 +385,26 @@ Key functions that process and transform data:
 ### packages.dsl2tillm.src.dsl2tillm.pb_codec.encode_result_protobuf
 - **Output to**: None.encode, json.dumps, result.to_dict
 
+### packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas
+- **Output to**: None.items, sorted, None.get, packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas, errors.append
+
 ### packages.dsl2tillm.src.dsl2tillm.codec.validate_payload
 - **Output to**: None.upper, packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb, jsonschema.validate, ValueError, str
 
 ### packages.dsl2tillm.src.dsl2tillm.codec.parse_text
 - **Output to**: packages.dsl2tillm.src.dsl2tillm.grammar.parse_line, packages.dsl2tillm.src.dsl2tillm.codec.validate_payload
 
-### packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas
-- **Output to**: None.items, sorted, None.get, packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas, errors.append
+### packages.dsl2tillm.src.dsl2tillm.grammar._parse_validate
+- **Output to**: packages.dsl2tillm.src.dsl2tillm.grammar._flag
+
+### packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive
+- **Output to**: packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag
+
+### packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix
+- **Output to**: packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag, packages.dsl2tillm.src.dsl2tillm.grammar._flag
 
 ### packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
-- **Output to**: line.strip, shlex.split, None.upper, line.startswith, packages.dsl2tillm.src.dsl2tillm.grammar._flag
+- **Output to**: line.strip, shlex.split, None.upper, _VERB_PARSERS.get, line.startswith
 
 ### packages.uri2tillm.src.uri2tillm.uri._encode
 - **Output to**: quote
@@ -374,20 +415,29 @@ Key functions that process and transform data:
 ### packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri
 - **Output to**: urlparse, packages.uri2tillm.src.uri2tillm.uri._decode, ValueError, packages.uri2tillm.src.uri2tillm.uri._decode, packages.uri2tillm.src.uri2tillm.uri._decode
 
-### src.tillm.cli._format_client_row
+### packages.dsl2tillm.src.dsl2tillm.handlers._validate
+- **Output to**: payload.get, src.tillm.validation.ecosystem_status, HandlerResult, src.tillm.validation.validate_client_readiness, result.to_dict
+
+### src.tillm.cli_output._format_client_row
 - **Output to**: row.get, row.get, row.get, row.get, row.get
 
-### src.tillm.cli._format_matrix_row
+### src.tillm.cli_output._format_matrix_row
 - **Output to**: result.get, str, result.get, str, len
 
-### src.tillm.cli._build_parser
+### src.tillm.cli_output._format_drive_summary_line
+- **Output to**: row.get, row.get, row.get, row.get, row.get
+
+### src.tillm.cli_parser._build_parser
 - **Output to**: argparse.ArgumentParser, parser.add_subparsers, sub.add_parser, clients.add_argument, sub.add_parser
 
 ### src.tillm.compat.shell_process_patterns
 - **Output to**: tuple, src.tillm.registry.iter_client_specs
 
-### packages.dsl2tillm.src.dsl2tillm.handlers._validate
-- **Output to**: payload.get, src.tillm.validation.ecosystem_status, HandlerResult, src.tillm.validation.validate_client_readiness, result.to_dict
+### src.tillm.controller_plan._validate_request
+- **Output to**: ClientNotReadyError, src.tillm.validation.validate_client_readiness, ClientNotReadyError, None.join
+
+### src.tillm.providers_probe._parse_models_payload
+- **Output to**: entries.sort, tuple, json.loads, isinstance, data.get
 
 ### src.tillm.validation.validate_client_readiness
 - **Output to**: src.tillm.registry.get_client_spec, spec.missing_env_vars, ValidationResult, ValidationResult, spec.command_path
@@ -401,53 +451,50 @@ Key functions that process and transform data:
 ### src.tillm.validation.validate_intent_contracts
 - **Output to**: parse_contract_line, list, errors.append, parsed.append, list
 
-### src.tillm.controller._validate_request
-- **Output to**: ClientNotReadyError, src.tillm.validation.validate_client_readiness, ClientNotReadyError, None.join
-
 ## Public API Surface
 
 Functions exposed as public API (no underscore prefix):
 
+- `src.tillm.providers_probe.diagnose_provider` - 40 calls
 - `packages.rest2tillm.src.rest2tillm.app.create_app` - 34 calls
 - `packages.cli2tillm.src.cli2tillm.cli.main` - 32 calls
-- `packages.dsl2tillm.src.dsl2tillm.grammar.parse_line` - 29 calls
 - `packages.dsl2tillm.src.dsl2tillm.bus.dispatch` - 29 calls
-- `packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl` - 27 calls
 - `packages.dsl2tillm.src.dsl2tillm.grammar.to_text` - 27 calls
-- `src.tillm.controller.drive_shell_llm_many` - 25 calls
+- `src.tillm.controller_plan.build_drive_plan` - 27 calls
+- `packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl` - 27 calls
+- `src.tillm.controller_drive.drive_shell_llm_many` - 25 calls
+- `src.tillm.providers_probe.probe_provider` - 23 calls
+- `src.tillm.surfaces_sync.plan_sync` - 21 calls
+- `src.tillm.headless.run_headless` - 20 calls
+- `src.tillm.providers_drive.resolve_provider_drive_attempts` - 20 calls
 - `packages.nlp2tillm.src.nlp2tillm.cli.main` - 20 calls
 - `packages.uri2tillm.src.uri2tillm.cli.main` - 17 calls
+- `src.tillm.surfaces_terminal.ClaudeSettingsSurface.read` - 17 calls
+- `src.tillm.surfaces_terminal.CodexConfigSurface.read` - 17 calls
 - `src.tillm.compat.launch_koru_agent` - 17 calls
 - `src.tillm.registry.resolve_client_ids` - 17 calls
+- `src.tillm.surfaces_sync.apply_sync` - 16 calls
 - `src.tillm.validation.validate_raw_dsl` - 16 calls
-- `src.tillm.controller.build_drive_plan` - 15 calls
-- `packages.dsl2tillm.src.dsl2tillm.events.EventStore.read_all` - 13 calls
-- `src.tillm.registry.ShellClientSpec.to_dict` - 12 calls
+- `src.tillm.cli.main` - 15 calls
+- `src.tillm.surfaces_terminal.OpencodeConfigSurface.write` - 14 calls
+- `src.tillm.registry.ShellClientSpec.to_dict` - 14 calls
+- `packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.read_all` - 13 calls
+- `src.tillm.surfaces_terminal.OpencodeConfigSurface.read` - 13 calls
+- `src.tillm.providers_drive.provider_env_overlay` - 13 calls
+- `src.tillm.providers_probe.list_provider_models` - 13 calls
+- `src.tillm.project_env.bootstrap_project_env` - 12 calls
+- `src.tillm.validation.ecosystem_status` - 12 calls
 - `packages.cli2tillm.src.cli2tillm.shell.run_shell` - 11 calls
-- `src.tillm.cli.main` - 11 calls
+- `src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read` - 11 calls
+- `src.tillm.controller.drive_shell_llm` - 11 calls
 - `src.tillm.validation.validate_client_readiness` - 11 calls
 - `packages.dsl2tillm.src.dsl2tillm.handlers.run_query` - 10 calls
+- `src.tillm.providers_store.set_provider_order` - 10 calls
+- `src.tillm.providers_store.get_stored_provider_order` - 10 calls
+- `src.tillm.surfaces_registry.normalize_surface_ids` - 10 calls
+- `src.tillm.drive_log.append_log` - 10 calls
 - `src.tillm.validation.validate_intent` - 10 calls
-- `src.tillm.validation.ecosystem_status` - 10 calls
 - `src.tillm.transports.docker.docker_service_status` - 10 calls
-- `src.tillm.transports.docker.run_docker_drive` - 10 calls
-- `packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas` - 9 calls
-- `packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri` - 9 calls
-- `src.tillm.transports.binary.run_binary_drive` - 9 calls
-- `src.tillm.compat.detect_koru_agent_rows` - 9 calls
-- `packages.dsl2tillm.src.dsl2tillm.events.EventStore.append_command` - 9 calls
-- `packages.rest2tillm.src.rest2tillm.cli.main` - 8 calls
-- `src.tillm.registry.ShellClientSpec.missing_env_vars` - 8 calls
-- `src.tillm.controller.save_prompt` - 7 calls
-- `packages.dsl2tillm.src.dsl2tillm.codec.validate_payload` - 6 calls
-- `packages.uri2tillm.src.uri2tillm.uri.uri_for_client` - 6 calls
-- `src.tillm.compat.tool_registry_entries` - 6 calls
-- `packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl` - 6 calls
-- `src.tillm.validation.validate_intent_contracts` - 6 calls
-- `packages.mcp2tillm.src.mcp2tillm.cli.main` - 5 calls
-- `packages.dsl2tillm.src.dsl2tillm.pb_codec.decode_protobuf` - 5 calls
-- `packages.uri2tillm.src.uri2tillm.uri.uri_for_cmd` - 5 calls
-- `packages.dsl2tillm.src.dsl2tillm.handlers.run_command` - 5 calls
 
 ## System Interactions
 
@@ -461,30 +508,30 @@ graph TD
     main --> add_argument
     to_text --> upper
     to_text --> get
+    _register_tools --> tool
+    run_headless --> normalize_client_id
+    run_headless --> get_client_spec
+    run_headless --> ShellDriveRequest
+    run_headless --> drive_shell_llm
+    run_headless --> to_dict
+    read --> _path
+    read --> read_json
+    read --> as_dict
+    read --> same_url
+    read --> SurfaceState
+    read --> _load
+    read --> any
     launch_koru_agent --> normalize_client_id
     launch_koru_agent --> get_client_spec
     launch_koru_agent --> save_prompt
     launch_koru_agent --> print
-    _register_tools --> tool
-    read_all --> splitlines
-    read_all --> is_file
-    read_all --> loads
-    read_all --> append
-    read_all --> read_text
-    to_dict --> command_path
-    to_dict --> missing_env_vars
-    to_dict --> list
-    main --> parse_args
-    main --> AssertionError
-    main --> _normalize_extra_arg
-    main --> _print
-    main --> _drive
-    detect_koru_agent_ro --> detect_clients
-    detect_koru_agent_ro --> get
-    detect_koru_agent_ro --> str
-    detect_koru_agent_ro --> bool
-    detect_koru_agent_ro --> append
-    append_command --> StoredEvent
+    apply_sync --> get_provider_spec
+    apply_sync --> plan_sync
+    apply_sync --> read_token
+    apply_sync --> resolve_provider_tok
+    apply_sync --> getattr
+    _parse_drive_matrix --> _flag
+    _parse_drive_matrix --> _bool_flag
 ```
 
 ## Reverse Engineering Guidelines

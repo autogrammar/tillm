@@ -1,101 +1,289 @@
-# tillm | 50f 3959L | python:46,shell:3,less:1 | 2026-06-08
-# stats: 158 func | 18 cls | 50 mod | CC̄=4.8 | critical:17 | cycles:0
-# alerts[5]: CC parse_line=35; CC drive_shell_llm_many=26; CC uri_to_dsl=24; CC test_compat_exports_koru_agent_rows=20; CC _main_subcommand=17
-# hotspots[5]: create_app fan=19; drive_shell_llm_many fan=18; dispatch fan=17; _main_subcommand fan=17; main fan=15
-# evolution: baseline
+# tillm | 122f 8003L | yaml:4,txt:7,shell:28,toml:7,json:10,python:63,dsl:2,yml:1 | 2026-09-08
+# generated in 0.03s
+# producer: code2llm | artifact: map.toon.yaml | schema: 1
+# stats: 264 func | 0 cls | 122 mod | CC̄=4.6 | critical:17 | cycles:0
+# alerts[5]: CC _provider_action=49; fan-out _provider_action=28; CC diagnose_provider=27; CC drive_shell_llm_many=26; fan-out build_drive_plan=24
+# hotspots[5]: _provider_action fan=28; build_drive_plan fan=24; create_app fan=21; _main_subcommand fan=20; _build_parser fan=19
+# evolution: CC̄ 4.4→4.6 (regressed +0.2)
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
-M[50]:
-  app.doql.less,52
-  packages/cli2tillm/src/cli2tillm/__init__.py,4
-  packages/cli2tillm/src/cli2tillm/cli.py,71
-  packages/cli2tillm/src/cli2tillm/shell.py,33
-  packages/cli2tillm/tests/test_cli2tillm.py,7
-  packages/dsl2tillm/src/dsl2tillm/__init__.py,7
-  packages/dsl2tillm/src/dsl2tillm/bus.py,89
-  packages/dsl2tillm/src/dsl2tillm/cli.py,113
-  packages/dsl2tillm/src/dsl2tillm/codec.py,32
-  packages/dsl2tillm/src/dsl2tillm/engine.py,6
-  packages/dsl2tillm/src/dsl2tillm/events.py,68
-  packages/dsl2tillm/src/dsl2tillm/grammar.py,152
-  packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py,177
-  packages/dsl2tillm/src/dsl2tillm/pb_codec.py,29
-  packages/dsl2tillm/src/dsl2tillm/result.py,29
-  packages/dsl2tillm/src/dsl2tillm/schema_registry.py,50
-  packages/dsl2tillm/tests/test_bus.py,37
-  packages/install-dev.sh,15
-  packages/mcp2tillm/src/mcp2tillm/__init__.py,4
-  packages/mcp2tillm/src/mcp2tillm/cli.py,24
-  packages/mcp2tillm/src/mcp2tillm/server.py,70
-  packages/mcp2tillm/tests/test_mcp2tillm.py,6
-  packages/nlp2tillm/src/nlp2tillm/__init__.py,4
-  packages/nlp2tillm/src/nlp2tillm/cli.py,41
-  packages/nlp2tillm/src/nlp2tillm/to_dsl.py,22
-  packages/nlp2tillm/tests/test_to_dsl.py,13
-  packages/rest2tillm/src/rest2tillm/__init__.py,4
-  packages/rest2tillm/src/rest2tillm/app.py,79
-  packages/rest2tillm/src/rest2tillm/cli.py,28
-  packages/rest2tillm/tests/test_rest2tillm.py,29
-  packages/uri2tillm/src/uri2tillm/__init__.py,5
-  packages/uri2tillm/src/uri2tillm/cli.py,41
-  packages/uri2tillm/src/uri2tillm/decode.py,61
-  packages/uri2tillm/src/uri2tillm/run.py,12
-  packages/uri2tillm/src/uri2tillm/uri.py,52
-  packages/uri2tillm/tests/test_uri.py,13
-  project.sh,63
-  src/tillm/__init__.py,47
-  src/tillm/__main__.py,8
-  src/tillm/cli.py,315
-  src/tillm/compat.py,206
-  src/tillm/controller.py,413
-  src/tillm/nlp.py,105
-  src/tillm/registry.py,310
-  src/tillm/transports/__init__.py,11
-  src/tillm/transports/binary.py,78
-  src/tillm/transports/docker.py,144
-  src/tillm/validation.py,183
-  tests/test_sillm.py,595
-  tree.sh,2
+M[122]:
+  coverage.json,1
+  deploy/docker-compose.yml,77
+  examples/aider/dry-run.sh,9
+  examples/aider/execute.sh,18
+  examples/aider/model-switch.sh,17
+  examples/aider/refactor.sh,14
+  examples/claude-code/dry-run.sh,9
+  examples/claude-code/execute.sh,18
+  examples/cline/dry-run.sh,15
+  examples/codex/dry-run.sh,9
+  examples/codex/execute.sh,17
+  examples/control-layer/cli-exec.sh,5
+  examples/control-layer/nlp-to-dsl.sh,5
+  examples/control-layer/rest-health.sh,14
+  examples/control-layer/uri-decode.sh,6
+  examples/devin/dry-run.sh,9
+  examples/devin/execute.sh,16
+  examples/dsl/drive-aider.dsl,2
+  examples/dsl/run-smoke.sh,5
+  examples/dsl/smoke.dsl,6
+  examples/fixtures/demo_module.py,9
+  examples/gemini-cli/dry-run.sh,15
+  examples/matrix/dry-run-all.sh,10
+  examples/matrix/dry-run-available.sh,11
+  examples/matrix/dsl-matrix.sh,5
+  examples/opencode/dry-run.sh,15
+  examples/openrouter/load-env.sh,30
+  examples/openrouter/models.sh,11
+  examples/qwen-code/dry-run.sh,15
+  examples/run-all-dry-run.sh,31
+  goal.yaml,527
+  koru.yaml,141
+  local.dev.txt,14
+  packages/cli2tillm/local.dev.txt,9
+  packages/cli2tillm/pyproject.toml,24
+  packages/cli2tillm/src/cli2tillm/__init__.py,3
+  packages/cli2tillm/src/cli2tillm/cli.py,70
+  packages/cli2tillm/src/cli2tillm/shell.py,32
+  packages/dsl2tillm/local.dev.txt,9
+  packages/dsl2tillm/pyproject.toml,33
+  packages/dsl2tillm/src/dsl2tillm/__init__.py,6
+  packages/dsl2tillm/src/dsl2tillm/bus.py,88
+  packages/dsl2tillm/src/dsl2tillm/cli.py,112
+  packages/dsl2tillm/src/dsl2tillm/codec.py,31
+  packages/dsl2tillm/src/dsl2tillm/engine.py,5
+  packages/dsl2tillm/src/dsl2tillm/events.py,70
+  packages/dsl2tillm/src/dsl2tillm/grammar.py,197
+  packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py,176
+  packages/dsl2tillm/src/dsl2tillm/pb_codec.py,28
+  packages/dsl2tillm/src/dsl2tillm/result.py,28
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/actions.schema.json,9
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/clients.schema.json,9
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/docker_status.schema.json,9
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/drive.schema.json,16
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/drive_matrix.schema.json,20
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/health.schema.json,9
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/orient.schema.json,9
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/resolve.schema.json,10
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/validate.schema.json,10
+  packages/dsl2tillm/src/dsl2tillm/schema_registry.py,49
+  packages/install-dev.sh,20
+  packages/mcp2tillm/local.dev.txt,10
+  packages/mcp2tillm/pyproject.toml,28
+  packages/mcp2tillm/src/mcp2tillm/__init__.py,3
+  packages/mcp2tillm/src/mcp2tillm/cli.py,23
+  packages/mcp2tillm/src/mcp2tillm/server.py,125
+  packages/nlp2tillm/local.dev.txt,10
+  packages/nlp2tillm/pyproject.toml,24
+  packages/nlp2tillm/src/nlp2tillm/__init__.py,3
+  packages/nlp2tillm/src/nlp2tillm/cli.py,40
+  packages/nlp2tillm/src/nlp2tillm/to_dsl.py,21
+  packages/rest2tillm/local.dev.txt,9
+  packages/rest2tillm/pyproject.toml,31
+  packages/rest2tillm/src/rest2tillm/__init__.py,3
+  packages/rest2tillm/src/rest2tillm/app.py,78
+  packages/rest2tillm/src/rest2tillm/cli.py,27
+  packages/uri2tillm/local.dev.txt,9
+  packages/uri2tillm/pyproject.toml,24
+  packages/uri2tillm/src/uri2tillm/__init__.py,4
+  packages/uri2tillm/src/uri2tillm/cli.py,40
+  packages/uri2tillm/src/uri2tillm/decode.py,60
+  packages/uri2tillm/src/uri2tillm/run.py,11
+  packages/uri2tillm/src/uri2tillm/uri.py,51
+  planfile.yaml,110
+  project.sh,62
+  pyproject.toml,81
+  src/tillm/__init__.py,50
+  src/tillm/__main__.py,7
+  src/tillm/cli.py,484
+  src/tillm/cli_output.py,209
+  src/tillm/cli_parser.py,227
+  src/tillm/compat.py,214
+  src/tillm/controller.py,111
+  src/tillm/controller_drive.py,166
+  src/tillm/controller_errors.py,21
+  src/tillm/controller_plan.py,168
+  src/tillm/controller_types.py,141
+  src/tillm/drive_log.py,82
+  src/tillm/headless.py,72
+  src/tillm/i18n.py,284
+  src/tillm/nlp.py,104
+  src/tillm/project_env.py,116
+  src/tillm/providers.py,97
+  src/tillm/providers_drive.py,187
+  src/tillm/providers_probe.py,332
+  src/tillm/providers_registry.py,188
+  src/tillm/providers_store.py,121
+  src/tillm/providers_types.py,129
+  src/tillm/registry.py,328
+  src/tillm/surfaces.py,37
+  src/tillm/surfaces_gui.py,125
+  src/tillm/surfaces_io.py,36
+  src/tillm/surfaces_registry.py,53
+  src/tillm/surfaces_sync.py,148
+  src/tillm/surfaces_terminal.py,206
+  src/tillm/surfaces_types.py,38
+  src/tillm/transports/__init__.py,10
+  src/tillm/transports/binary.py,77
+  src/tillm/transports/docker.py,143
+  src/tillm/validation.py,187
+  testql-scenarios/generated-cli-tests.testql.toon.yaml,20
+  tree.sh,1
 D:
-  packages/cli2tillm/src/cli2tillm/__init__.py:
-  packages/cli2tillm/src/cli2tillm/cli.py:
-    e: main
+  src/tillm/cli.py:
+    e: _resolve_execute_profile,_missing_prompt_error,_stdin_has_data,_read_prompt,_resolve_drive_targets,_base_drive_request,_drive,_providers_list,_sync_matrix,_provider_order,_provider_action,_nlp,main
+    _resolve_execute_profile(raw)
+    _missing_prompt_error()
+    _stdin_has_data()
+    _read_prompt(args)
+    _resolve_drive_targets(args)
+    _base_drive_request(args;prompt)
+    _drive(args)
+    _providers_list(args)
+    _sync_matrix(args)
+    _provider_order(args)
+    _provider_action(args)
+    _nlp(args)
     main(argv)
-  packages/cli2tillm/src/cli2tillm/shell.py:
-    e: run_shell
-    run_shell()
-  packages/cli2tillm/tests/test_cli2tillm.py:
-    e: test_exec_health_via_bus
-    test_exec_health_via_bus()
-  packages/dsl2tillm/src/dsl2tillm/__init__.py:
-  packages/dsl2tillm/src/dsl2tillm/bus.py:
-    e: dispatch,execute_dsl_line,execute_dsl
-    dispatch(command)
-    execute_dsl_line(line)
-    execute_dsl(text)
+  src/tillm/providers_probe.py:
+    e: _http_json_impl,_http_json,_probe_anthropic_endpoint,probe_provider,_parse_models_payload,list_provider_models,diagnose_provider
+    _http_json_impl(url)
+    _http_json(url)
+    _probe_anthropic_endpoint(spec;token;model)
+    probe_provider(provider_id)
+    _parse_models_payload(body)
+    list_provider_models(provider_id)
+    diagnose_provider(provider_id)
+  src/tillm/controller_drive.py:
+    e: timeout_value,_drive_result_from_exception,_drive_one_client,drive_shell_llm_many,_drive_shell_llm_once,result_from_error
+    timeout_value(timeout_seconds)
+    _drive_result_from_exception(client_id;exc)
+    _drive_one_client(request;client_id)
+    drive_shell_llm_many(request)
+    _drive_shell_llm_once(request)
+    result_from_error(client_id;exc)
+  packages/uri2tillm/src/uri2tillm/decode.py:
+    e: uri_to_dsl
+    uri_to_dsl(uri)
+  src/tillm/cli_output.py:
+    e: _format_client_row,_format_matrix_row,_output_stats,_summarize_drive_result,_summarize_drive_payload,_format_drive_summary_line,_print_summary,_print
+    _format_client_row(row)
+    _format_matrix_row(result)
+    _output_stats(text)
+    _summarize_drive_result(row)
+    _summarize_drive_payload(payload)
+    _format_drive_summary_line(row)
+    _print_summary(payload)
+    _print(payload;output_format)
+  src/tillm/providers_drive.py:
+    e: client_protocol,provider_env_overlay,resolve_request_provider,provider_compatible_with_client,resolve_drive_client_id,resolve_drive_model,resolve_provider_drive_attempts,is_provider_exhaustion
+    client_protocol(client_id)
+    provider_env_overlay(client_id;provider_id)
+    resolve_request_provider(explicit)
+    provider_compatible_with_client(client_id;provider_id)
+    resolve_drive_client_id(client_id;provider_id)
+    resolve_drive_model(client_id;provider_id;requested)
+    resolve_provider_drive_attempts(client_id)
+    is_provider_exhaustion()
   packages/dsl2tillm/src/dsl2tillm/cli.py:
     e: _main_legacy,_main_subcommand,main
     _main_legacy(argv)
     _main_subcommand(argv)
     main(argv)
-  packages/dsl2tillm/src/dsl2tillm/codec.py:
-    e: validate_payload,parse_text,envelope_from_bytes
-    validate_payload(payload)
-    parse_text(line)
-    envelope_from_bytes(data)
-  packages/dsl2tillm/src/dsl2tillm/engine.py:
-  packages/dsl2tillm/src/dsl2tillm/events.py:
-    e: StoredEvent,EventStore
-    StoredEvent: to_dict(0)
-    EventStore: __init__(1),for_workdir(2),append_command(2),read_all(0)
   packages/dsl2tillm/src/dsl2tillm/grammar.py:
-    e: _flag,_bool_flag,_quoted_or_tail,parse_line,to_text
+    e: _flag,_bool_flag,_quoted_or_tail,_parse_validate,_parse_drive,_parse_drive_matrix,parse_line,to_text
     _flag(rest;name)
     _bool_flag(rest;name)
     _quoted_or_tail(rest)
+    _parse_validate(rest)
+    _parse_drive(rest;default_file)
+    _parse_drive_matrix(rest;default_file)
     parse_line(line)
     to_text(payload)
+  packages/cli2tillm/src/cli2tillm/cli.py:
+    e: main
+    main(argv)
+  packages/dsl2tillm/src/dsl2tillm/bus.py:
+    e: dispatch,execute_dsl_line,execute_dsl
+    dispatch(command)
+    execute_dsl_line(line)
+    execute_dsl(text)
+  src/tillm/nlp.py:
+    e: ShellIntent,_client_from_text,_strip_drive_prefix,_intent_from_nlp2dsl,intent_from_text
+    ShellIntent: to_dsl(0)
+    _client_from_text(text;default_client)
+    _strip_drive_prefix(text)
+    _intent_from_nlp2dsl(text;default_client)
+    intent_from_text(text)
+  src/tillm/registry.py:
+    e: ShellClientSpec,normalize_client_id,iter_client_specs,get_client_spec,available_client_ids,registered_client_ids,resolve_client_ids,detect_clients,normalize_execute_profile
+    ShellClientSpec: command_path(1),profile_execute_args(1),supported_execute_profiles(0),has_auth_file(0),missing_env_vars(1),to_dict(0)
+    normalize_client_id(raw)
+    iter_client_specs()
+    get_client_spec(client_id)
+    available_client_ids()
+    registered_client_ids()
+    resolve_client_ids()
+    detect_clients()
+    normalize_execute_profile(raw)
+  src/tillm/surfaces_sync.py:
+    e: _surface_in_sync,plan_sync,sync_all,apply_sync
+    _surface_in_sync(surface;spec;store_token)
+    plan_sync(provider_id)
+    sync_all()
+    apply_sync(provider_id)
+  src/tillm/controller_plan.py:
+    e: _prompt_root,save_prompt,_resolve_spec,_resolve_command_impl,_resolve_command,_validate_request,_resolve_execute_args,_normalize_model_for_client,_model_for_plan,build_drive_plan
+    _prompt_root(project;prompt_dir)
+    save_prompt(prompt)
+    _resolve_spec(client_id)
+    _resolve_command_impl(spec)
+    _resolve_command(spec)
+    _validate_request(request;spec)
+    _resolve_execute_args(spec)
+    _normalize_model_for_client(client_id;model)
+    _model_for_plan(request;client_id)
+    build_drive_plan(request)
+  src/tillm/validation.py:
+    e: ValidationResult,validate_client_readiness,validate_intent,validate_raw_dsl,client_status_rows,intent_contracts,validate_intent_contracts,ecosystem_status
+    ValidationResult: to_dict(0)
+    validate_client_readiness(client_id)
+    validate_intent(intent)
+    validate_raw_dsl(raw_dsl;client_id)
+    client_status_rows()
+    intent_contracts()
+    validate_intent_contracts()
+    ecosystem_status()
+  src/tillm/surfaces_gui.py:
+    e: JetBrainsOpenAILikeSurface,QoderSurface
+    JetBrainsOpenAILikeSurface: _paths(0),applicable(1),read(1),read_token(1)  # JetBrains AI Assistant OpenAI-like provider XML...
+    QoderSurface: _paths(0),applicable(1),_markers(1),read(1),_configured_text(0),read_token(1)  # Qoder (JetBrains plugin) BYOK settings — detect-only...
+  src/tillm/controller.py:
+    e: _resolve_command,drive_shell_llm
+    _resolve_command(spec)
+    drive_shell_llm(request)
+  src/tillm/drive_log.py:
+    e: tillm_dir,log_dir,_now_iso,append_log,log_drive_event
+    tillm_dir(project)
+    log_dir(project)
+    _now_iso()
+    append_log(project;event)
+    log_drive_event(project)
+  src/tillm/transports/binary.py:
+    e: run_binary_drive
+    run_binary_drive(request;plan)
+  src/tillm/transports/docker.py:
+    e: _compose_file,docker_service_name,docker_service_status,_docker_argv,run_docker_drive
+    _compose_file()
+    docker_service_name(client_id)
+    docker_service_status()
+    _docker_argv(plan)
+    run_docker_drive(request;plan)
+  packages/cli2tillm/src/cli2tillm/shell.py:
+    e: run_shell
+    run_shell()
   packages/dsl2tillm/src/dsl2tillm/handlers/__init__.py:
-    e: run_query,run_command,_health,_clients,_orient,_actions,_validate,_resolve,_docker_status,_drive,_drive_matrix,HandlerResult
+    e: HandlerResult,run_query,run_command,_health,_clients,_orient,_actions,_validate,_resolve,_docker_status,_drive,_drive_matrix
     HandlerResult: to_dict(0)
     run_query(payload)
     run_command(payload)
@@ -108,103 +296,30 @@ D:
     _docker_status()
     _drive(payload)
     _drive_matrix(payload)
-  packages/dsl2tillm/src/dsl2tillm/pb_codec.py:
-    e: encode_protobuf,decode_protobuf,encode_result_protobuf
-    encode_protobuf(payload)
-    decode_protobuf(data)
-    encode_result_protobuf(result)
-  packages/dsl2tillm/src/dsl2tillm/result.py:
-    e: DslResult
-    DslResult: to_dict(0)
-  packages/dsl2tillm/src/dsl2tillm/schema_registry.py:
-    e: _load_schemas,schema_for_verb,all_verbs,validate_schemas
-    _load_schemas()
-    schema_for_verb(verb)
-    all_verbs()
-    validate_schemas()
-  packages/dsl2tillm/tests/test_bus.py:
-    e: test_health,test_orient,test_clients,test_actions,test_validate_ecosystem,test_resolve
-    test_health()
-    test_orient()
-    test_clients()
-    test_actions()
-    test_validate_ecosystem()
-    test_resolve()
-  packages/mcp2tillm/src/mcp2tillm/__init__.py:
-  packages/mcp2tillm/src/mcp2tillm/cli.py:
-    e: main
-    main(argv)
+  src/tillm/providers_store.py:
+    e: _config_path,_load_store,_write_store,save_provider_token,stored_provider_entry,resolve_provider_token,set_default_provider,get_default_provider,set_provider_order,get_stored_provider_order,provider_default_model
+    _config_path()
+    _load_store()
+    _write_store(data)
+    save_provider_token(provider_id;token)
+    stored_provider_entry(provider_id)
+    resolve_provider_token(provider_id)
+    set_default_provider(provider_id)
+    get_default_provider()
+    set_provider_order(order)
+    get_stored_provider_order()
+    provider_default_model(provider_id)
   packages/mcp2tillm/src/mcp2tillm/server.py:
-    e: _require_fastmcp,create_server,run_server,TillmMCPServer
+    e: TillmMCPServer,_enabled,_project_root,_require_within_project_root,_guard_payload,_guard_command,_require_fastmcp,create_server,run_server
     TillmMCPServer: __post_init__(0),_register_tools(0),run(0)
+    _enabled(name)
+    _project_root()
+    _require_within_project_root(raw_path)
+    _guard_payload(payload)
+    _guard_command(command)
     _require_fastmcp()
     create_server(name)
     run_server()
-  packages/mcp2tillm/tests/test_mcp2tillm.py:
-    e: test_create_server
-    test_create_server()
-  packages/nlp2tillm/src/nlp2tillm/__init__.py:
-  packages/nlp2tillm/src/nlp2tillm/cli.py:
-    e: main
-    main(argv)
-  packages/nlp2tillm/src/nlp2tillm/to_dsl.py:
-    e: to_dsl,apply_nl
-    to_dsl(prompt)
-    apply_nl(prompt)
-  packages/nlp2tillm/tests/test_to_dsl.py:
-    e: test_to_dsl_aider,test_to_dsl_codex
-    test_to_dsl_aider()
-    test_to_dsl_codex()
-  packages/rest2tillm/src/rest2tillm/__init__.py:
-  packages/rest2tillm/src/rest2tillm/app.py:
-    e: create_app
-    create_app()
-  packages/rest2tillm/src/rest2tillm/cli.py:
-    e: main
-    main(argv)
-  packages/rest2tillm/tests/test_rest2tillm.py:
-    e: test_root_endpoint,test_health_endpoint,test_post_dsl_health
-    test_root_endpoint()
-    test_health_endpoint()
-    test_post_dsl_health()
-  packages/uri2tillm/src/uri2tillm/__init__.py:
-  packages/uri2tillm/src/uri2tillm/cli.py:
-    e: main
-    main(argv)
-  packages/uri2tillm/src/uri2tillm/decode.py:
-    e: uri_to_dsl
-    uri_to_dsl(uri)
-  packages/uri2tillm/src/uri2tillm/run.py:
-    e: run_uri
-    run_uri(uri)
-  packages/uri2tillm/src/uri2tillm/uri.py:
-    e: _encode,_decode,uri_for_cmd,uri_for_client,is_tillm_uri,parse_tillm_uri
-    _encode(value)
-    _decode(value)
-    uri_for_cmd(verb)
-    uri_for_client(client)
-    is_tillm_uri(uri)
-    parse_tillm_uri(uri)
-  packages/uri2tillm/tests/test_uri.py:
-    e: test_decode_health_cmd,test_decode_drive_client
-    test_decode_health_cmd()
-    test_decode_drive_client()
-  src/tillm/__init__.py:
-  src/tillm/__main__.py:
-  src/tillm/cli.py:
-    e: _format_client_row,_format_matrix_row,_print,_build_parser,_normalize_extra_arg_tokens,_resolve_execute_profile,_read_prompt,_resolve_drive_targets,_base_drive_request,_drive,_nlp,main
-    _format_client_row(row)
-    _format_matrix_row(result)
-    _print(payload;output_format)
-    _build_parser()
-    _normalize_extra_arg_tokens(argv)
-    _resolve_execute_profile(raw)
-    _read_prompt(args)
-    _resolve_drive_targets(args)
-    _base_drive_request(args;prompt)
-    _drive(args)
-    _nlp(args)
-    main(argv)
   src/tillm/compat.py:
     e: agent_backend_profiles,agent_backend_aliases,is_shell_llm_client,is_client_available,shell_client_ids,shell_process_patterns,tool_registry_entries,autopilot_backend_for_client,detect_koru_agent_rows,drive_koru_chat,launch_koru_agent
     agent_backend_profiles()
@@ -218,99 +333,216 @@ D:
     detect_koru_agent_rows()
     drive_koru_chat()
     launch_koru_agent()
-  src/tillm/controller.py:
-    e: resolve_backend,_prompt_root,save_prompt,_resolve_spec,_resolve_command,_validate_request,_resolve_execute_args,build_drive_plan,_timeout_value,_drive_result_from_exception,_drive_one_client,drive_shell_llm_many,drive_shell_llm,result_from_error,TillmError,UnknownClientError,ClientUnavailableError,ClientNotReadyError,UnknownProfileError,ShellDriveRequest,ShellDrivePlan,MultiShellDriveRequest,ShellDriveResult,MultiShellDriveResult
-    TillmError:  # Base error for SLLM control failures.
-    UnknownClientError:  # Requested client is not registered.
-    ClientUnavailableError:  # Registered client command is not available in PATH.
-    ClientNotReadyError:  # Registered client is missing binary, env vars, or requested 
-    UnknownProfileError:  # Requested execute profile is not registered for the client.
+  packages/uri2tillm/src/uri2tillm/cli.py:
+    e: main
+    main(argv)
+  packages/nlp2tillm/src/nlp2tillm/cli.py:
+    e: main
+    main(argv)
+  src/tillm/headless.py:
+    e: supports_headless,headless_client_ids,run_headless
+    supports_headless(client_id)
+    headless_client_ids()
+    run_headless(client_id;prompt)
+  src/tillm/surfaces_terminal.py:
+    e: ClaudeSettingsSurface,CodexConfigSurface,OpencodeConfigSurface
+    ClaudeSettingsSurface: _path(0),applicable(1),read(1),read_token(1),write(3)  # ``~/.claude/settings.json`` env block for manually launched ...
+    CodexConfigSurface: _path(0),applicable(1),_load(0),read(1),read_token(1),write(3)  # ``~/.codex/config.toml`` model_providers table...
+    OpencodeConfigSurface: _candidates(0),_path(0),applicable(1),_entry(1),read(1),read_token(1),write(3)  # opencode JSON config with custom provider entry...
+  src/tillm/project_env.py:
+    e: _strip_quotes,load_env_file,apply_into_environ,apply_llm_bridges,_env2llm_enabled,_ensure_env2llm_map,resolve_env_file,bootstrap_project_env
+    _strip_quotes(value)
+    load_env_file(path)
+    apply_into_environ(values)
+    apply_llm_bridges()
+    _env2llm_enabled()
+    _ensure_env2llm_map(project)
+    resolve_env_file(project;env_file)
+    bootstrap_project_env(project)
+  src/tillm/surfaces_registry.py:
+    e: normalize_surface_ids,iter_surfaces
+    normalize_surface_ids(names)
+    iter_surfaces()
+  packages/dsl2tillm/src/dsl2tillm/schema_registry.py:
+    e: _load_schemas,schema_for_verb,all_verbs,validate_schemas
+    _load_schemas()
+    schema_for_verb(verb)
+    all_verbs()
+    validate_schemas()
+  packages/uri2tillm/src/uri2tillm/uri.py:
+    e: _encode,_decode,uri_for_cmd,uri_for_client,is_tillm_uri,parse_tillm_uri
+    _encode(value)
+    _decode(value)
+    uri_for_cmd(verb)
+    uri_for_client(client)
+    is_tillm_uri(uri)
+    parse_tillm_uri(uri)
+  src/tillm/i18n.py:
+    e: _normalize,_stored_language,_system_language,set_language,save_language,current_language,_,yes_answers
+    _normalize(code)
+    _stored_language()
+    _system_language()
+    set_language(code)
+    save_language(code)
+    current_language()
+    _(key)
+    yes_answers()
+  src/tillm/cli_parser.py:
+    e: _build_parser,_normalize_extra_arg_tokens
+    _build_parser()
+    _normalize_extra_arg_tokens(argv)
+  src/tillm/providers_registry.py:
+    e: normalize_provider_id,get_provider_spec,iter_provider_specs
+    normalize_provider_id(raw)
+    get_provider_spec(provider_id)
+    iter_provider_specs()
+  src/tillm/providers_types.py:
+    e: ProviderSpec,UnknownProviderError,ProbeResult,ModelListing,DiagnosisItem,ProviderDiagnosis,is_subscription_order_token
+    ProviderSpec: protocols(0),compatible_clients(0)
+    UnknownProviderError(ValueError):
+    ProbeResult: to_dict(0)
+    ModelListing:
+    DiagnosisItem:
+    ProviderDiagnosis: to_dict(0)
+    is_subscription_order_token(token)
+  src/tillm/controller_types.py:
+    e: ShellDriveRequest,ShellDrivePlan,MultiShellDriveRequest,ShellDriveResult,MultiShellDriveResult,resolve_backend
     ShellDriveRequest:
     ShellDrivePlan: shell_preview(0),to_dict(0)
     MultiShellDriveRequest:
     ShellDriveResult: to_dict(0)
     MultiShellDriveResult: to_dict(0)
     resolve_backend(raw)
-    _prompt_root(project;prompt_dir)
-    save_prompt(prompt)
-    _resolve_spec(client_id)
-    _resolve_command(spec)
-    _validate_request(request;spec)
-    _resolve_execute_args(spec)
-    build_drive_plan(request)
-    _timeout_value(timeout_seconds)
-    _drive_result_from_exception(client_id;exc)
-    _drive_one_client(request;client_id)
-    drive_shell_llm_many(request)
-    drive_shell_llm(request)
-    result_from_error(client_id;exc)
-  src/tillm/nlp.py:
-    e: _client_from_text,_strip_drive_prefix,_intent_from_nlp2dsl,intent_from_text,ShellIntent
-    ShellIntent: to_dsl(0)
-    _client_from_text(text;default_client)
-    _strip_drive_prefix(text)
-    _intent_from_nlp2dsl(text;default_client)
-    intent_from_text(text)
-  src/tillm/registry.py:
-    e: normalize_client_id,iter_client_specs,get_client_spec,available_client_ids,registered_client_ids,resolve_client_ids,detect_clients,normalize_execute_profile,ShellClientSpec
-    ShellClientSpec: command_path(1),profile_execute_args(1),supported_execute_profiles(0),missing_env_vars(1),to_dict(0)
-    normalize_client_id(raw)
-    iter_client_specs()
-    get_client_spec(client_id)
-    available_client_ids()
-    registered_client_ids()
-    resolve_client_ids()
-    detect_clients()
-    normalize_execute_profile(raw)
+  packages/dsl2tillm/src/dsl2tillm/events.py:
+    e: StoredEvent,TillmEventStore
+    StoredEvent: to_dict(0)
+    TillmEventStore: __init__(1),for_workdir(1),append_command(2),read_all(0)
+  packages/dsl2tillm/src/dsl2tillm/pb_codec.py:
+    e: encode_protobuf,decode_protobuf,encode_result_protobuf
+    encode_protobuf(payload)
+    decode_protobuf(data)
+    encode_result_protobuf(result)
+  packages/mcp2tillm/src/mcp2tillm/cli.py:
+    e: main
+    main(argv)
+  src/tillm/surfaces_io.py:
+    e: provider_slug,read_json,as_dict,write_private_json,same_url
+    provider_slug(spec)
+    read_json(path)
+    as_dict(value)
+    write_private_json(path;data)
+    same_url(a;b)
+  packages/rest2tillm/src/rest2tillm/cli.py:
+    e: main
+    main(argv)
+  packages/dsl2tillm/src/dsl2tillm/codec.py:
+    e: validate_payload,parse_text,envelope_from_bytes
+    validate_payload(payload)
+    parse_text(line)
+    envelope_from_bytes(data)
+  packages/nlp2tillm/src/nlp2tillm/to_dsl.py:
+    e: to_dsl,apply_nl
+    to_dsl(prompt)
+    apply_nl(prompt)
+  examples/fixtures/demo_module.py:
+    e: say_hello,say_hello_formal
+    say_hello(name)
+    say_hello_formal(name)
+  packages/dsl2tillm/src/dsl2tillm/result.py:
+    e: DslResult
+    DslResult: to_dict(0)
+  packages/uri2tillm/src/uri2tillm/run.py:
+    e: run_uri
+    run_uri(uri)
+  src/tillm/providers.py:
+    e: _http_json
+    _http_json(url)
+  src/tillm/surfaces_types.py:
+    e: SurfaceState,SyncStep,UnknownSurfaceError
+    SurfaceState: to_dict(0)
+    SyncStep: to_dict(0)
+    UnknownSurfaceError(ValueError):
+  packages/rest2tillm/src/rest2tillm/app.py:
+    e: create_app
+    create_app()
+  goal.yaml:
+  local.dev.txt:
+  planfile.yaml:
+  project.sh:
+    e: venv_is_usable
+    venv_is_usable()
+  tree.sh:
+  koru.yaml:
+  pyproject.toml:
+  packages/mcp2tillm/local.dev.txt:
+  packages/install-dev.sh:
+  packages/mcp2tillm/pyproject.toml:
+  packages/rest2tillm/local.dev.txt:
+  packages/uri2tillm/local.dev.txt:
+  packages/rest2tillm/pyproject.toml:
+  packages/nlp2tillm/pyproject.toml:
+  packages/nlp2tillm/local.dev.txt:
+  packages/uri2tillm/pyproject.toml:
+  coverage.json:
+  packages/dsl2tillm/local.dev.txt:
+  packages/dsl2tillm/pyproject.toml:
+  packages/mcp2tillm/src/mcp2tillm/__init__.py:
+  packages/dsl2tillm/src/dsl2tillm/__init__.py:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/docker_status.schema.json:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/health.schema.json:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/drive_matrix.schema.json:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/resolve.schema.json:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/clients.schema.json:
+  packages/rest2tillm/src/rest2tillm/__init__.py:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/orient.schema.json:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/actions.schema.json:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/drive.schema.json:
+  packages/cli2tillm/local.dev.txt:
+  packages/cli2tillm/pyproject.toml:
+  packages/dsl2tillm/src/dsl2tillm/schema/commands/validate.schema.json:
+  packages/cli2tillm/src/cli2tillm/__init__.py:
+  examples/run-all-dry-run.sh:
+    e: run
+    run()
+  packages/dsl2tillm/src/dsl2tillm/engine.py:
+  examples/devin/dry-run.sh:
+  examples/devin/execute.sh:
+  examples/gemini-cli/dry-run.sh:
+  examples/aider/refactor.sh:
+  examples/aider/model-switch.sh:
+  examples/aider/execute.sh:
+  examples/codex/dry-run.sh:
+  examples/aider/dry-run.sh:
+  examples/claude-code/dry-run.sh:
+  examples/matrix/dsl-matrix.sh:
+  examples/codex/execute.sh:
+  examples/matrix/dry-run-available.sh:
+  examples/matrix/dry-run-all.sh:
+  examples/claude-code/execute.sh:
+  examples/opencode/dry-run.sh:
+  examples/openrouter/models.sh:
+  examples/control-layer/cli-exec.sh:
+  examples/openrouter/load-env.sh:
+  examples/control-layer/nlp-to-dsl.sh:
+  examples/cline/dry-run.sh:
+  examples/control-layer/uri-decode.sh:
+  examples/qwen-code/dry-run.sh:
+  examples/control-layer/rest-health.sh:
+  examples/dsl/run-smoke.sh:
+  examples/dsl/drive-aider.dsl:
+  examples/dsl/smoke.dsl:
+  src/tillm/__init__.py:
+  src/tillm/__main__.py:
+  src/tillm/controller_errors.py:
+    e: TillmError,UnknownClientError,ClientUnavailableError,ClientNotReadyError,UnknownProfileError
+    TillmError(RuntimeError):  # Base error for TILLM control failures...
+    UnknownClientError(TillmError):  # Requested client is not registered...
+    ClientUnavailableError(TillmError):  # Registered client command is not available in PATH...
+    ClientNotReadyError(TillmError):  # Registered client is missing binary, env vars, or requested ...
+    UnknownProfileError(TillmError):  # Requested execute profile is not registered for the client...
+  src/tillm/surfaces.py:
   src/tillm/transports/__init__.py:
-  src/tillm/transports/binary.py:
-    e: run_binary_drive
-    run_binary_drive(request;plan)
-  src/tillm/transports/docker.py:
-    e: _compose_file,docker_service_name,docker_service_status,_docker_argv,run_docker_drive
-    _compose_file()
-    docker_service_name(client_id)
-    docker_service_status()
-    _docker_argv(plan)
-    run_docker_drive(request;plan)
-  src/tillm/validation.py:
-    e: validate_client_readiness,validate_intent,validate_raw_dsl,client_status_rows,intent_contracts,validate_intent_contracts,ecosystem_status,ValidationResult
-    ValidationResult: to_dict(0)
-    validate_client_readiness(client_id)
-    validate_intent(intent)
-    validate_raw_dsl(raw_dsl;client_id)
-    client_status_rows()
-    intent_contracts()
-    validate_intent_contracts()
-    ecosystem_status()
-  tests/test_sillm.py:
-    e: test_registry_normalizes_common_aliases,test_registry_lists_all_shell_clients,test_detect_clients_marks_available_from_injected_which,test_detect_clients_reports_capabilities_and_env,test_build_drive_plan_for_each_registered_client,test_execute_args_match_vendor_headless_flags,test_build_drive_plan_includes_execute_args_when_executing,test_build_drive_plan_rejects_execute_for_cline,test_build_drive_plan_uses_message_file_for_aider,test_validate_client_readiness_reports_missing_binary_and_env,test_validate_client_readiness_rejects_execute_for_interactive_only,test_validate_raw_dsl_rejects_unknown_client,test_compat_exports_koru_agent_rows,test_drive_cli_accepts_space_form_extra_arg_flags,test_clients_cli_lists_registered_clients,test_nlp_rules_select_client_and_prompt,test_validate_intent_rejects_raw_dsl_without_tillm_drive,test_ecosystem_status_includes_client_rows,test_automation_profile_uses_permission_bypass_flags,test_automation_profile_is_rejected_when_unsupported,test_drive_cli_accepts_automation_profile,test_resolve_client_ids_for_all_available_only,test_resolve_client_ids_for_clients_list,test_drive_many_plans_all_selected_clients,test_drive_many_fail_fast_stops_after_first_failure,test_drive_cli_all_available_clients,test_registry_lists_transport_metadata,test_registered_and_available_client_helpers,test_intent_contracts_are_exposed_for_ecosystem_validation
-    test_registry_normalizes_common_aliases(alias;canonical)
-    test_registry_lists_all_shell_clients()
-    test_detect_clients_marks_available_from_injected_which()
-    test_detect_clients_reports_capabilities_and_env()
-    test_build_drive_plan_for_each_registered_client(client_id;tmp_path;monkeypatch)
-    test_execute_args_match_vendor_headless_flags(client_id)
-    test_build_drive_plan_includes_execute_args_when_executing(client_id;tmp_path;monkeypatch)
-    test_build_drive_plan_rejects_execute_for_cline(tmp_path)
-    test_build_drive_plan_uses_message_file_for_aider(tmp_path)
-    test_validate_client_readiness_reports_missing_binary_and_env(monkeypatch)
-    test_validate_client_readiness_rejects_execute_for_interactive_only()
-    test_validate_raw_dsl_rejects_unknown_client()
-    test_compat_exports_koru_agent_rows()
-    test_drive_cli_accepts_space_form_extra_arg_flags(monkeypatch;tmp_path;capsys)
-    test_clients_cli_lists_registered_clients(capsys)
-    test_nlp_rules_select_client_and_prompt()
-    test_validate_intent_rejects_raw_dsl_without_tillm_drive()
-    test_ecosystem_status_includes_client_rows()
-    test_automation_profile_uses_permission_bypass_flags(client_id;tmp_path;monkeypatch)
-    test_automation_profile_is_rejected_when_unsupported(tmp_path;monkeypatch)
-    test_drive_cli_accepts_automation_profile(monkeypatch;tmp_path;capsys)
-    test_resolve_client_ids_for_all_available_only(monkeypatch)
-    test_resolve_client_ids_for_clients_list()
-    test_drive_many_plans_all_selected_clients(tmp_path;monkeypatch)
-    test_drive_many_fail_fast_stops_after_first_failure(tmp_path;monkeypatch)
-    test_drive_cli_all_available_clients(monkeypatch;tmp_path;capsys)
-    test_registry_lists_transport_metadata()
-    test_registered_and_available_client_helpers(monkeypatch)
-    test_intent_contracts_are_exposed_for_ecosystem_validation()
+  packages/nlp2tillm/src/nlp2tillm/__init__.py:
+  deploy/docker-compose.yml:
+  testql-scenarios/generated-cli-tests.testql.toon.yaml:
+  packages/uri2tillm/src/uri2tillm/__init__.py:

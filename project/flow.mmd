@@ -1,5 +1,5 @@
 flowchart TD
-%% generated in 0.01s
+%% generated in 0.03s
 
     %% Entry points (blue)
     classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff
@@ -14,18 +14,18 @@ flowchart TD
         packages__dsl2tillm__src__dsl2tillm__cli___main_legacy["_main_legacy"]
         packages__dsl2tillm__src__dsl2tillm__cli___main_subcommand["_main_subcommand"]
         packages__dsl2tillm__src__dsl2tillm__cli__main["main"]
-        packages__mcp2tillm__src__mcp2tillm__cli__main["main"]
+        packages__dsl2tillm__src__dsl2tillm__bus__dispatch{{dispatch CC=15}}
+        packages__dsl2tillm__src__dsl2tillm__bus__execute_dsl_line["execute_dsl_line"]
+        packages__dsl2tillm__src__dsl2tillm__bus__execute_dsl["execute_dsl"]
         packages__dsl2tillm__src__dsl2tillm__pb_codec__encode_protobuf["encode_protobuf"]
+        packages__mcp2tillm__src__mcp2tillm__cli__main["main"]
         packages__dsl2tillm__src__dsl2tillm__schema_registry__all_verbs["all_verbs"]
-        packages__rest2tillm__src__rest2tillm__cli__main["main"]
-        packages__uri2tillm__src__uri2tillm__decode__uri_to_dsl{{uri_to_dsl CC=24}}
-        packages__dsl2tillm__src__dsl2tillm__grammar__parse_line{{parse_line CC=35}}
+        packages__dsl2tillm__src__dsl2tillm__grammar___parse_validate["_parse_validate"]
+        packages__dsl2tillm__src__dsl2tillm__grammar___parse_drive["_parse_drive"]
+        packages__dsl2tillm__src__dsl2tillm__grammar___parse_drive_matrix["_parse_drive_matrix"]
         packages__dsl2tillm__src__dsl2tillm__grammar__to_text["to_text"]
-        packages__uri2tillm__src__uri2tillm__uri__uri_for_cmd["uri_for_cmd"]
-        packages__uri2tillm__src__uri2tillm__uri__uri_for_client["uri_for_client"]
-        packages__uri2tillm__src__uri2tillm__uri__is_tillm_uri["is_tillm_uri"]
-        src__tillm__cli___format_client_row["_format_client_row"]
-        ...["+67 more"]
+        packages__uri2tillm__src__uri2tillm__cli__main["main"]
+        ...["+135 more"]
     end
 
-    class project__venv_is_usable,packages__dsl2tillm__src__dsl2tillm__cli___main_legacy,packages__dsl2tillm__src__dsl2tillm__cli___main_subcommand,packages__dsl2tillm__src__dsl2tillm__cli__main,packages__mcp2tillm__src__mcp2tillm__cli__main,packages__dsl2tillm__src__dsl2tillm__pb_codec__encode_protobuf,packages__dsl2tillm__src__dsl2tillm__schema_registry__all_verbs,packages__rest2tillm__src__rest2tillm__cli__main,packages__cli2tillm__src__cli2tillm__cli__main,packages__dsl2tillm__src__dsl2tillm__grammar__to_text entry
+    class project__venv_is_usable,packages__dsl2tillm__src__dsl2tillm__cli___main_legacy,packages__dsl2tillm__src__dsl2tillm__cli___main_subcommand,packages__dsl2tillm__src__dsl2tillm__cli__main,packages__dsl2tillm__src__dsl2tillm__pb_codec__encode_protobuf,packages__mcp2tillm__src__mcp2tillm__cli__main,packages__dsl2tillm__src__dsl2tillm__schema_registry__all_verbs,packages__dsl2tillm__src__dsl2tillm__grammar___parse_validate,packages__dsl2tillm__src__dsl2tillm__grammar___parse_drive,packages__dsl2tillm__src__dsl2tillm__grammar___parse_drive_matrix entry

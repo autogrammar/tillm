@@ -156,6 +156,9 @@ def resolve_drive_model(
     """Pick a model for a provider attempt (avoid openrouter/ prefixes on z.ai)."""
     model = (requested or "").strip()
     if provider_id in {None, SUBSCRIPTION_DRIVE_PROVIDER}:
+        if (client_id or "").strip().lower() == "codex":
+            if model and not (model.startswith("gpt-") or model.startswith("o") or model.startswith("openai/")):
+                return None
         return model or None
     if (client_id or "").strip().lower() == "opencode":
         return _opencode_drive_model(provider_id, model)

@@ -1,161 +1,98 @@
-project: /home/tom/github/semcod/tillm
+project: /home/tom/github/autogrammar/tillm
 generated_from: code2llm call graph analysis
 stats:
-  total_nodes: 105
-  total_edges: 135
-  modules_count: 24
+  total_nodes: 200
+  total_edges: 281
+  modules_count: 44
 nodes:
-  packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line:
-    name: execute_dsl_line
-    module: packages.dsl2tillm.src.dsl2tillm.bus
-    line: 78
+  src.tillm.providers_store.set_default_provider:
+    name: set_default_provider
+    module: src.tillm.providers_store
+    line: 68
     cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 1
-  src.tillm.compat.launch_koru_agent:
-    name: launch_koru_agent
-    module: src.tillm.compat
-    line: 145
-    cyclomatic_complexity: 8
-    calls_out: 17
+    calls_out: 3
     calls_in: 0
-  src.tillm.controller._resolve_command:
-    name: _resolve_command
-    module: src.tillm.controller
-    line: 195
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.handlers._drive:
-    name: _drive
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 120
-    cyclomatic_complexity: 3
-    calls_out: 19
-    calls_in: 1
-  src.tillm.validation.validate_intent:
-    name: validate_intent
+  src.tillm.validation.validate_raw_dsl:
+    name: validate_raw_dsl
     module: src.tillm.validation
-    line: 57
-    cyclomatic_complexity: 5
-    calls_out: 10
-    calls_in: 1
-  packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl:
-    name: uri_to_dsl
-    module: packages.uri2tillm.src.uri2tillm.decode
-    line: 8
-    cyclomatic_complexity: 24
-    calls_out: 27
-    calls_in: 2
-  packages.dsl2tillm.src.dsl2tillm.cli._main_legacy:
-    name: _main_legacy
-    module: packages.dsl2tillm.src.dsl2tillm.cli
-    line: 16
+    line: 75
     cyclomatic_complexity: 12
-    calls_out: 20
+    calls_out: 16
     calls_in: 1
-  src.tillm.validation.validate_intent_contracts:
-    name: validate_intent_contracts
-    module: src.tillm.validation
-    line: 105
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 1
-  src.tillm.cli._print:
-    name: _print
-    module: src.tillm.cli
-    line: 60
-    cyclomatic_complexity: 17
-    calls_out: 29
-    calls_in: 7
-  packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl:
-    name: apply_nl
-    module: packages.nlp2tillm.src.nlp2tillm.to_dsl
-    line: 17
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 1
-  src.tillm.controller.drive_shell_llm_many:
-    name: drive_shell_llm_many
-    module: src.tillm.controller
-    line: 293
-    cyclomatic_complexity: 26
-    calls_out: 25
-    calls_in: 2
-  packages.dsl2tillm.src.dsl2tillm.bus.dispatch:
-    name: dispatch
-    module: packages.dsl2tillm.src.dsl2tillm.bus
-    line: 15
-    cyclomatic_complexity: 15
-    calls_out: 29
-    calls_in: 14
   src.tillm.registry.normalize_execute_profile:
     name: normalize_execute_profile
     module: src.tillm.registry
-    line: 286
+    line: 305
     cyclomatic_complexity: 4
     calls_out: 2
     calls_in: 2
-  src.tillm.registry.registered_client_ids:
-    name: registered_client_ids
-    module: src.tillm.registry
-    line: 229
-    cyclomatic_complexity: 2
-    calls_out: 1
+  src.tillm.cli._providers_list:
+    name: _providers_list
+    module: src.tillm.cli
+    line: 177
+    cyclomatic_complexity: 8
+    calls_out: 10
     calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas:
-    name: validate_schemas
-    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
-    line: 40
+  src.tillm.compat.detect_koru_agent_rows:
+    name: detect_koru_agent_rows
+    module: src.tillm.compat
+    line: 96
     cyclomatic_complexity: 5
     calls_out: 9
-    calls_in: 2
-  src.tillm.registry.normalize_client_id:
-    name: normalize_client_id
-    module: src.tillm.registry
-    line: 207
+    calls_in: 0
+  packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools:
+    name: _register_tools
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 77
     cyclomatic_complexity: 1
-    calls_out: 4
-    calls_in: 7
-  packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri:
-    name: parse_tillm_uri
-    module: packages.uri2tillm.src.uri2tillm.uri
-    line: 44
+    calls_out: 24
+    calls_in: 0
+  src.tillm.controller_plan._normalize_model_for_client:
+    name: _normalize_model_for_client
+    module: src.tillm.controller_plan
+    line: 81
     cyclomatic_complexity: 5
-    calls_out: 9
+    calls_out: 2
     calls_in: 1
-  src.tillm.validation.client_status_rows:
-    name: client_status_rows
-    module: src.tillm.validation
-    line: 97
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 1
-  src.tillm.controller._timeout_value:
-    name: _timeout_value
-    module: src.tillm.controller
-    line: 255
-    cyclomatic_complexity: 3
-    calls_out: 1
-    calls_in: 2
-  packages.dsl2tillm.src.dsl2tillm.handlers.run_command:
-    name: run_command
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 42
+  src.tillm.cli.main:
+    name: main
+    module: src.tillm.cli
+    line: 462
+    cyclomatic_complexity: 8
+    calls_out: 15
+    calls_in: 0
+  src.tillm.surfaces_terminal.ClaudeSettingsSurface.read:
+    name: read
+    module: src.tillm.surfaces_terminal
+    line: 31
+    cyclomatic_complexity: 6
+    calls_out: 17
+    calls_in: 0
+  src.tillm.providers_drive.resolve_request_provider:
+    name: resolve_request_provider
+    module: src.tillm.providers_drive
+    line: 71
+    cyclomatic_complexity: 6
+    calls_out: 5
+    calls_in: 3
+  src.tillm.nlp.intent_from_text:
+    name: intent_from_text
+    module: src.tillm.nlp
+    line: 91
     cyclomatic_complexity: 3
     calls_out: 5
-    calls_in: 1
-  src.tillm.validation.ecosystem_status:
-    name: ecosystem_status
-    module: src.tillm.validation
-    line: 139
-    cyclomatic_complexity: 5
-    calls_out: 10
+    calls_in: 2
+  src.tillm.providers_drive.client_protocol:
+    name: client_protocol
+    module: src.tillm.providers_drive
+    line: 24
+    cyclomatic_complexity: 2
+    calls_out: 3
     calls_in: 3
-  src.tillm.controller.result_from_error:
-    name: result_from_error
-    module: src.tillm.controller
-    line: 384
+  src.tillm.drive_log._now_iso:
+    name: _now_iso
+    module: src.tillm.drive_log
+    line: 24
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 1
@@ -166,174 +103,55 @@ nodes:
     cyclomatic_complexity: 2
     calls_out: 6
     calls_in: 2
-  src.tillm.transports.docker.docker_service_name:
-    name: docker_service_name
-    module: src.tillm.transports.docker
-    line: 25
+  src.tillm.surfaces_terminal.CodexConfigSurface.read:
+    name: read
+    module: src.tillm.surfaces_terminal
+    line: 90
     cyclomatic_complexity: 4
-    calls_out: 1
-    calls_in: 1
-  src.tillm.registry.detect_clients:
-    name: detect_clients
-    module: src.tillm.registry
-    line: 266
-    cyclomatic_complexity: 4
-    calls_out: 3
-    calls_in: 5
-  packages.mcp2tillm.src.mcp2tillm.server.create_server:
-    name: create_server
-    module: packages.mcp2tillm.src.mcp2tillm.server
-    line: 64
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.pb_codec.decode_protobuf:
-    name: decode_protobuf
-    module: packages.dsl2tillm.src.dsl2tillm.pb_codec
-    line: 20
-    cyclomatic_complexity: 3
-    calls_out: 5
-    calls_in: 1
-  src.tillm.cli._resolve_drive_targets:
-    name: _resolve_drive_targets
-    module: src.tillm.cli
-    line: 216
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 1
-  src.tillm.registry.iter_client_specs:
-    name: iter_client_specs
-    module: src.tillm.registry
-    line: 212
-    cyclomatic_complexity: 1
-    calls_out: 0
-    calls_in: 6
-  packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes:
-    name: envelope_from_bytes
-    module: packages.dsl2tillm.src.dsl2tillm.codec
-    line: 30
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 1
-  packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer.__post_init__:
-    name: __post_init__
-    module: packages.mcp2tillm.src.mcp2tillm.server
-    line: 21
-    cyclomatic_complexity: 1
-    calls_out: 3
+    calls_out: 17
     calls_in: 0
-  src.tillm.cli._resolve_execute_profile:
-    name: _resolve_execute_profile
-    module: src.tillm.cli
-    line: 201
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 3
-  src.tillm.cli.main:
-    name: main
-    module: src.tillm.cli
-    line: 297
+  src.tillm.cli_output._summarize_drive_payload:
+    name: _summarize_drive_payload
+    module: src.tillm.cli_output
+    line: 100
+    cyclomatic_complexity: 9
+    calls_out: 8
+    calls_in: 1
+  src.tillm.providers_probe.diagnose_provider:
+    name: diagnose_provider
+    module: src.tillm.providers_probe
+    line: 243
+    cyclomatic_complexity: 27
+    calls_out: 40
+    calls_in: 1
+  src.tillm.providers_registry.get_provider_spec:
+    name: get_provider_spec
+    module: src.tillm.providers_registry
+    line: 178
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 16
+  src.tillm.project_env.resolve_env_file:
+    name: resolve_env_file
+    module: src.tillm.project_env
+    line: 74
     cyclomatic_complexity: 6
-    calls_out: 11
-    calls_in: 0
-  src.tillm.controller.drive_shell_llm:
-    name: drive_shell_llm
-    module: src.tillm.controller
-    line: 365
-    cyclomatic_complexity: 4
-    calls_out: 5
-    calls_in: 5
-  src.tillm.transports.docker.run_docker_drive:
-    name: run_docker_drive
-    module: src.tillm.transports.docker
-    line: 77
-    cyclomatic_complexity: 10
+    calls_out: 9
+    calls_in: 1
+  src.tillm.validation.validate_intent:
+    name: validate_intent
+    module: src.tillm.validation
+    line: 60
+    cyclomatic_complexity: 5
     calls_out: 10
     calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.handlers._drive_matrix:
-    name: _drive_matrix
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 144
-    cyclomatic_complexity: 4
-    calls_out: 32
-    calls_in: 1
-  packages.mcp2tillm.src.mcp2tillm.server._require_fastmcp:
-    name: _require_fastmcp
-    module: packages.mcp2tillm.src.mcp2tillm.server
-    line: 9
-    cyclomatic_complexity: 2
-    calls_out: 1
-    calls_in: 1
-  src.tillm.registry.get_client_spec:
-    name: get_client_spec
-    module: src.tillm.registry
-    line: 216
-    cyclomatic_complexity: 3
-    calls_out: 1
-    calls_in: 9
-  src.tillm.validation.validate_client_readiness:
-    name: validate_client_readiness
+  src.tillm.validation.validate_intent_contracts:
+    name: validate_intent_contracts
     module: src.tillm.validation
-    line: 34
-    cyclomatic_complexity: 7
-    calls_out: 11
-    calls_in: 5
-  src.tillm.compat.tool_registry_entries:
-    name: tool_registry_entries
-    module: src.tillm.compat
-    line: 64
+    line: 108
     cyclomatic_complexity: 4
     calls_out: 6
-    calls_in: 0
-  packages.dsl2tillm.src.dsl2tillm.handlers._orient:
-    name: _orient
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 70
-    cyclomatic_complexity: 1
-    calls_out: 5
     calls_in: 1
-  src.tillm.transports.docker._docker_argv:
-    name: _docker_argv
-    module: src.tillm.transports.docker
-    line: 60
-    cyclomatic_complexity: 1
-    calls_out: 5
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.grammar._flag:
-    name: _flag
-    module: packages.dsl2tillm.src.dsl2tillm.grammar
-    line: 9
-    cyclomatic_complexity: 4
-    calls_out: 4
-    calls_in: 14
-  packages.dsl2tillm.src.dsl2tillm.handlers._validate:
-    name: _validate
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 89
-    cyclomatic_complexity: 3
-    calls_out: 11
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.grammar.parse_line:
-    name: parse_line
-    module: packages.dsl2tillm.src.dsl2tillm.grammar
-    line: 32
-    cyclomatic_complexity: 35
-    calls_out: 29
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.handlers._docker_status:
-    name: _docker_status
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 112
-    cyclomatic_complexity: 2
-    calls_out: 4
-    calls_in: 1
-  packages.rest2tillm.src.rest2tillm.cli.main:
-    name: main
-    module: packages.rest2tillm.src.rest2tillm.cli
-    line: 13
-    cyclomatic_complexity: 3
-    calls_out: 8
-    calls_in: 0
   packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag:
     name: _bool_flag
     module: packages.dsl2tillm.src.dsl2tillm.grammar
@@ -341,13 +159,6 @@ nodes:
     cyclomatic_complexity: 2
     calls_out: 2
     calls_in: 6
-  src.tillm.cli._read_prompt:
-    name: _read_prompt
-    module: src.tillm.cli
-    line: 205
-    cyclomatic_complexity: 4
-    calls_out: 4
-    calls_in: 1
   packages.dsl2tillm.src.dsl2tillm.handlers.run_query:
     name: run_query
     module: packages.dsl2tillm.src.dsl2tillm.handlers
@@ -355,27 +166,314 @@ nodes:
     cyclomatic_complexity: 8
     calls_out: 10
     calls_in: 1
+  src.tillm.surfaces_io.provider_slug:
+    name: provider_slug
+    module: src.tillm.surfaces_io
+    line: 13
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 3
+  packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl:
+    name: apply_nl
+    module: packages.nlp2tillm.src.nlp2tillm.to_dsl
+    line: 17
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
   src.tillm.cli._drive:
     name: _drive
     module: src.tillm.cli
-    line: 241
-    cyclomatic_complexity: 8
-    calls_out: 16
+    line: 95
+    cyclomatic_complexity: 17
+    calls_out: 52
     calls_in: 1
-  packages.mcp2tillm.src.mcp2tillm.server.run_server:
-    name: run_server
-    module: packages.mcp2tillm.src.mcp2tillm.server
+  packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb:
+    name: schema_for_verb
+    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
+    line: 29
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 2
+  packages.dsl2tillm.src.dsl2tillm.cli.main:
+    name: main
+    module: packages.dsl2tillm.src.dsl2tillm.cli
+    line: 104
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 0
+  src.tillm.cli_output._output_stats:
+    name: _output_stats
+    module: src.tillm.cli_output
+    line: 55
+    cyclomatic_complexity: 7
+    calls_out: 7
+    calls_in: 2
+  packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl:
+    name: uri_to_dsl
+    module: packages.uri2tillm.src.uri2tillm.decode
+    line: 8
+    cyclomatic_complexity: 24
+    calls_out: 27
+    calls_in: 2
+  packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl:
+    name: execute_dsl
+    module: packages.dsl2tillm.src.dsl2tillm.bus
+    line: 82
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 4
+  src.tillm.providers_registry.iter_provider_specs:
+    name: iter_provider_specs
+    module: src.tillm.providers_registry
+    line: 187
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 2
+  src.tillm.registry.resolve_client_ids:
+    name: resolve_client_ids
+    module: src.tillm.registry
+    line: 252
+    cyclomatic_complexity: 15
+    calls_out: 17
+    calls_in: 3
+  src.tillm.providers_store._write_store:
+    name: _write_store
+    module: src.tillm.providers_store
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 4
+  src.tillm.cli_parser._normalize_extra_arg_tokens:
+    name: _normalize_extra_arg_tokens
+    module: src.tillm.cli_parser
+    line: 214
+    cyclomatic_complexity: 5
+    calls_out: 5
+    calls_in: 1
+  src.tillm.providers_probe._probe_anthropic_endpoint:
+    name: _probe_anthropic_endpoint
+    module: src.tillm.providers_probe
     line: 68
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 1
-  packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl:
+  src.tillm.providers_store.stored_provider_entry:
+    name: stored_provider_entry
+    module: src.tillm.providers_store
+    line: 52
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 4
+  packages.dsl2tillm.src.dsl2tillm.handlers._docker_status:
+    name: _docker_status
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 112
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 1
+  src.tillm.registry.registered_client_ids:
+    name: registered_client_ids
+    module: src.tillm.registry
+    line: 248
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  src.tillm.i18n.current_language:
+    name: current_language
+    module: src.tillm.i18n
+    line: 255
+    cyclomatic_complexity: 5
+    calls_out: 4
+    calls_in: 3
+  src.tillm.i18n._system_language:
+    name: _system_language
+    module: src.tillm.i18n
+    line: 225
+    cyclomatic_complexity: 3
+    calls_out: 2
+    calls_in: 1
+  src.tillm.surfaces_io.read_json:
+    name: read_json
+    module: src.tillm.surfaces_io
+    line: 17
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 5
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive:
+    name: _parse_drive
+    module: packages.dsl2tillm.src.dsl2tillm.grammar
+    line: 44
+    cyclomatic_complexity: 11
+    calls_out: 8
+    calls_in: 0
+  src.tillm.providers_store.get_default_provider:
+    name: get_default_provider
+    module: src.tillm.providers_store
+    line: 76
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 1
+  src.tillm.surfaces_sync.sync_all:
+    name: sync_all
+    module: src.tillm.surfaces_sync
+    line: 75
+    cyclomatic_complexity: 8
+    calls_out: 5
+    calls_in: 1
+  src.tillm.cli._base_drive_request:
+    name: _base_drive_request
+    module: src.tillm.cli
+    line: 77
+    cyclomatic_complexity: 3
+    calls_out: 9
+    calls_in: 1
+  src.tillm.transports.docker.docker_service_name:
+    name: docker_service_name
+    module: src.tillm.transports.docker
+    line: 25
+    cyclomatic_complexity: 4
+    calls_out: 1
+    calls_in: 1
+  src.tillm.transports.binary.run_binary_drive:
+    name: run_binary_drive
+    module: src.tillm.transports.binary
+    line: 13
+    cyclomatic_complexity: 10
+    calls_out: 8
+    calls_in: 1
+  src.tillm.nlp.ShellIntent.to_dsl:
     name: to_dsl
-    module: packages.nlp2tillm.src.nlp2tillm.to_dsl
-    line: 8
+    module: src.tillm.nlp
+    line: 25
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 3
+  packages.mcp2tillm.src.mcp2tillm.server._guard_payload:
+    name: _guard_payload
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 31
+    cyclomatic_complexity: 8
+    calls_out: 12
+    calls_in: 1
+  packages.mcp2tillm.src.mcp2tillm.server.create_server:
+    name: create_server
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 120
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.tillm.cli._resolve_execute_profile:
+    name: _resolve_execute_profile
+    module: src.tillm.cli
+    line: 34
     cyclomatic_complexity: 2
     calls_out: 2
+    calls_in: 3
+  src.tillm.compat.tool_registry_entries:
+    name: tool_registry_entries
+    module: src.tillm.compat
+    line: 65
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 0
+  src.tillm.providers_drive.is_provider_exhaustion:
+    name: is_provider_exhaustion
+    module: src.tillm.providers_drive
+    line: 184
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  src.tillm.validation.client_status_rows:
+    name: client_status_rows
+    module: src.tillm.validation
+    line: 100
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.tillm.surfaces_io.same_url:
+    name: same_url
+    module: src.tillm.surfaces_io
+    line: 35
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 5
+  packages.mcp2tillm.src.mcp2tillm.server._guard_command:
+    name: _guard_command
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 50
+    cyclomatic_complexity: 4
+    calls_out: 4
+    calls_in: 3
+  src.tillm.controller_drive._drive_shell_llm_once:
+    name: _drive_shell_llm_once
+    module: src.tillm.controller_drive
+    line: 140
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 2
+  src.tillm.headless.headless_client_ids:
+    name: headless_client_ids
+    module: src.tillm.headless
+    line: 38
+    cyclomatic_complexity: 3
+    calls_out: 2
+    calls_in: 0
+  src.tillm.project_env._ensure_env2llm_map:
+    name: _ensure_env2llm_map
+    module: src.tillm.project_env
+    line: 61
+    cyclomatic_complexity: 4
+    calls_out: 2
+    calls_in: 1
+  src.tillm.compat.is_client_available:
+    name: is_client_available
+    module: src.tillm.compat
+    line: 52
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 2
+  src.tillm.registry.available_client_ids:
+    name: available_client_ids
+    module: src.tillm.registry
+    line: 243
+    cyclomatic_complexity: 4
+    calls_out: 2
+    calls_in: 3
+  src.tillm.providers_store.resolve_provider_token:
+    name: resolve_provider_token
+    module: src.tillm.providers_store
+    line: 58
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 9
+  packages.dsl2tillm.src.dsl2tillm.handlers._actions:
+    name: _actions
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 82
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  src.tillm.drive_log.log_drive_event:
+    name: log_drive_event
+    module: src.tillm.drive_log
+    line: 42
+    cyclomatic_complexity: 10
+    calls_out: 4
     calls_in: 4
+  src.tillm.providers_store.set_provider_order:
+    name: set_provider_order
+    module: src.tillm.providers_store
+    line: 84
+    cyclomatic_complexity: 8
+    calls_out: 10
+    calls_in: 2
+  src.tillm.nlp._client_from_text:
+    name: _client_from_text
+    module: src.tillm.nlp
+    line: 41
+    cyclomatic_complexity: 6
+    calls_out: 6
+    calls_in: 1
   packages.uri2tillm.src.uri2tillm.run.run_uri:
     name: run_uri
     module: packages.uri2tillm.src.uri2tillm.run
@@ -383,59 +481,262 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 1
-  src.tillm.compat.shell_client_ids:
-    name: shell_client_ids
-    module: src.tillm.compat
-    line: 56
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 0
-  packages.uri2tillm.src.uri2tillm.uri._decode:
-    name: _decode
-    module: packages.uri2tillm.src.uri2tillm.uri
-    line: 16
-    cyclomatic_complexity: 2
-    calls_out: 1
-    calls_in: 3
-  src.tillm.controller._validate_request:
-    name: _validate_request
-    module: src.tillm.controller
-    line: 203
-    cyclomatic_complexity: 5
-    calls_out: 4
-    calls_in: 1
-  src.tillm.compat.drive_koru_chat:
-    name: drive_koru_chat
-    module: src.tillm.compat
-    line: 126
+  src.tillm.registry.detect_clients:
+    name: detect_clients
+    module: src.tillm.registry
+    line: 285
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 5
+  src.tillm.providers_probe.probe_provider:
+    name: probe_provider
+    module: src.tillm.providers_probe
+    line: 87
+    cyclomatic_complexity: 20
+    calls_out: 23
+    calls_in: 4
+  packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs:
+    name: all_verbs
+    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
+    line: 36
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  src.tillm.controller._drive_result_from_exception:
+  src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token:
+    name: read_token
+    module: src.tillm.surfaces_terminal
+    line: 49
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 0
+  packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl:
+    name: to_dsl
+    module: packages.nlp2tillm.src.nlp2tillm.to_dsl
+    line: 8
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  src.tillm.compat.is_shell_llm_client:
+    name: is_shell_llm_client
+    module: src.tillm.compat
+    line: 48
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.tillm.project_env.apply_llm_bridges:
+    name: apply_llm_bridges
+    module: src.tillm.project_env
+    line: 47
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.codec.parse_text:
+    name: parse_text
+    module: packages.dsl2tillm.src.dsl2tillm.codec
+    line: 23
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 2
+  src.tillm.providers_drive.resolve_drive_client_id:
+    name: resolve_drive_client_id
+    module: src.tillm.providers_drive
+    line: 106
+    cyclomatic_complexity: 5
+    calls_out: 3
+    calls_in: 1
+  src.tillm.cli._missing_prompt_error:
+    name: _missing_prompt_error
+    module: src.tillm.cli
+    line: 38
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 2
+  src.tillm.transports.docker._docker_argv:
+    name: _docker_argv
+    module: src.tillm.transports.docker
+    line: 60
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 1
+  src.tillm.surfaces_terminal.CodexConfigSurface.write:
+    name: write
+    module: src.tillm.surfaces_terminal
+    line: 118
+    cyclomatic_complexity: 3
+    calls_out: 7
+    calls_in: 0
+  packages.dsl2tillm.src.dsl2tillm.pb_codec.decode_protobuf:
+    name: decode_protobuf
+    module: packages.dsl2tillm.src.dsl2tillm.pb_codec
+    line: 20
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 1
+  src.tillm.controller_drive._drive_result_from_exception:
     name: _drive_result_from_exception
-    module: src.tillm.controller
-    line: 262
+    module: src.tillm.controller_drive
+    line: 33
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 2
-  src.tillm.validation.validate_raw_dsl:
-    name: validate_raw_dsl
-    module: src.tillm.validation
-    line: 72
-    cyclomatic_complexity: 12
-    calls_out: 16
+  src.tillm.providers_drive.provider_env_overlay:
+    name: provider_env_overlay
+    module: src.tillm.providers_drive
+    line: 28
+    cyclomatic_complexity: 16
+    calls_out: 13
+    calls_in: 2
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_validate:
+    name: _parse_validate
+    module: packages.dsl2tillm.src.dsl2tillm.grammar
+    line: 36
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 0
+  packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand:
+    name: _main_subcommand
+    module: packages.dsl2tillm.src.dsl2tillm.cli
+    line: 46
+    cyclomatic_complexity: 17
+    calls_out: 40
     calls_in: 1
-  packages.mcp2tillm.src.mcp2tillm.cli.main:
-    name: main
-    module: packages.mcp2tillm.src.mcp2tillm.cli
-    line: 11
+  packages.mcp2tillm.src.mcp2tillm.server._require_within_project_root:
+    name: _require_within_project_root
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 21
+    cyclomatic_complexity: 2
+    calls_out: 6
+    calls_in: 1
+  src.tillm.providers_probe.list_provider_models:
+    name: list_provider_models
+    module: src.tillm.providers_probe
+    line: 188
+    cyclomatic_complexity: 11
+    calls_out: 13
+    calls_in: 2
+  src.tillm.providers_store.get_stored_provider_order:
+    name: get_stored_provider_order
+    module: src.tillm.providers_store
+    line: 108
+    cyclomatic_complexity: 5
+    calls_out: 10
+    calls_in: 2
+  packages.mcp2tillm.src.mcp2tillm.server._project_root:
+    name: _project_root
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 17
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  src.tillm.transports.docker.run_docker_drive:
+    name: run_docker_drive
+    module: src.tillm.transports.docker
+    line: 77
+    cyclomatic_complexity: 10
+    calls_out: 9
+    calls_in: 1
+  src.tillm.i18n.yes_answers:
+    name: yes_answers
+    module: src.tillm.i18n
+    line: 273
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.tillm.cli._provider_action:
+    name: _provider_action
+    module: src.tillm.cli
+    line: 291
+    cyclomatic_complexity: 49
+    calls_out: 69
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.handlers._orient:
+    name: _orient
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 70
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 1
+  src.tillm.surfaces_registry.iter_surfaces:
+    name: iter_surfaces
+    module: src.tillm.surfaces_registry
+    line: 47
+    cyclomatic_complexity: 6
+    calls_out: 0
+    calls_in: 3
+  src.tillm.i18n.save_language:
+    name: save_language
+    module: src.tillm.i18n
+    line: 240
     cyclomatic_complexity: 3
     calls_out: 5
     calls_in: 0
-  src.tillm.nlp._strip_drive_prefix:
-    name: _strip_drive_prefix
-    module: src.tillm.nlp
-    line: 50
+  packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line:
+    name: execute_dsl_line
+    module: packages.dsl2tillm.src.dsl2tillm.bus
+    line: 78
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.tillm.registry.normalize_client_id:
+    name: normalize_client_id
+    module: src.tillm.registry
+    line: 226
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 9
+  packages.dsl2tillm.src.dsl2tillm.grammar.parse_line:
+    name: parse_line
+    module: packages.dsl2tillm.src.dsl2tillm.grammar
+    line: 146
+    cyclomatic_complexity: 5
+    calls_out: 6
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix:
+    name: _parse_drive_matrix
+    module: packages.dsl2tillm.src.dsl2tillm.grammar
+    line: 75
+    cyclomatic_complexity: 16
+    calls_out: 15
+    calls_in: 0
+  src.tillm.controller_types.resolve_backend:
+    name: resolve_backend
+    module: src.tillm.controller_types
+    line: 29
+    cyclomatic_complexity: 5
+    calls_out: 3
+    calls_in: 2
+  packages.mcp2tillm.src.mcp2tillm.server._require_fastmcp:
+    name: _require_fastmcp
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 60
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  src.tillm.providers_drive.resolve_drive_model:
+    name: resolve_drive_model
+    module: src.tillm.providers_drive
+    line: 119
+    cyclomatic_complexity: 8
+    calls_out: 5
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.handlers._health:
+    name: _health
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 56
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  src.tillm.controller_plan._prompt_root:
+    name: _prompt_root
+    module: src.tillm.controller_plan
+    line: 24
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  src.tillm.project_env._strip_quotes:
+    name: _strip_quotes
+    module: src.tillm.project_env
+    line: 12
     cyclomatic_complexity: 5
     calls_out: 5
     calls_in: 1
@@ -446,223 +747,83 @@ nodes:
     cyclomatic_complexity: 2
     calls_out: 6
     calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.cli.main:
-    name: main
-    module: packages.dsl2tillm.src.dsl2tillm.cli
-    line: 104
-    cyclomatic_complexity: 4
-    calls_out: 3
-    calls_in: 0
-  packages.uri2tillm.src.uri2tillm.uri.uri_for_client:
-    name: uri_for_client
-    module: packages.uri2tillm.src.uri2tillm.uri
-    line: 28
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 0
-  src.tillm.compat.detect_koru_agent_rows:
-    name: detect_koru_agent_rows
-    module: src.tillm.compat
-    line: 95
-    cyclomatic_complexity: 5
-    calls_out: 9
-    calls_in: 0
-  packages.dsl2tillm.src.dsl2tillm.codec.validate_payload:
-    name: validate_payload
-    module: packages.dsl2tillm.src.dsl2tillm.codec
-    line: 14
-    cyclomatic_complexity: 2
-    calls_out: 6
-    calls_in: 3
-  packages.uri2tillm.src.uri2tillm.uri._encode:
-    name: _encode
-    module: packages.uri2tillm.src.uri2tillm.uri
-    line: 12
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 5
-  src.tillm.compat.is_client_available:
-    name: is_client_available
-    module: src.tillm.compat
-    line: 51
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  src.tillm.cli._build_parser:
-    name: _build_parser
-    module: src.tillm.cli
-    line: 95
-    cyclomatic_complexity: 1
-    calls_out: 34
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl:
-    name: execute_dsl
-    module: packages.dsl2tillm.src.dsl2tillm.bus
-    line: 82
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 4
-  src.tillm.transports.docker.docker_service_status:
-    name: docker_service_status
-    module: src.tillm.transports.docker
-    line: 32
-    cyclomatic_complexity: 9
-    calls_out: 10
-    calls_in: 1
-  src.tillm.registry.available_client_ids:
-    name: available_client_ids
-    module: src.tillm.registry
-    line: 224
-    cyclomatic_complexity: 4
-    calls_out: 2
-    calls_in: 2
-  src.tillm.nlp._client_from_text:
-    name: _client_from_text
-    module: src.tillm.nlp
-    line: 41
-    cyclomatic_complexity: 6
-    calls_out: 6
-    calls_in: 1
-  packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools:
-    name: _register_tools
-    module: packages.mcp2tillm.src.mcp2tillm.server
-    line: 26
-    cyclomatic_complexity: 1
-    calls_out: 17
-    calls_in: 0
-  src.tillm.transports.binary.run_binary_drive:
-    name: run_binary_drive
-    module: src.tillm.transports.binary
-    line: 13
-    cyclomatic_complexity: 10
-    calls_out: 9
-    calls_in: 1
-  src.tillm.registry.resolve_client_ids:
-    name: resolve_client_ids
-    module: src.tillm.registry
-    line: 233
-    cyclomatic_complexity: 15
-    calls_out: 17
-    calls_in: 3
-  packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs:
-    name: all_verbs
-    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
+  src.tillm.providers_store.save_provider_token:
+    name: save_provider_token
+    module: src.tillm.providers_store
     line: 36
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb:
-    name: schema_for_verb
-    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
-    line: 29
-    cyclomatic_complexity: 2
-    calls_out: 4
-    calls_in: 2
-  packages.dsl2tillm.src.dsl2tillm.codec.parse_text:
-    name: parse_text
-    module: packages.dsl2tillm.src.dsl2tillm.codec
-    line: 23
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 1
-  src.tillm.cli._base_drive_request:
-    name: _base_drive_request
-    module: src.tillm.cli
-    line: 225
     cyclomatic_complexity: 3
-    calls_out: 9
-    calls_in: 1
-  src.tillm.cli._nlp:
-    name: _nlp
-    module: src.tillm.cli
-    line: 270
-    cyclomatic_complexity: 5
-    calls_out: 14
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.handlers._health:
-    name: _health
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 56
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 1
-  src.tillm.controller.build_drive_plan:
-    name: build_drive_plan
-    module: src.tillm.controller
-    line: 221
-    cyclomatic_complexity: 3
-    calls_out: 15
-    calls_in: 2
-  src.tillm.controller.save_prompt:
-    name: save_prompt
-    module: src.tillm.controller
-    line: 177
-    cyclomatic_complexity: 2
     calls_out: 7
     calls_in: 2
-  packages.rest2tillm.src.rest2tillm.app.create_app:
-    name: create_app
-    module: packages.rest2tillm.src.rest2tillm.app
-    line: 19
-    cyclomatic_complexity: 1
-    calls_out: 34
-    calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas:
-    name: _load_schemas
-    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
-    line: 17
+  src.tillm.i18n._:
+    name: _
+    module: src.tillm.i18n
+    line: 265
     cyclomatic_complexity: 4
-    calls_out: 11
+    calls_out: 4
     calls_in: 4
-  packages.cli2tillm.src.cli2tillm.shell.run_shell:
-    name: run_shell
-    module: packages.cli2tillm.src.cli2tillm.shell
-    line: 11
-    cyclomatic_complexity: 8
+  packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas:
+    name: validate_schemas
+    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
+    line: 40
+    cyclomatic_complexity: 5
+    calls_out: 9
+    calls_in: 2
+  packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes:
+    name: envelope_from_bytes
+    module: packages.dsl2tillm.src.dsl2tillm.codec
+    line: 30
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 2
+  src.tillm.providers_probe._parse_models_payload:
+    name: _parse_models_payload
+    module: src.tillm.providers_probe
+    line: 172
+    cyclomatic_complexity: 9
     calls_out: 11
     calls_in: 1
-  src.tillm.compat.is_shell_llm_client:
-    name: is_shell_llm_client
-    module: src.tillm.compat
-    line: 47
-    cyclomatic_complexity: 1
-    calls_out: 1
+  src.tillm.project_env.load_env_file:
+    name: load_env_file
+    module: src.tillm.project_env
+    line: 19
+    cyclomatic_complexity: 6
+    calls_out: 9
     calls_in: 1
-  src.tillm.compat.shell_process_patterns:
-    name: shell_process_patterns
-    module: src.tillm.compat
-    line: 60
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 0
-  src.tillm.controller._resolve_execute_args:
-    name: _resolve_execute_args
-    module: src.tillm.controller
-    line: 212
+  packages.mcp2tillm.src.mcp2tillm.cli.main:
+    name: main
+    module: packages.mcp2tillm.src.mcp2tillm.cli
+    line: 11
     cyclomatic_complexity: 3
-    calls_out: 3
-    calls_in: 1
-  src.tillm.controller.resolve_backend:
-    name: resolve_backend
-    module: src.tillm.controller
-    line: 64
-    cyclomatic_complexity: 5
-    calls_out: 3
-    calls_in: 2
-  packages.dsl2tillm.src.dsl2tillm.handlers._clients:
-    name: _clients
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 63
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 1
-  src.tillm.cli._normalize_extra_arg_tokens:
-    name: _normalize_extra_arg_tokens
-    module: src.tillm.cli
-    line: 185
-    cyclomatic_complexity: 5
     calls_out: 5
+    calls_in: 0
+  src.tillm.cli._read_prompt:
+    name: _read_prompt
+    module: src.tillm.cli
+    line: 55
+    cyclomatic_complexity: 6
+    calls_out: 7
     calls_in: 1
+  src.tillm.controller_drive._drive_one_client:
+    name: _drive_one_client
+    module: src.tillm.controller_drive
+    line: 45
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 0
+  src.tillm.controller_drive.result_from_error:
+    name: result_from_error
+    module: src.tillm.controller_drive
+    line: 159
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 2
+  packages.dsl2tillm.src.dsl2tillm.bus.dispatch:
+    name: dispatch
+    module: packages.dsl2tillm.src.dsl2tillm.bus
+    line: 15
+    cyclomatic_complexity: 15
+    calls_out: 29
+    calls_in: 14
   packages.uri2tillm.src.uri2tillm.uri.uri_for_cmd:
     name: uri_for_cmd
     module: packages.uri2tillm.src.uri2tillm.uri
@@ -670,12 +831,432 @@ nodes:
     cyclomatic_complexity: 4
     calls_out: 5
     calls_in: 0
-  src.tillm.controller._prompt_root:
-    name: _prompt_root
+  src.tillm.cli._provider_order:
+    name: _provider_order
+    module: src.tillm.cli
+    line: 257
+    cyclomatic_complexity: 11
+    calls_out: 18
+    calls_in: 1
+  src.tillm.compat.shell_client_ids:
+    name: shell_client_ids
+    module: src.tillm.compat
+    line: 57
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.tillm.drive_log.log_dir:
+    name: log_dir
+    module: src.tillm.drive_log
+    line: 20
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.tillm.i18n.set_language:
+    name: set_language
+    module: src.tillm.i18n
+    line: 233
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  packages.cli2tillm.src.cli2tillm.shell.run_shell:
+    name: run_shell
+    module: packages.cli2tillm.src.cli2tillm.shell
+    line: 11
+    cyclomatic_complexity: 8
+    calls_out: 11
+    calls_in: 1
+  src.tillm.controller_drive.drive_shell_llm_many:
+    name: drive_shell_llm_many
+    module: src.tillm.controller_drive
+    line: 68
+    cyclomatic_complexity: 26
+    calls_out: 25
+    calls_in: 2
+  src.tillm.surfaces_terminal.ClaudeSettingsSurface.write:
+    name: write
+    module: src.tillm.surfaces_terminal
+    line: 55
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 1
+  packages.mcp2tillm.src.mcp2tillm.server._enabled:
+    name: _enabled
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 13
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.handlers.run_command:
+    name: run_command
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 42
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 1
+  src.tillm.controller_plan._validate_request:
+    name: _validate_request
+    module: src.tillm.controller_plan
+    line: 63
+    cyclomatic_complexity: 5
+    calls_out: 4
+    calls_in: 1
+  packages.rest2tillm.src.rest2tillm.app.create_app:
+    name: create_app
+    module: packages.rest2tillm.src.rest2tillm.app
+    line: 19
+    cyclomatic_complexity: 1
+    calls_out: 34
+    calls_in: 1
+  src.tillm.cli_output._summarize_drive_result:
+    name: _summarize_drive_result
+    module: src.tillm.cli_output
+    line: 67
+    cyclomatic_complexity: 10
+    calls_out: 7
+    calls_in: 3
+  src.tillm.registry.iter_client_specs:
+    name: iter_client_specs
+    module: src.tillm.registry
+    line: 231
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 7
+  src.tillm.validation.ecosystem_status:
+    name: ecosystem_status
+    module: src.tillm.validation
+    line: 142
+    cyclomatic_complexity: 6
+    calls_out: 12
+    calls_in: 3
+  packages.dsl2tillm.src.dsl2tillm.codec.validate_payload:
+    name: validate_payload
+    module: packages.dsl2tillm.src.dsl2tillm.codec
+    line: 14
+    cyclomatic_complexity: 2
+    calls_out: 6
+    calls_in: 3
+  src.tillm.cli._sync_matrix:
+    name: _sync_matrix
+    module: src.tillm.cli
+    line: 225
+    cyclomatic_complexity: 14
+    calls_out: 16
+    calls_in: 1
+  src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read:
+    name: read
+    module: src.tillm.surfaces_gui
+    line: 27
+    cyclomatic_complexity: 10
+    calls_out: 11
+    calls_in: 0
+  src.tillm.compat.launch_koru_agent:
+    name: launch_koru_agent
+    module: src.tillm.compat
+    line: 154
+    cyclomatic_complexity: 8
+    calls_out: 17
+    calls_in: 0
+  src.tillm.controller.drive_shell_llm:
+    name: drive_shell_llm
     module: src.tillm.controller
-    line: 171
+    line: 35
+    cyclomatic_complexity: 10
+    calls_out: 11
+    calls_in: 6
+  src.tillm.controller_plan._resolve_command_impl:
+    name: _resolve_command_impl
+    module: src.tillm.controller_plan
+    line: 48
     cyclomatic_complexity: 2
     calls_out: 3
+    calls_in: 1
+  src.tillm.i18n._stored_language:
+    name: _stored_language
+    module: src.tillm.i18n
+    line: 213
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 1
+  src.tillm.providers_types.is_subscription_order_token:
+    name: is_subscription_order_token
+    module: src.tillm.providers_types
+    line: 78
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 3
+  packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail:
+    name: _quoted_or_tail
+    module: packages.dsl2tillm.src.dsl2tillm.grammar
+    line: 26
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 2
+  src.tillm.i18n._normalize:
+    name: _normalize
+    module: src.tillm.i18n
+    line: 205
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 5
+  src.tillm.cli._stdin_has_data:
+    name: _stdin_has_data
+    module: src.tillm.cli
+    line: 48
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  src.tillm.providers_drive.provider_compatible_with_client:
+    name: provider_compatible_with_client
+    module: src.tillm.providers_drive
+    line: 81
+    cyclomatic_complexity: 11
+    calls_out: 9
+    calls_in: 2
+  src.tillm.project_env.bootstrap_project_env:
+    name: bootstrap_project_env
+    module: src.tillm.project_env
+    line: 87
+    cyclomatic_complexity: 3
+    calls_out: 12
+    calls_in: 3
+  src.tillm.surfaces_sync.apply_sync:
+    name: apply_sync
+    module: src.tillm.surfaces_sync
+    line: 105
+    cyclomatic_complexity: 12
+    calls_out: 16
+    calls_in: 0
+  src.tillm.cli._resolve_drive_targets:
+    name: _resolve_drive_targets
+    module: src.tillm.cli
+    line: 68
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  src.tillm.surfaces_sync.plan_sync:
+    name: plan_sync
+    module: src.tillm.surfaces_sync
+    line: 24
+    cyclomatic_complexity: 13
+    calls_out: 21
+    calls_in: 2
+  src.tillm.surfaces_io.as_dict:
+    name: as_dict
+    module: src.tillm.surfaces_io
+    line: 25
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 12
+  packages.dsl2tillm.src.dsl2tillm.handlers._validate:
+    name: _validate
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 89
+    cyclomatic_complexity: 3
+    calls_out: 11
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.handlers._drive:
+    name: _drive
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 120
+    cyclomatic_complexity: 3
+    calls_out: 19
+    calls_in: 1
+  packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer.__post_init__:
+    name: __post_init__
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 72
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.tillm.providers_store.provider_default_model:
+    name: provider_default_model
+    module: src.tillm.providers_store
+    line: 117
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 4
+  packages.uri2tillm.src.uri2tillm.uri._decode:
+    name: _decode
+    module: packages.uri2tillm.src.uri2tillm.uri
+    line: 16
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 3
+  src.tillm.compat.autopilot_backend_for_client:
+    name: autopilot_backend_for_client
+    module: src.tillm.compat
+    line: 92
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 0
+  src.tillm.controller_plan._resolve_spec:
+    name: _resolve_spec
+    module: src.tillm.controller_plan
+    line: 41
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  src.tillm.controller_plan._resolve_command:
+    name: _resolve_command
+    module: src.tillm.controller_plan
+    line: 56
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.handlers._clients:
+    name: _clients
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 63
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  src.tillm.controller_plan._model_for_plan:
+    name: _model_for_plan
+    module: src.tillm.controller_plan
+    line: 91
+    cyclomatic_complexity: 5
+    calls_out: 3
+    calls_in: 1
+  src.tillm.validation.validate_client_readiness:
+    name: validate_client_readiness
+    module: src.tillm.validation
+    line: 37
+    cyclomatic_complexity: 7
+    calls_out: 11
+    calls_in: 5
+  src.tillm.surfaces_terminal.OpencodeConfigSurface.read_token:
+    name: read_token
+    module: src.tillm.surfaces_terminal
+    line: 185
+    cyclomatic_complexity: 4
+    calls_out: 7
+    calls_in: 0
+  src.tillm.transports.docker.docker_service_status:
+    name: docker_service_status
+    module: src.tillm.transports.docker
+    line: 32
+    cyclomatic_complexity: 9
+    calls_out: 10
+    calls_in: 1
+  packages.rest2tillm.src.rest2tillm.cli.main:
+    name: main
+    module: packages.rest2tillm.src.rest2tillm.cli
+    line: 13
+    cyclomatic_complexity: 3
+    calls_out: 8
+    calls_in: 0
+  src.tillm.providers_probe._http_json:
+    name: _http_json
+    module: src.tillm.providers_probe
+    line: 54
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 3
+  src.tillm.headless.run_headless:
+    name: run_headless
+    module: src.tillm.headless
+    line: 44
+    cyclomatic_complexity: 6
+    calls_out: 20
+    calls_in: 0
+  src.tillm.surfaces_registry.normalize_surface_ids:
+    name: normalize_surface_ids
+    module: src.tillm.surfaces_registry
+    line: 32
+    cyclomatic_complexity: 6
+    calls_out: 10
+    calls_in: 2
+  src.tillm.providers_store._config_path:
+    name: _config_path
+    module: src.tillm.providers_store
+    line: 14
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 2
+  src.tillm.providers_registry.normalize_provider_id:
+    name: normalize_provider_id
+    module: src.tillm.providers_registry
+    line: 170
+    cyclomatic_complexity: 5
+    calls_out: 2
+    calls_in: 5
+  packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas:
+    name: _load_schemas
+    module: packages.dsl2tillm.src.dsl2tillm.schema_registry
+    line: 17
+    cyclomatic_complexity: 4
+    calls_out: 11
+    calls_in: 4
+  src.tillm.surfaces_terminal.OpencodeConfigSurface.write:
+    name: write
+    module: src.tillm.surfaces_terminal
+    line: 190
+    cyclomatic_complexity: 2
+    calls_out: 14
+    calls_in: 0
+  packages.dsl2tillm.src.dsl2tillm.handlers._drive_matrix:
+    name: _drive_matrix
+    module: packages.dsl2tillm.src.dsl2tillm.handlers
+    line: 144
+    cyclomatic_complexity: 4
+    calls_out: 32
+    calls_in: 1
+  src.tillm.project_env.apply_into_environ:
+    name: apply_into_environ
+    module: src.tillm.project_env
+    line: 36
+    cyclomatic_complexity: 5
+    calls_out: 3
+    calls_in: 1
+  src.tillm.controller_plan.build_drive_plan:
+    name: build_drive_plan
+    module: src.tillm.controller_plan
+    line: 101
+    cyclomatic_complexity: 13
+    calls_out: 27
+    calls_in: 2
+  src.tillm.surfaces_io.write_private_json:
+    name: write_private_json
+    module: src.tillm.surfaces_io
+    line: 29
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 2
+  src.tillm.drive_log.append_log:
+    name: append_log
+    module: src.tillm.drive_log
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 10
+    calls_in: 1
+  packages.uri2tillm.src.uri2tillm.uri._encode:
+    name: _encode
+    module: packages.uri2tillm.src.uri2tillm.uri
+    line: 12
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 5
+  src.tillm.providers._http_json:
+    name: _http_json
+    module: src.tillm.providers
+    line: 53
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.tillm.cli_output._print_summary:
+    name: _print_summary
+    module: src.tillm.cli_output
+    line: 140
+    cyclomatic_complexity: 16
+    calls_out: 24
+    calls_in: 1
+  src.tillm.drive_log.tillm_dir:
+    name: tillm_dir
+    module: src.tillm.drive_log
+    line: 13
+    cyclomatic_complexity: 2
+    calls_out: 6
     calls_in: 1
   src.tillm.nlp._intent_from_nlp2dsl:
     name: _intent_from_nlp2dsl
@@ -684,62 +1265,146 @@ nodes:
     cyclomatic_complexity: 15
     calls_out: 25
     calls_in: 1
-  src.tillm.compat.autopilot_backend_for_client:
-    name: autopilot_backend_for_client
-    module: src.tillm.compat
-    line: 91
+  src.tillm.registry.get_client_spec:
+    name: get_client_spec
+    module: src.tillm.registry
+    line: 235
+    cyclomatic_complexity: 3
+    calls_out: 1
+    calls_in: 11
+  packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri:
+    name: parse_tillm_uri
+    module: packages.uri2tillm.src.uri2tillm.uri
+    line: 44
+    cyclomatic_complexity: 5
+    calls_out: 9
+    calls_in: 1
+  src.tillm.providers_probe._http_json_impl:
+    name: _http_json_impl
+    module: src.tillm.providers_probe
+    line: 32
+    cyclomatic_complexity: 6
+    calls_out: 12
+    calls_in: 1
+  src.tillm.providers_store._load_store:
+    name: _load_store
+    module: src.tillm.providers_store
+    line: 20
     cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 8
+  src.tillm.headless.supports_headless:
+    name: supports_headless
+    module: src.tillm.headless
+    line: 24
+    cyclomatic_complexity: 5
+    calls_out: 3
+    calls_in: 2
+  src.tillm.controller_plan.save_prompt:
+    name: save_prompt
+    module: src.tillm.controller_plan
+    line: 30
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 2
+  src.tillm.project_env._env2llm_enabled:
+    name: _env2llm_enabled
+    module: src.tillm.project_env
+    line: 57
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  packages.uri2tillm.src.uri2tillm.uri.uri_for_client:
+    name: uri_for_client
+    module: packages.uri2tillm.src.uri2tillm.uri
+    line: 28
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 0
+  src.tillm.nlp._strip_drive_prefix:
+    name: _strip_drive_prefix
+    module: src.tillm.nlp
+    line: 50
+    cyclomatic_complexity: 5
+    calls_out: 5
+    calls_in: 1
+  src.tillm.providers_drive.resolve_provider_drive_attempts:
+    name: resolve_provider_drive_attempts
+    module: src.tillm.providers_drive
+    line: 137
+    cyclomatic_complexity: 18
+    calls_out: 20
+    calls_in: 1
+  src.tillm.controller._resolve_command:
+    name: _resolve_command
+    module: src.tillm.controller
+    line: 31
+    cyclomatic_complexity: 1
     calls_out: 1
     calls_in: 0
-  src.tillm.nlp.intent_from_text:
-    name: intent_from_text
-    module: src.tillm.nlp
-    line: 91
-    cyclomatic_complexity: 3
-    calls_out: 5
-    calls_in: 2
-  packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail:
-    name: _quoted_or_tail
+  src.tillm.compat.shell_process_patterns:
+    name: shell_process_patterns
+    module: src.tillm.compat
+    line: 61
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.tillm.cli._nlp:
+    name: _nlp
+    module: src.tillm.cli
+    line: 435
+    cyclomatic_complexity: 5
+    calls_out: 14
+    calls_in: 1
+  packages.dsl2tillm.src.dsl2tillm.grammar._flag:
+    name: _flag
     module: packages.dsl2tillm.src.dsl2tillm.grammar
-    line: 26
-    cyclomatic_complexity: 3
+    line: 9
+    cyclomatic_complexity: 4
     calls_out: 4
-    calls_in: 3
-  packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand:
-    name: _main_subcommand
+    calls_in: 14
+  packages.dsl2tillm.src.dsl2tillm.cli._main_legacy:
+    name: _main_legacy
     module: packages.dsl2tillm.src.dsl2tillm.cli
-    line: 46
-    cyclomatic_complexity: 17
-    calls_out: 40
+    line: 16
+    cyclomatic_complexity: 12
+    calls_out: 20
     calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.handlers._actions:
-    name: _actions
-    module: packages.dsl2tillm.src.dsl2tillm.handlers
-    line: 82
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 1
-  src.tillm.controller._drive_one_client:
-    name: _drive_one_client
-    module: src.tillm.controller
-    line: 274
+  src.tillm.compat.drive_koru_chat:
+    name: drive_koru_chat
+    module: src.tillm.compat
+    line: 127
     cyclomatic_complexity: 2
     calls_out: 4
     calls_in: 0
-  src.tillm.controller._resolve_spec:
-    name: _resolve_spec
-    module: src.tillm.controller
-    line: 188
-    cyclomatic_complexity: 2
+  src.tillm.surfaces_terminal.OpencodeConfigSurface.read:
+    name: read
+    module: src.tillm.surfaces_terminal
+    line: 169
+    cyclomatic_complexity: 3
+    calls_out: 13
+    calls_in: 0
+  src.tillm.surfaces_terminal.OpencodeConfigSurface._entry:
+    name: _entry
+    module: src.tillm.surfaces_terminal
+    line: 159
+    cyclomatic_complexity: 4
+    calls_out: 10
+    calls_in: 0
+  src.tillm.cli_output._print:
+    name: _print
+    module: src.tillm.cli_output
+    line: 174
+    cyclomatic_complexity: 18
+    calls_out: 30
+    calls_in: 8
+  packages.mcp2tillm.src.mcp2tillm.server.run_server:
+    name: run_server
+    module: packages.mcp2tillm.src.mcp2tillm.server
+    line: 124
+    cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 1
-  packages.dsl2tillm.src.dsl2tillm.pb_codec.encode_result_protobuf:
-    name: encode_result_protobuf
-    module: packages.dsl2tillm.src.dsl2tillm.pb_codec
-    line: 27
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 2
 edges:
 - caller: packages.dsl2tillm.src.dsl2tillm.cli._main_legacy
   callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
@@ -753,23 +1418,29 @@ edges:
 - caller: packages.dsl2tillm.src.dsl2tillm.cli.main
   callee: packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand
   call_type: resolved
-- caller: packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl
-  callee: src.tillm.nlp.intent_from_text
+- caller: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  callee: packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes
   call_type: resolved
-- caller: packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl
-  callee: packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl
+- caller: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  callee: packages.dsl2tillm.src.dsl2tillm.handlers.run_query
   call_type: resolved
-- caller: packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl
+- caller: packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line
   callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  call_type: resolved
+- caller: packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl
+  callee: packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line
   call_type: resolved
 - caller: packages.mcp2tillm.src.mcp2tillm.cli.main
   callee: packages.mcp2tillm.src.mcp2tillm.server.run_server
   call_type: resolved
-- caller: packages.rest2tillm.src.rest2tillm.app.create_app
-  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb
+- caller: packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb
+  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
   call_type: resolved
-- caller: packages.rest2tillm.src.rest2tillm.app.create_app
-  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas
+- caller: packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs
+  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
+  call_type: resolved
+- caller: packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas
+  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
   call_type: resolved
 - caller: packages.dsl2tillm.src.dsl2tillm.codec.validate_payload
   callee: packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb
@@ -786,35 +1457,29 @@ edges:
 - caller: packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes
   callee: packages.dsl2tillm.src.dsl2tillm.pb_codec.decode_protobuf
   call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb
-  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
-  call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs
-  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
-  call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas
-  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
-  call_type: resolved
-- caller: packages.rest2tillm.src.rest2tillm.cli.main
-  callee: packages.rest2tillm.src.rest2tillm.app.create_app
-  call_type: resolved
-- caller: packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl
-  callee: packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri
-  call_type: resolved
 - caller: packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag
   callee: packages.dsl2tillm.src.dsl2tillm.grammar._flag
   call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
+- caller: packages.dsl2tillm.src.dsl2tillm.grammar._parse_validate
   callee: packages.dsl2tillm.src.dsl2tillm.grammar._flag
   call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
-  callee: packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail
+- caller: packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive
+  callee: packages.dsl2tillm.src.dsl2tillm.grammar._flag
   call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
+- caller: packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive
   callee: packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag
   call_type: resolved
-- caller: packages.cli2tillm.src.cli2tillm.shell.run_shell
-  callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+- caller: packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive
+  callee: packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail
+  call_type: resolved
+- caller: packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix
+  callee: packages.dsl2tillm.src.dsl2tillm.grammar._flag
+  call_type: resolved
+- caller: packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix
+  callee: packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag
+  call_type: resolved
+- caller: packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix
+  callee: packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail
   call_type: resolved
 - caller: packages.uri2tillm.src.uri2tillm.uri.uri_for_cmd
   callee: packages.uri2tillm.src.uri2tillm.uri._encode
@@ -825,113 +1490,188 @@ edges:
 - caller: packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri
   callee: packages.uri2tillm.src.uri2tillm.uri._decode
   call_type: resolved
-- caller: src.tillm.cli._resolve_execute_profile
-  callee: src.tillm.registry.normalize_execute_profile
-  call_type: resolved
-- caller: src.tillm.cli._resolve_drive_targets
-  callee: src.tillm.registry.resolve_client_ids
-  call_type: resolved
-- caller: src.tillm.cli._base_drive_request
-  callee: src.tillm.cli._resolve_drive_targets
-  call_type: resolved
-- caller: src.tillm.cli._base_drive_request
-  callee: src.tillm.cli._resolve_execute_profile
-  call_type: resolved
-- caller: src.tillm.cli._drive
-  callee: src.tillm.cli._read_prompt
-  call_type: resolved
-- caller: src.tillm.cli._drive
-  callee: src.tillm.cli._print
-  call_type: resolved
-- caller: src.tillm.cli._drive
-  callee: src.tillm.controller.drive_shell_llm
-  call_type: resolved
-- caller: src.tillm.cli._drive
-  callee: src.tillm.controller.drive_shell_llm_many
-  call_type: resolved
-- caller: src.tillm.cli._drive
-  callee: src.tillm.controller.result_from_error
-  call_type: resolved
-- caller: src.tillm.cli._nlp
-  callee: src.tillm.nlp.intent_from_text
-  call_type: resolved
-- caller: src.tillm.cli._nlp
-  callee: src.tillm.validation.validate_intent
-  call_type: resolved
-- caller: src.tillm.cli._nlp
-  callee: src.tillm.controller.drive_shell_llm
-  call_type: resolved
-- caller: src.tillm.cli._nlp
-  callee: src.tillm.cli._print
-  call_type: resolved
-- caller: src.tillm.cli.main
-  callee: src.tillm.cli._normalize_extra_arg_tokens
-  call_type: resolved
-- caller: src.tillm.cli.main
-  callee: src.tillm.cli._print
-  call_type: resolved
-- caller: src.tillm.cli.main
-  callee: src.tillm.cli._drive
-  call_type: resolved
-- caller: src.tillm.cli.main
-  callee: src.tillm.cli._nlp
-  call_type: resolved
-- caller: src.tillm.cli.main
-  callee: src.tillm.cli._build_parser
-  call_type: resolved
-- caller: src.tillm.cli.main
-  callee: src.tillm.registry.detect_clients
-  call_type: resolved
-- caller: src.tillm.transports.binary.run_binary_drive
-  callee: src.tillm.controller._timeout_value
-  call_type: resolved
-- caller: src.tillm.compat.is_shell_llm_client
-  callee: src.tillm.registry.get_client_spec
-  call_type: resolved
-- caller: src.tillm.compat.is_client_available
-  callee: src.tillm.registry.get_client_spec
-  call_type: resolved
-- caller: src.tillm.compat.shell_client_ids
-  callee: src.tillm.registry.iter_client_specs
-  call_type: resolved
-- caller: src.tillm.compat.shell_process_patterns
-  callee: src.tillm.registry.iter_client_specs
-  call_type: resolved
-- caller: src.tillm.compat.tool_registry_entries
-  callee: src.tillm.registry.iter_client_specs
-  call_type: resolved
-- caller: src.tillm.compat.autopilot_backend_for_client
-  callee: src.tillm.compat.is_shell_llm_client
-  call_type: resolved
-- caller: src.tillm.compat.detect_koru_agent_rows
-  callee: src.tillm.registry.detect_clients
-  call_type: resolved
-- caller: src.tillm.compat.drive_koru_chat
-  callee: src.tillm.controller.drive_shell_llm
-  call_type: resolved
-- caller: src.tillm.compat.launch_koru_agent
-  callee: src.tillm.registry.normalize_client_id
-  call_type: resolved
-- caller: src.tillm.compat.launch_koru_agent
-  callee: src.tillm.registry.get_client_spec
-  call_type: resolved
-- caller: src.tillm.compat.launch_koru_agent
-  callee: src.tillm.controller.save_prompt
-  call_type: resolved
-- caller: src.tillm.compat.launch_koru_agent
-  callee: src.tillm.controller.build_drive_plan
-  call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
-  callee: packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes
-  call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
-  callee: packages.dsl2tillm.src.dsl2tillm.handlers.run_query
-  call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line
+- caller: packages.cli2tillm.src.cli2tillm.shell.run_shell
   callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
   call_type: resolved
-- caller: packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl
-  callee: packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line
+- caller: src.tillm.headless.supports_headless
+  callee: src.tillm.registry.get_client_spec
+  call_type: resolved
+- caller: src.tillm.headless.supports_headless
+  callee: src.tillm.registry.normalize_client_id
+  call_type: resolved
+- caller: src.tillm.headless.headless_client_ids
+  callee: src.tillm.registry.iter_client_specs
+  call_type: resolved
+- caller: src.tillm.headless.headless_client_ids
+  callee: src.tillm.headless.supports_headless
+  call_type: resolved
+- caller: src.tillm.headless.run_headless
+  callee: src.tillm.registry.normalize_client_id
+  call_type: resolved
+- caller: src.tillm.headless.run_headless
+  callee: src.tillm.registry.get_client_spec
+  call_type: resolved
+- caller: src.tillm.headless.run_headless
+  callee: src.tillm.controller.drive_shell_llm
+  call_type: resolved
+- caller: src.tillm.headless.run_headless
+  callee: src.tillm.headless.supports_headless
+  call_type: resolved
+- caller: src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read
+  callee: src.tillm.surfaces_io.same_url
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.plan_sync
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.plan_sync
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.plan_sync
+  callee: src.tillm.surfaces_registry.iter_surfaces
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.sync_all
+  callee: src.tillm.providers_registry.iter_provider_specs
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.sync_all
+  callee: src.tillm.surfaces_registry.iter_surfaces
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.apply_sync
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.apply_sync
+  callee: src.tillm.surfaces_sync.plan_sync
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.apply_sync
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.apply_sync
+  callee: src.tillm.surfaces_terminal.ClaudeSettingsSurface.write
+  call_type: resolved
+- caller: src.tillm.surfaces_sync.apply_sync
+  callee: src.tillm.surfaces_registry.iter_surfaces
+  call_type: resolved
+- caller: src.tillm.i18n._stored_language
+  callee: src.tillm.i18n._normalize
+  call_type: resolved
+- caller: src.tillm.i18n._stored_language
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.i18n._system_language
+  callee: src.tillm.i18n._normalize
+  call_type: resolved
+- caller: src.tillm.i18n.set_language
+  callee: src.tillm.i18n._normalize
+  call_type: resolved
+- caller: src.tillm.i18n.set_language
+  callee: src.tillm.i18n.current_language
+  call_type: resolved
+- caller: src.tillm.i18n.save_language
+  callee: src.tillm.i18n._normalize
+  call_type: resolved
+- caller: src.tillm.i18n.save_language
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.i18n.save_language
+  callee: src.tillm.providers_store._write_store
+  call_type: resolved
+- caller: src.tillm.i18n.current_language
+  callee: src.tillm.i18n._normalize
+  call_type: resolved
+- caller: src.tillm.i18n.current_language
+  callee: src.tillm.i18n._stored_language
+  call_type: resolved
+- caller: src.tillm.i18n.current_language
+  callee: src.tillm.i18n._system_language
+  call_type: resolved
+- caller: src.tillm.i18n._
+  callee: src.tillm.i18n.current_language
+  call_type: resolved
+- caller: src.tillm.i18n.yes_answers
+  callee: src.tillm.i18n.current_language
+  call_type: resolved
+- caller: packages.uri2tillm.src.uri2tillm.run.run_uri
+  callee: packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl
+  call_type: resolved
+- caller: packages.uri2tillm.src.uri2tillm.run.run_uri
+  callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  call_type: resolved
+- caller: src.tillm.controller._resolve_command
+  callee: src.tillm.controller_plan._resolve_command_impl
+  call_type: resolved
+- caller: src.tillm.controller.drive_shell_llm
+  callee: src.tillm.providers_drive.resolve_provider_drive_attempts
+  call_type: resolved
+- caller: src.tillm.controller.drive_shell_llm
+  callee: src.tillm.controller_drive._drive_shell_llm_once
+  call_type: resolved
+- caller: src.tillm.controller.drive_shell_llm
+  callee: src.tillm.providers_drive.resolve_drive_client_id
+  call_type: resolved
+- caller: src.tillm.controller.drive_shell_llm
+  callee: src.tillm.providers_drive.is_provider_exhaustion
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.read
+  callee: src.tillm.surfaces_io.read_json
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.read
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.read
+  callee: src.tillm.surfaces_io.same_url
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token
+  callee: src.tillm.surfaces_io.same_url
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token
+  callee: src.tillm.surfaces_io.read_json
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.write
+  callee: src.tillm.surfaces_io.read_json
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.write
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.ClaudeSettingsSurface.write
+  callee: src.tillm.surfaces_io.write_private_json
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.CodexConfigSurface.read
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.CodexConfigSurface.read
+  callee: src.tillm.surfaces_io.same_url
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.CodexConfigSurface.write
+  callee: src.tillm.surfaces_io.provider_slug
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface._entry
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface._entry
+  callee: src.tillm.surfaces_io.same_url
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface._entry
+  callee: src.tillm.surfaces_io.read_json
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface.read
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface.read_token
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface.write
+  callee: src.tillm.surfaces_io.read_json
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface.write
+  callee: src.tillm.surfaces_io.as_dict
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface.write
+  callee: src.tillm.surfaces_io.provider_slug
+  call_type: resolved
+- caller: src.tillm.surfaces_terminal.OpencodeConfigSurface.write
+  callee: src.tillm.surfaces_io.write_private_json
   call_type: resolved
 - caller: packages.dsl2tillm.src.dsl2tillm.handlers.run_query
   callee: packages.dsl2tillm.src.dsl2tillm.handlers._health
@@ -976,7 +1716,7 @@ edges:
   callee: src.tillm.validation.validate_client_readiness
   call_type: resolved
 - caller: packages.dsl2tillm.src.dsl2tillm.handlers._resolve
-  callee: packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl
+  callee: src.tillm.nlp.ShellIntent.to_dsl
   call_type: resolved
 - caller: packages.dsl2tillm.src.dsl2tillm.handlers._docker_status
   callee: src.tillm.transports.docker.docker_service_status
@@ -985,31 +1725,391 @@ edges:
   callee: src.tillm.controller.drive_shell_llm
   call_type: resolved
 - caller: packages.dsl2tillm.src.dsl2tillm.handlers._drive_matrix
-  callee: src.tillm.controller.drive_shell_llm_many
+  callee: src.tillm.controller_drive.drive_shell_llm_many
   call_type: resolved
 - caller: packages.dsl2tillm.src.dsl2tillm.handlers._drive_matrix
   callee: src.tillm.registry.resolve_client_ids
+  call_type: resolved
+- caller: src.tillm.project_env.load_env_file
+  callee: src.tillm.project_env._strip_quotes
+  call_type: resolved
+- caller: src.tillm.project_env._ensure_env2llm_map
+  callee: src.tillm.project_env._env2llm_enabled
+  call_type: resolved
+- caller: src.tillm.project_env.bootstrap_project_env
+  callee: src.tillm.project_env.resolve_env_file
+  call_type: resolved
+- caller: src.tillm.project_env.bootstrap_project_env
+  callee: src.tillm.project_env.apply_llm_bridges
+  call_type: resolved
+- caller: src.tillm.project_env.bootstrap_project_env
+  callee: src.tillm.project_env._ensure_env2llm_map
+  call_type: resolved
+- caller: src.tillm.project_env.bootstrap_project_env
+  callee: src.tillm.project_env.apply_into_environ
+  call_type: resolved
+- caller: src.tillm.project_env.bootstrap_project_env
+  callee: src.tillm.project_env.load_env_file
+  call_type: resolved
+- caller: src.tillm.controller_drive._drive_one_client
+  callee: src.tillm.controller.drive_shell_llm
+  call_type: resolved
+- caller: src.tillm.controller_drive._drive_one_client
+  callee: src.tillm.controller_types.resolve_backend
+  call_type: resolved
+- caller: src.tillm.controller_drive._drive_one_client
+  callee: src.tillm.controller_drive._drive_result_from_exception
+  call_type: resolved
+- caller: src.tillm.controller_drive._drive_shell_llm_once
+  callee: src.tillm.controller_plan.build_drive_plan
+  call_type: resolved
+- caller: src.tillm.controller_drive._drive_shell_llm_once
+  callee: src.tillm.controller_types.resolve_backend
+  call_type: resolved
+- caller: src.tillm.controller_drive._drive_shell_llm_once
+  callee: src.tillm.transports.binary.run_binary_drive
+  call_type: resolved
+- caller: src.tillm.controller_drive._drive_shell_llm_once
+  callee: src.tillm.transports.docker.run_docker_drive
+  call_type: resolved
+- caller: src.tillm.providers._http_json
+  callee: src.tillm.providers_probe._http_json_impl
+  call_type: resolved
+- caller: src.tillm.cli_output._summarize_drive_result
+  callee: src.tillm.cli_output._output_stats
+  call_type: resolved
+- caller: src.tillm.cli_output._summarize_drive_payload
+  callee: src.tillm.cli_output._summarize_drive_result
+  call_type: resolved
+- caller: src.tillm.cli_output._print_summary
+  callee: src.tillm.cli_output._summarize_drive_payload
+  call_type: resolved
+- caller: src.tillm.cli_output._print
+  callee: src.tillm.cli_output._print_summary
+  call_type: resolved
+- caller: src.tillm.cli._resolve_execute_profile
+  callee: src.tillm.registry.normalize_execute_profile
+  call_type: resolved
+- caller: src.tillm.cli._read_prompt
+  callee: src.tillm.cli._missing_prompt_error
+  call_type: resolved
+- caller: src.tillm.cli._read_prompt
+  callee: src.tillm.cli._stdin_has_data
+  call_type: resolved
+- caller: src.tillm.cli._resolve_drive_targets
+  callee: src.tillm.registry.resolve_client_ids
+  call_type: resolved
+- caller: src.tillm.cli._base_drive_request
+  callee: src.tillm.cli._resolve_drive_targets
+  call_type: resolved
+- caller: src.tillm.cli._base_drive_request
+  callee: src.tillm.cli._resolve_execute_profile
+  call_type: resolved
+- caller: src.tillm.cli._drive
+  callee: src.tillm.drive_log.log_drive_event
+  call_type: resolved
+- caller: src.tillm.cli._drive
+  callee: src.tillm.cli_output._print
+  call_type: resolved
+- caller: src.tillm.cli._drive
+  callee: src.tillm.cli._read_prompt
+  call_type: resolved
+- caller: src.tillm.cli._drive
+  callee: src.tillm.controller_drive.result_from_error
+  call_type: resolved
+- caller: src.tillm.cli._providers_list
+  callee: src.tillm.providers_registry.iter_provider_specs
+  call_type: resolved
+- caller: src.tillm.cli._providers_list
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.cli._sync_matrix
+  callee: src.tillm.surfaces_sync.sync_all
+  call_type: resolved
+- caller: src.tillm.cli._sync_matrix
+  callee: src.tillm.surfaces_registry.normalize_surface_ids
+  call_type: resolved
+- caller: src.tillm.cli._provider_order
+  callee: src.tillm.providers_store.get_stored_provider_order
+  call_type: resolved
+- caller: src.tillm.cli._provider_order
+  callee: src.tillm.providers_store.set_provider_order
+  call_type: resolved
+- caller: src.tillm.cli._provider_action
+  callee: src.tillm.cli._sync_matrix
+  call_type: resolved
+- caller: src.tillm.cli._provider_action
+  callee: src.tillm.cli._provider_order
+  call_type: resolved
+- caller: src.tillm.cli._provider_action
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.cli._provider_action
+  callee: src.tillm.providers_store.save_provider_token
+  call_type: resolved
+- caller: src.tillm.cli._provider_action
+  callee: src.tillm.providers_probe.probe_provider
+  call_type: resolved
+- caller: src.tillm.cli._nlp
+  callee: src.tillm.nlp.intent_from_text
+  call_type: resolved
+- caller: src.tillm.cli._nlp
+  callee: src.tillm.validation.validate_intent
+  call_type: resolved
+- caller: src.tillm.cli._nlp
+  callee: src.tillm.controller.drive_shell_llm
+  call_type: resolved
+- caller: src.tillm.cli._nlp
+  callee: src.tillm.cli_output._print
+  call_type: resolved
+- caller: src.tillm.cli.main
+  callee: src.tillm.project_env.bootstrap_project_env
+  call_type: resolved
+- caller: src.tillm.cli.main
+  callee: src.tillm.cli_parser._normalize_extra_arg_tokens
+  call_type: resolved
+- caller: src.tillm.cli.main
+  callee: src.tillm.cli_output._print
+  call_type: resolved
+- caller: src.tillm.cli.main
+  callee: src.tillm.cli._drive
+  call_type: resolved
+- caller: src.tillm.cli.main
+  callee: src.tillm.cli._providers_list
+  call_type: resolved
+- caller: src.tillm.cli.main
+  callee: src.tillm.cli._provider_action
+  call_type: resolved
+- caller: src.tillm.cli.main
+  callee: src.tillm.cli._nlp
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_env_overlay
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_env_overlay
+  callee: src.tillm.providers_drive.client_protocol
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_env_overlay
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_env_overlay
+  callee: src.tillm.providers_store.provider_default_model
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_request_provider
+  callee: src.tillm.providers_registry.normalize_provider_id
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_request_provider
+  callee: src.tillm.providers_store.get_default_provider
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_compatible_with_client
+  callee: src.tillm.providers_drive.client_protocol
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_compatible_with_client
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_compatible_with_client
+  callee: src.tillm.compat.is_client_available
+  call_type: resolved
+- caller: src.tillm.providers_drive.provider_compatible_with_client
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_drive_client_id
+  callee: src.tillm.compat.is_client_available
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_drive_model
+  callee: src.tillm.providers_store.provider_default_model
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_provider_drive_attempts
+  callee: src.tillm.providers_drive.resolve_request_provider
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_provider_drive_attempts
+  callee: src.tillm.providers_types.is_subscription_order_token
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_provider_drive_attempts
+  callee: src.tillm.providers_drive.provider_compatible_with_client
+  call_type: resolved
+- caller: src.tillm.providers_drive.resolve_provider_drive_attempts
+  callee: src.tillm.providers_registry.normalize_provider_id
+  call_type: resolved
+- caller: src.tillm.providers_store._load_store
+  callee: src.tillm.providers_store._config_path
+  call_type: resolved
+- caller: src.tillm.providers_store._write_store
+  callee: src.tillm.providers_store._config_path
+  call_type: resolved
+- caller: src.tillm.providers_store.save_provider_token
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_store.save_provider_token
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.providers_store.save_provider_token
+  callee: src.tillm.providers_store._write_store
+  call_type: resolved
+- caller: src.tillm.providers_store.stored_provider_entry
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_store.stored_provider_entry
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.providers_store.resolve_provider_token
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_store.resolve_provider_token
+  callee: src.tillm.providers_store.stored_provider_entry
+  call_type: resolved
+- caller: src.tillm.providers_store.set_default_provider
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_store.set_default_provider
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.providers_store.set_default_provider
+  callee: src.tillm.providers_store._write_store
+  call_type: resolved
+- caller: src.tillm.providers_store.get_default_provider
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.providers_store.set_provider_order
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.providers_store.set_provider_order
+  callee: src.tillm.providers_store._write_store
+  call_type: resolved
+- caller: src.tillm.providers_store.set_provider_order
+  callee: src.tillm.providers_types.is_subscription_order_token
+  call_type: resolved
+- caller: src.tillm.providers_store.set_provider_order
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_store.set_provider_order
+  callee: src.tillm.providers_registry.normalize_provider_id
+  call_type: resolved
+- caller: src.tillm.providers_store.get_stored_provider_order
+  callee: src.tillm.providers_store._load_store
+  call_type: resolved
+- caller: src.tillm.providers_store.provider_default_model
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_store.provider_default_model
+  callee: src.tillm.providers_store.stored_provider_entry
+  call_type: resolved
+- caller: packages.rest2tillm.src.rest2tillm.app.create_app
+  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb
+  call_type: resolved
+- caller: packages.rest2tillm.src.rest2tillm.app.create_app
+  callee: packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas
+  call_type: resolved
+- caller: packages.mcp2tillm.src.mcp2tillm.server._require_within_project_root
+  callee: packages.mcp2tillm.src.mcp2tillm.server._project_root
+  call_type: resolved
+- caller: packages.mcp2tillm.src.mcp2tillm.server._guard_payload
+  callee: packages.mcp2tillm.src.mcp2tillm.server._require_within_project_root
+  call_type: resolved
+- caller: packages.mcp2tillm.src.mcp2tillm.server._guard_payload
+  callee: packages.mcp2tillm.src.mcp2tillm.server._enabled
+  call_type: resolved
+- caller: packages.mcp2tillm.src.mcp2tillm.server._guard_command
+  callee: packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes
+  call_type: resolved
+- caller: packages.mcp2tillm.src.mcp2tillm.server._guard_command
+  callee: packages.dsl2tillm.src.dsl2tillm.codec.parse_text
+  call_type: resolved
+- caller: packages.mcp2tillm.src.mcp2tillm.server._guard_command
+  callee: packages.mcp2tillm.src.mcp2tillm.server._guard_payload
   call_type: resolved
 - caller: packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer.__post_init__
   callee: packages.mcp2tillm.src.mcp2tillm.server._require_fastmcp
   call_type: resolved
 - caller: packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
-  callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
-  call_type: resolved
-- caller: packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
-  callee: packages.dsl2tillm.src.dsl2tillm.pb_codec.encode_result_protobuf
-  call_type: resolved
-- caller: packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
-  callee: packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl
+  callee: packages.mcp2tillm.src.mcp2tillm.server._guard_command
   call_type: resolved
 - caller: packages.mcp2tillm.src.mcp2tillm.server.run_server
   callee: packages.mcp2tillm.src.mcp2tillm.server.create_server
   call_type: resolved
-- caller: packages.uri2tillm.src.uri2tillm.run.run_uri
-  callee: packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl
+- caller: src.tillm.providers_registry.get_provider_spec
+  callee: src.tillm.providers_registry.normalize_provider_id
   call_type: resolved
-- caller: packages.uri2tillm.src.uri2tillm.run.run_uri
-  callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+- caller: src.tillm.compat.is_shell_llm_client
+  callee: src.tillm.registry.get_client_spec
+  call_type: resolved
+- caller: src.tillm.compat.is_client_available
+  callee: src.tillm.registry.get_client_spec
+  call_type: resolved
+- caller: src.tillm.compat.shell_client_ids
+  callee: src.tillm.registry.iter_client_specs
+  call_type: resolved
+- caller: src.tillm.compat.shell_process_patterns
+  callee: src.tillm.registry.iter_client_specs
+  call_type: resolved
+- caller: src.tillm.compat.tool_registry_entries
+  callee: src.tillm.registry.iter_client_specs
+  call_type: resolved
+- caller: src.tillm.compat.autopilot_backend_for_client
+  callee: src.tillm.compat.is_shell_llm_client
+  call_type: resolved
+- caller: src.tillm.compat.detect_koru_agent_rows
+  callee: src.tillm.registry.detect_clients
+  call_type: resolved
+- caller: src.tillm.compat.drive_koru_chat
+  callee: src.tillm.controller.drive_shell_llm
+  call_type: resolved
+- caller: src.tillm.compat.launch_koru_agent
+  callee: src.tillm.registry.normalize_client_id
+  call_type: resolved
+- caller: src.tillm.compat.launch_koru_agent
+  callee: src.tillm.registry.get_client_spec
+  call_type: resolved
+- caller: src.tillm.compat.launch_koru_agent
+  callee: src.tillm.controller_plan.save_prompt
+  call_type: resolved
+- caller: src.tillm.compat.launch_koru_agent
+  callee: src.tillm.controller_plan.build_drive_plan
+  call_type: resolved
+- caller: src.tillm.drive_log.log_dir
+  callee: src.tillm.drive_log.tillm_dir
+  call_type: resolved
+- caller: src.tillm.drive_log.append_log
+  callee: src.tillm.drive_log.log_dir
+  call_type: resolved
+- caller: src.tillm.drive_log.append_log
+  callee: src.tillm.drive_log._now_iso
+  call_type: resolved
+- caller: src.tillm.drive_log.log_drive_event
+  callee: src.tillm.drive_log.append_log
+  call_type: resolved
+- caller: src.tillm.controller_plan.save_prompt
+  callee: src.tillm.controller_plan._prompt_root
+  call_type: resolved
+- caller: src.tillm.controller_plan._resolve_spec
+  callee: src.tillm.registry.get_client_spec
+  call_type: resolved
+- caller: src.tillm.controller_plan._validate_request
+  callee: src.tillm.validation.validate_client_readiness
+  call_type: resolved
+- caller: src.tillm.controller_plan._model_for_plan
+  callee: src.tillm.controller_plan._normalize_model_for_client
+  call_type: resolved
+- caller: src.tillm.controller_plan.build_drive_plan
+  callee: src.tillm.project_env.bootstrap_project_env
+  call_type: resolved
+- caller: src.tillm.controller_plan.build_drive_plan
+  callee: src.tillm.controller_plan._resolve_spec
+  call_type: resolved
+- caller: src.tillm.controller_plan.build_drive_plan
+  callee: src.tillm.controller_plan._validate_request
+  call_type: resolved
+- caller: src.tillm.controller_plan.build_drive_plan
+  callee: src.tillm.controller_plan._resolve_command
+  call_type: resolved
+- caller: src.tillm.controller_plan.build_drive_plan
+  callee: src.tillm.controller_plan.save_prompt
+  call_type: resolved
+- caller: src.tillm.controller_plan.build_drive_plan
+  callee: src.tillm.registry.normalize_execute_profile
+  call_type: resolved
+- caller: src.tillm.controller_plan.build_drive_plan
+  callee: src.tillm.controller_plan._model_for_plan
   call_type: resolved
 - caller: src.tillm.nlp._client_from_text
   callee: src.tillm.registry.iter_client_specs
@@ -1031,6 +2131,45 @@ edges:
   call_type: resolved
 - caller: src.tillm.nlp.intent_from_text
   callee: src.tillm.nlp._strip_drive_prefix
+  call_type: resolved
+- caller: src.tillm.providers_probe._probe_anthropic_endpoint
+  callee: src.tillm.providers_probe._http_json
+  call_type: resolved
+- caller: src.tillm.providers_probe.probe_provider
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_probe.probe_provider
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.providers_probe.probe_provider
+  callee: src.tillm.providers_probe._http_json
+  call_type: resolved
+- caller: src.tillm.providers_probe.probe_provider
+  callee: src.tillm.providers_probe._probe_anthropic_endpoint
+  call_type: resolved
+- caller: src.tillm.providers_probe.list_provider_models
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_probe.list_provider_models
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.providers_probe.list_provider_models
+  callee: src.tillm.providers_probe._http_json
+  call_type: resolved
+- caller: src.tillm.providers_probe.list_provider_models
+  callee: src.tillm.providers_probe._parse_models_payload
+  call_type: resolved
+- caller: src.tillm.providers_probe.diagnose_provider
+  callee: src.tillm.providers_registry.get_provider_spec
+  call_type: resolved
+- caller: src.tillm.providers_probe.diagnose_provider
+  callee: src.tillm.providers_store.resolve_provider_token
+  call_type: resolved
+- caller: src.tillm.providers_probe.diagnose_provider
+  callee: src.tillm.providers_probe.list_provider_models
+  call_type: resolved
+- caller: src.tillm.providers_probe.diagnose_provider
+  callee: src.tillm.registry.available_client_ids
   call_type: resolved
 - caller: src.tillm.validation.validate_client_readiness
   callee: src.tillm.registry.get_client_spec
@@ -1054,6 +2193,9 @@ edges:
   callee: src.tillm.registry.detect_clients
   call_type: resolved
 - caller: src.tillm.validation.ecosystem_status
+  callee: src.tillm.project_env.bootstrap_project_env
+  call_type: resolved
+- caller: src.tillm.validation.ecosystem_status
   callee: src.tillm.validation.client_status_rows
   call_type: resolved
 - caller: src.tillm.validation.ecosystem_status
@@ -1062,8 +2204,11 @@ edges:
 - caller: src.tillm.validation.ecosystem_status
   callee: src.tillm.validation.validate_intent_contracts
   call_type: resolved
-- caller: src.tillm.validation.ecosystem_status
-  callee: src.tillm.registry.iter_client_specs
+- caller: packages.rest2tillm.src.rest2tillm.cli.main
+  callee: packages.rest2tillm.src.rest2tillm.app.create_app
+  call_type: resolved
+- caller: packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl
+  callee: packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri
   call_type: resolved
 - caller: src.tillm.transports.docker.docker_service_name
   callee: src.tillm.registry.iter_client_specs
@@ -1080,8 +2225,14 @@ edges:
 - caller: src.tillm.transports.docker.run_docker_drive
   callee: src.tillm.transports.docker._docker_argv
   call_type: resolved
-- caller: src.tillm.transports.docker.run_docker_drive
-  callee: src.tillm.controller._timeout_value
+- caller: packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl
+  callee: src.tillm.nlp.intent_from_text
+  call_type: resolved
+- caller: packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl
+  callee: packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl
+  call_type: resolved
+- caller: packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl
+  callee: packages.dsl2tillm.src.dsl2tillm.bus.dispatch
   call_type: resolved
 - caller: src.tillm.registry.get_client_spec
   callee: src.tillm.registry.normalize_client_id
@@ -1097,54 +2248,6 @@ edges:
   call_type: resolved
 - caller: src.tillm.registry.detect_clients
   callee: src.tillm.registry.normalize_client_id
-  call_type: resolved
-- caller: src.tillm.controller.save_prompt
-  callee: src.tillm.controller._prompt_root
-  call_type: resolved
-- caller: src.tillm.controller._resolve_spec
-  callee: src.tillm.registry.get_client_spec
-  call_type: resolved
-- caller: src.tillm.controller._validate_request
-  callee: src.tillm.validation.validate_client_readiness
-  call_type: resolved
-- caller: src.tillm.controller.build_drive_plan
-  callee: src.tillm.controller._resolve_spec
-  call_type: resolved
-- caller: src.tillm.controller.build_drive_plan
-  callee: src.tillm.controller._validate_request
-  call_type: resolved
-- caller: src.tillm.controller.build_drive_plan
-  callee: src.tillm.controller._resolve_command
-  call_type: resolved
-- caller: src.tillm.controller.build_drive_plan
-  callee: src.tillm.controller.save_prompt
-  call_type: resolved
-- caller: src.tillm.controller.build_drive_plan
-  callee: src.tillm.registry.normalize_execute_profile
-  call_type: resolved
-- caller: src.tillm.controller.build_drive_plan
-  callee: src.tillm.controller._resolve_execute_args
-  call_type: resolved
-- caller: src.tillm.controller._drive_one_client
-  callee: src.tillm.controller.drive_shell_llm
-  call_type: resolved
-- caller: src.tillm.controller._drive_one_client
-  callee: src.tillm.controller.resolve_backend
-  call_type: resolved
-- caller: src.tillm.controller._drive_one_client
-  callee: src.tillm.controller._drive_result_from_exception
-  call_type: resolved
-- caller: src.tillm.controller.drive_shell_llm
-  callee: src.tillm.controller.build_drive_plan
-  call_type: resolved
-- caller: src.tillm.controller.drive_shell_llm
-  callee: src.tillm.controller.resolve_backend
-  call_type: resolved
-- caller: src.tillm.controller.drive_shell_llm
-  callee: src.tillm.transports.binary.run_binary_drive
-  call_type: resolved
-- caller: src.tillm.controller.drive_shell_llm
-  callee: src.tillm.transports.docker.run_docker_drive
   call_type: resolved
 modules:
   packages.cli2tillm.src.cli2tillm.shell:
@@ -1164,6 +2267,9 @@ modules:
   packages.dsl2tillm.src.dsl2tillm.grammar:
   - packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag
   - packages.dsl2tillm.src.dsl2tillm.grammar._flag
+  - packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive
+  - packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix
+  - packages.dsl2tillm.src.dsl2tillm.grammar._parse_validate
   - packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail
   - packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
   packages.dsl2tillm.src.dsl2tillm.handlers:
@@ -1180,7 +2286,6 @@ modules:
   - packages.dsl2tillm.src.dsl2tillm.handlers.run_query
   packages.dsl2tillm.src.dsl2tillm.pb_codec:
   - packages.dsl2tillm.src.dsl2tillm.pb_codec.decode_protobuf
-  - packages.dsl2tillm.src.dsl2tillm.pb_codec.encode_result_protobuf
   packages.dsl2tillm.src.dsl2tillm.schema_registry:
   - packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
   - packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs
@@ -1191,7 +2296,12 @@ modules:
   packages.mcp2tillm.src.mcp2tillm.server:
   - packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer.__post_init__
   - packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
+  - packages.mcp2tillm.src.mcp2tillm.server._enabled
+  - packages.mcp2tillm.src.mcp2tillm.server._guard_command
+  - packages.mcp2tillm.src.mcp2tillm.server._guard_payload
+  - packages.mcp2tillm.src.mcp2tillm.server._project_root
   - packages.mcp2tillm.src.mcp2tillm.server._require_fastmcp
+  - packages.mcp2tillm.src.mcp2tillm.server._require_within_project_root
   - packages.mcp2tillm.src.mcp2tillm.server.create_server
   - packages.mcp2tillm.src.mcp2tillm.server.run_server
   packages.nlp2tillm.src.nlp2tillm.to_dsl:
@@ -1213,15 +2323,26 @@ modules:
   - packages.uri2tillm.src.uri2tillm.uri.uri_for_cmd
   src.tillm.cli:
   - src.tillm.cli._base_drive_request
-  - src.tillm.cli._build_parser
   - src.tillm.cli._drive
+  - src.tillm.cli._missing_prompt_error
   - src.tillm.cli._nlp
-  - src.tillm.cli._normalize_extra_arg_tokens
-  - src.tillm.cli._print
+  - src.tillm.cli._provider_action
+  - src.tillm.cli._provider_order
+  - src.tillm.cli._providers_list
   - src.tillm.cli._read_prompt
   - src.tillm.cli._resolve_drive_targets
   - src.tillm.cli._resolve_execute_profile
+  - src.tillm.cli._stdin_has_data
+  - src.tillm.cli._sync_matrix
   - src.tillm.cli.main
+  src.tillm.cli_output:
+  - src.tillm.cli_output._output_stats
+  - src.tillm.cli_output._print
+  - src.tillm.cli_output._print_summary
+  - src.tillm.cli_output._summarize_drive_payload
+  - src.tillm.cli_output._summarize_drive_result
+  src.tillm.cli_parser:
+  - src.tillm.cli_parser._normalize_extra_arg_tokens
   src.tillm.compat:
   - src.tillm.compat.autopilot_backend_for_client
   - src.tillm.compat.detect_koru_agent_rows
@@ -1233,25 +2354,97 @@ modules:
   - src.tillm.compat.shell_process_patterns
   - src.tillm.compat.tool_registry_entries
   src.tillm.controller:
-  - src.tillm.controller._drive_one_client
-  - src.tillm.controller._drive_result_from_exception
-  - src.tillm.controller._prompt_root
   - src.tillm.controller._resolve_command
-  - src.tillm.controller._resolve_execute_args
-  - src.tillm.controller._resolve_spec
-  - src.tillm.controller._timeout_value
-  - src.tillm.controller._validate_request
-  - src.tillm.controller.build_drive_plan
   - src.tillm.controller.drive_shell_llm
-  - src.tillm.controller.drive_shell_llm_many
-  - src.tillm.controller.resolve_backend
-  - src.tillm.controller.result_from_error
-  - src.tillm.controller.save_prompt
+  src.tillm.controller_drive:
+  - src.tillm.controller_drive._drive_one_client
+  - src.tillm.controller_drive._drive_result_from_exception
+  - src.tillm.controller_drive._drive_shell_llm_once
+  - src.tillm.controller_drive.drive_shell_llm_many
+  - src.tillm.controller_drive.result_from_error
+  src.tillm.controller_plan:
+  - src.tillm.controller_plan._model_for_plan
+  - src.tillm.controller_plan._normalize_model_for_client
+  - src.tillm.controller_plan._prompt_root
+  - src.tillm.controller_plan._resolve_command
+  - src.tillm.controller_plan._resolve_command_impl
+  - src.tillm.controller_plan._resolve_spec
+  - src.tillm.controller_plan._validate_request
+  - src.tillm.controller_plan.build_drive_plan
+  - src.tillm.controller_plan.save_prompt
+  src.tillm.controller_types:
+  - src.tillm.controller_types.resolve_backend
+  src.tillm.drive_log:
+  - src.tillm.drive_log._now_iso
+  - src.tillm.drive_log.append_log
+  - src.tillm.drive_log.log_dir
+  - src.tillm.drive_log.log_drive_event
+  - src.tillm.drive_log.tillm_dir
+  src.tillm.headless:
+  - src.tillm.headless.headless_client_ids
+  - src.tillm.headless.run_headless
+  - src.tillm.headless.supports_headless
+  src.tillm.i18n:
+  - src.tillm.i18n._
+  - src.tillm.i18n._normalize
+  - src.tillm.i18n._stored_language
+  - src.tillm.i18n._system_language
+  - src.tillm.i18n.current_language
+  - src.tillm.i18n.save_language
+  - src.tillm.i18n.set_language
+  - src.tillm.i18n.yes_answers
   src.tillm.nlp:
+  - src.tillm.nlp.ShellIntent.to_dsl
   - src.tillm.nlp._client_from_text
   - src.tillm.nlp._intent_from_nlp2dsl
   - src.tillm.nlp._strip_drive_prefix
   - src.tillm.nlp.intent_from_text
+  src.tillm.project_env:
+  - src.tillm.project_env._ensure_env2llm_map
+  - src.tillm.project_env._env2llm_enabled
+  - src.tillm.project_env._strip_quotes
+  - src.tillm.project_env.apply_into_environ
+  - src.tillm.project_env.apply_llm_bridges
+  - src.tillm.project_env.bootstrap_project_env
+  - src.tillm.project_env.load_env_file
+  - src.tillm.project_env.resolve_env_file
+  src.tillm.providers:
+  - src.tillm.providers._http_json
+  src.tillm.providers_drive:
+  - src.tillm.providers_drive.client_protocol
+  - src.tillm.providers_drive.is_provider_exhaustion
+  - src.tillm.providers_drive.provider_compatible_with_client
+  - src.tillm.providers_drive.provider_env_overlay
+  - src.tillm.providers_drive.resolve_drive_client_id
+  - src.tillm.providers_drive.resolve_drive_model
+  - src.tillm.providers_drive.resolve_provider_drive_attempts
+  - src.tillm.providers_drive.resolve_request_provider
+  src.tillm.providers_probe:
+  - src.tillm.providers_probe._http_json
+  - src.tillm.providers_probe._http_json_impl
+  - src.tillm.providers_probe._parse_models_payload
+  - src.tillm.providers_probe._probe_anthropic_endpoint
+  - src.tillm.providers_probe.diagnose_provider
+  - src.tillm.providers_probe.list_provider_models
+  - src.tillm.providers_probe.probe_provider
+  src.tillm.providers_registry:
+  - src.tillm.providers_registry.get_provider_spec
+  - src.tillm.providers_registry.iter_provider_specs
+  - src.tillm.providers_registry.normalize_provider_id
+  src.tillm.providers_store:
+  - src.tillm.providers_store._config_path
+  - src.tillm.providers_store._load_store
+  - src.tillm.providers_store._write_store
+  - src.tillm.providers_store.get_default_provider
+  - src.tillm.providers_store.get_stored_provider_order
+  - src.tillm.providers_store.provider_default_model
+  - src.tillm.providers_store.resolve_provider_token
+  - src.tillm.providers_store.save_provider_token
+  - src.tillm.providers_store.set_default_provider
+  - src.tillm.providers_store.set_provider_order
+  - src.tillm.providers_store.stored_provider_entry
+  src.tillm.providers_types:
+  - src.tillm.providers_types.is_subscription_order_token
   src.tillm.registry:
   - src.tillm.registry.available_client_ids
   - src.tillm.registry.detect_clients
@@ -1261,6 +2454,31 @@ modules:
   - src.tillm.registry.normalize_execute_profile
   - src.tillm.registry.registered_client_ids
   - src.tillm.registry.resolve_client_ids
+  src.tillm.surfaces_gui:
+  - src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read
+  src.tillm.surfaces_io:
+  - src.tillm.surfaces_io.as_dict
+  - src.tillm.surfaces_io.provider_slug
+  - src.tillm.surfaces_io.read_json
+  - src.tillm.surfaces_io.same_url
+  - src.tillm.surfaces_io.write_private_json
+  src.tillm.surfaces_registry:
+  - src.tillm.surfaces_registry.iter_surfaces
+  - src.tillm.surfaces_registry.normalize_surface_ids
+  src.tillm.surfaces_sync:
+  - src.tillm.surfaces_sync.apply_sync
+  - src.tillm.surfaces_sync.plan_sync
+  - src.tillm.surfaces_sync.sync_all
+  src.tillm.surfaces_terminal:
+  - src.tillm.surfaces_terminal.ClaudeSettingsSurface.read
+  - src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token
+  - src.tillm.surfaces_terminal.ClaudeSettingsSurface.write
+  - src.tillm.surfaces_terminal.CodexConfigSurface.read
+  - src.tillm.surfaces_terminal.CodexConfigSurface.write
+  - src.tillm.surfaces_terminal.OpencodeConfigSurface._entry
+  - src.tillm.surfaces_terminal.OpencodeConfigSurface.read
+  - src.tillm.surfaces_terminal.OpencodeConfigSurface.read_token
+  - src.tillm.surfaces_terminal.OpencodeConfigSurface.write
   src.tillm.transports.binary:
   - src.tillm.transports.binary.run_binary_drive
   src.tillm.transports.docker:
@@ -1277,13 +2495,18 @@ modules:
   - src.tillm.validation.validate_intent_contracts
   - src.tillm.validation.validate_raw_dsl
 entry_points:
+- examples.fixtures.demo_module.say_hello
+- examples.fixtures.demo_module.say_hello_formal
 - packages.cli2tillm.src.cli2tillm.cli.main
 - packages.dsl2tillm.src.dsl2tillm.cli.main
-- packages.dsl2tillm.src.dsl2tillm.events.EventStore.__init__
-- packages.dsl2tillm.src.dsl2tillm.events.EventStore.append_command
-- packages.dsl2tillm.src.dsl2tillm.events.EventStore.for_workdir
-- packages.dsl2tillm.src.dsl2tillm.events.EventStore.read_all
 - packages.dsl2tillm.src.dsl2tillm.events.StoredEvent.to_dict
+- packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.__init__
+- packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.append_command
+- packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.for_workdir
+- packages.dsl2tillm.src.dsl2tillm.events.TillmEventStore.read_all
+- packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive
+- packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix
+- packages.dsl2tillm.src.dsl2tillm.grammar._parse_validate
 - packages.dsl2tillm.src.dsl2tillm.grammar.to_text
 - packages.dsl2tillm.src.dsl2tillm.handlers.HandlerResult.to_dict
 - packages.dsl2tillm.src.dsl2tillm.pb_codec.encode_protobuf
@@ -1306,21 +2529,63 @@ entry_points:
 - src.tillm.compat.autopilot_backend_for_client
 - src.tillm.compat.detect_koru_agent_rows
 - src.tillm.compat.drive_koru_chat
-- src.tillm.compat.is_client_available
 - src.tillm.compat.launch_koru_agent
 - src.tillm.compat.shell_client_ids
 - src.tillm.compat.shell_process_patterns
 - src.tillm.compat.tool_registry_entries
-- src.tillm.controller.MultiShellDriveResult.to_dict
-- src.tillm.controller.ShellDrivePlan.shell_preview
-- src.tillm.controller.ShellDrivePlan.to_dict
-- src.tillm.controller.ShellDriveResult.to_dict
-- src.tillm.controller._drive_one_client
-- src.tillm.nlp.ShellIntent.to_dsl
+- src.tillm.controller._resolve_command
+- src.tillm.controller_drive._drive_one_client
+- src.tillm.controller_drive.timeout_value
+- src.tillm.controller_types.MultiShellDriveResult.to_dict
+- src.tillm.controller_types.ShellDrivePlan.shell_preview
+- src.tillm.controller_types.ShellDrivePlan.to_dict
+- src.tillm.controller_types.ShellDriveResult.to_dict
+- src.tillm.headless.headless_client_ids
+- src.tillm.headless.run_headless
+- src.tillm.i18n.save_language
+- src.tillm.i18n.set_language
+- src.tillm.i18n.yes_answers
+- src.tillm.providers._http_json
+- src.tillm.providers_store.set_default_provider
+- src.tillm.providers_types.ProbeResult.to_dict
+- src.tillm.providers_types.ProviderDiagnosis.to_dict
+- src.tillm.providers_types.ProviderSpec.compatible_clients
+- src.tillm.providers_types.ProviderSpec.protocols
 - src.tillm.registry.ShellClientSpec.command_path
+- src.tillm.registry.ShellClientSpec.has_auth_file
 - src.tillm.registry.ShellClientSpec.missing_env_vars
 - src.tillm.registry.ShellClientSpec.profile_execute_args
 - src.tillm.registry.ShellClientSpec.supported_execute_profiles
 - src.tillm.registry.ShellClientSpec.to_dict
+- src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface._paths
+- src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.applicable
+- src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read
+- src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read_token
+- src.tillm.surfaces_gui.QoderSurface._configured_text
+- src.tillm.surfaces_gui.QoderSurface._markers
+- src.tillm.surfaces_gui.QoderSurface._paths
+- src.tillm.surfaces_gui.QoderSurface.applicable
+- src.tillm.surfaces_gui.QoderSurface.read
+- src.tillm.surfaces_gui.QoderSurface.read_token
+- src.tillm.surfaces_sync.apply_sync
+- src.tillm.surfaces_terminal.ClaudeSettingsSurface._path
+- src.tillm.surfaces_terminal.ClaudeSettingsSurface.applicable
+- src.tillm.surfaces_terminal.ClaudeSettingsSurface.read
+- src.tillm.surfaces_terminal.ClaudeSettingsSurface.read_token
+- src.tillm.surfaces_terminal.CodexConfigSurface._load
+- src.tillm.surfaces_terminal.CodexConfigSurface._path
+- src.tillm.surfaces_terminal.CodexConfigSurface.applicable
+- src.tillm.surfaces_terminal.CodexConfigSurface.read
+- src.tillm.surfaces_terminal.CodexConfigSurface.read_token
+- src.tillm.surfaces_terminal.CodexConfigSurface.write
+- src.tillm.surfaces_terminal.OpencodeConfigSurface._candidates
+- src.tillm.surfaces_terminal.OpencodeConfigSurface._entry
+- src.tillm.surfaces_terminal.OpencodeConfigSurface._path
+- src.tillm.surfaces_terminal.OpencodeConfigSurface.applicable
+- src.tillm.surfaces_terminal.OpencodeConfigSurface.read
+- src.tillm.surfaces_terminal.OpencodeConfigSurface.read_token
+- src.tillm.surfaces_terminal.OpencodeConfigSurface.write
+- src.tillm.surfaces_types.SurfaceState.to_dict
+- src.tillm.surfaces_types.SyncStep.to_dict
 - src.tillm.validation.ValidationResult.to_dict
 - src.tillm.validation.intent_contracts

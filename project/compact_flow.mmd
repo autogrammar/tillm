@@ -1,18 +1,19 @@
 flowchart TD
-%% generated in 0.01s
+%% generated in 0.03s
+    examples__run_all_dry_run["examples.run-all-dry-run<br/>1 funcs"]
     packages__cli2tillm["packages.cli2tillm<br/>2 funcs"]
-    packages__dsl2tillm["packages.dsl2tillm<br/>39 funcs"]
-    packages__mcp2tillm["packages.mcp2tillm<br/>7 funcs"]
+    packages__dsl2tillm["packages.dsl2tillm<br/>42 funcs"]
+    packages__mcp2tillm["packages.mcp2tillm<br/>12 funcs"]
     packages__nlp2tillm["packages.nlp2tillm<br/>3 funcs"]
     packages__rest2tillm["packages.rest2tillm<br/>2 funcs"]
     packages__uri2tillm["packages.uri2tillm<br/>9 funcs"]
-    src__tillm["src.tillm<br/>73 funcs"]
-    packages__dsl2tillm ==>|10| src__tillm
+    src__tillm["src.tillm<br/>190 funcs"]
+    packages__dsl2tillm ==>|11| src__tillm
+    packages__mcp2tillm ==>|8| packages__dsl2tillm
     packages__rest2tillm ==>|6| packages__dsl2tillm
-    packages__mcp2tillm ==>|6| packages__dsl2tillm
     packages__cli2tillm -->|3| packages__dsl2tillm
-    packages__nlp2tillm -->|1| src__tillm
-    packages__nlp2tillm -->|1| packages__dsl2tillm
-    packages__dsl2tillm -->|1| packages__nlp2tillm
-    packages__mcp2tillm -->|1| packages__nlp2tillm
+    packages__nlp2tillm -->|2| src__tillm
     packages__uri2tillm -->|1| packages__dsl2tillm
+    src__tillm -->|1| examples__run_all_dry_run
+    packages__mcp2tillm -->|1| src__tillm
+    packages__nlp2tillm -->|1| packages__dsl2tillm

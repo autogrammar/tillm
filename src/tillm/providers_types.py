@@ -20,11 +20,18 @@ CLIENT_PROTOCOLS: dict[str, str] = {
 SUBSCRIPTION_DRIVE_PROVIDER = "__subscription__"
 
 SUBSCRIPTION_ORDER_TOKENS = frozenset(
-    {"subscription", "claude-subscription", "native", "claude-native"}
+    {
+        "subscription",
+        "claude-subscription",
+        "codex-subscription",
+        "chatgpt",
+        "native",
+        "claude-native",
+    }
 )
 
 # Clients that can use the subscription/native attempt (no provider overlay).
-SUBSCRIPTION_CLIENTS = frozenset({"claude-code"})
+SUBSCRIPTION_CLIENTS = frozenset({"claude-code", "codex"})
 
 PROVIDER_EXHAUSTION_MARKERS = (
     "429",

@@ -1,49 +1,49 @@
-# code2llm call graph | /home/tom/github/semcod/tillm
-# generated in 0.05s
-# nodes: 105 | edges: 135 | modules: 24
-# CC̄=4.4
+# code2llm call graph | /home/tom/github/autogrammar/tillm
+# generated in 0.17s
+# nodes: 200 | edges: 281 | modules: 44
+# CC̄=4.6
 
 HUBS[20]:
+  src.tillm.cli._provider_action
+    CC=49  in:1  out:69  total:70
+  src.tillm.cli._drive
+    CC=17  in:1  out:52  total:53
   packages.dsl2tillm.src.dsl2tillm.bus.dispatch
     CC=15  in:14  out:29  total:43
+  src.tillm.providers_probe.diagnose_provider
+    CC=27  in:1  out:40  total:41
   packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand
     CC=17  in:1  out:40  total:41
-  src.tillm.cli._print
-    CC=17  in:7  out:29  total:36
-  src.tillm.cli._build_parser
-    CC=1  in:1  out:34  total:35
+  src.tillm.cli_output._print
+    CC=18  in:8  out:30  total:38
   packages.rest2tillm.src.rest2tillm.app.create_app
     CC=1  in:1  out:34  total:35
   packages.dsl2tillm.src.dsl2tillm.handlers._drive_matrix
     CC=4  in:1  out:32  total:33
-  packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
-    CC=35  in:1  out:29  total:30
   packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl
     CC=24  in:2  out:27  total:29
-  src.tillm.controller.drive_shell_llm_many
+  src.tillm.controller_plan.build_drive_plan
+    CC=13  in:2  out:27  total:29
+  src.tillm.providers_probe.probe_provider
+    CC=20  in:4  out:23  total:27
+  src.tillm.controller_drive.drive_shell_llm_many
     CC=26  in:2  out:25  total:27
   src.tillm.nlp._intent_from_nlp2dsl
     CC=15  in:1  out:25  total:26
+  src.tillm.cli_output._print_summary
+    CC=16  in:1  out:24  total:25
+  packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
+    CC=1  in:0  out:24  total:24
+  src.tillm.surfaces_sync.plan_sync
+    CC=13  in:2  out:21  total:23
+  src.tillm.providers_drive.resolve_provider_drive_attempts
+    CC=18  in:1  out:20  total:21
   packages.dsl2tillm.src.dsl2tillm.cli._main_legacy
     CC=12  in:1  out:20  total:21
-  packages.dsl2tillm.src.dsl2tillm.handlers._drive
-    CC=3  in:1  out:19  total:20
   src.tillm.registry.resolve_client_ids
     CC=15  in:3  out:17  total:20
-  packages.dsl2tillm.src.dsl2tillm.grammar._flag
-    CC=4  in:14  out:4  total:18
-  src.tillm.compat.launch_koru_agent
-    CC=8  in:0  out:17  total:17
-  src.tillm.cli._drive
-    CC=8  in:1  out:16  total:17
-  src.tillm.validation.validate_raw_dsl
-    CC=12  in:1  out:16  total:17
-  packages.mcp2tillm.src.mcp2tillm.server.TillmMCPServer._register_tools
-    CC=1  in:0  out:17  total:17
-  src.tillm.controller.build_drive_plan
-    CC=3  in:2  out:15  total:17
-  src.tillm.validation.validate_client_readiness
-    CC=7  in:5  out:11  total:16
+  packages.dsl2tillm.src.dsl2tillm.handlers._drive
+    CC=3  in:1  out:19  total:20
 
 MODULES:
   packages.cli2tillm.src.cli2tillm.shell  [1 funcs]
@@ -60,11 +60,14 @@ MODULES:
     envelope_from_bytes  CC=1  out:2
     parse_text  CC=2  out:2
     validate_payload  CC=2  out:6
-  packages.dsl2tillm.src.dsl2tillm.grammar  [4 funcs]
+  packages.dsl2tillm.src.dsl2tillm.grammar  [7 funcs]
     _bool_flag  CC=2  out:2
     _flag  CC=4  out:4
+    _parse_drive  CC=11  out:8
+    _parse_drive_matrix  CC=16  out:15
+    _parse_validate  CC=2  out:1
     _quoted_or_tail  CC=3  out:4
-    parse_line  CC=35  out:29
+    parse_line  CC=5  out:6
   packages.dsl2tillm.src.dsl2tillm.handlers  [11 funcs]
     _actions  CC=1  out:3
     _clients  CC=1  out:3
@@ -76,9 +79,8 @@ MODULES:
     _resolve  CC=2  out:6
     _validate  CC=3  out:11
     run_command  CC=3  out:5
-  packages.dsl2tillm.src.dsl2tillm.pb_codec  [2 funcs]
+  packages.dsl2tillm.src.dsl2tillm.pb_codec  [1 funcs]
     decode_protobuf  CC=3  out:5
-    encode_result_protobuf  CC=1  out:3
   packages.dsl2tillm.src.dsl2tillm.schema_registry  [4 funcs]
     _load_schemas  CC=4  out:11
     all_verbs  CC=1  out:3
@@ -86,10 +88,15 @@ MODULES:
     validate_schemas  CC=5  out:9
   packages.mcp2tillm.src.mcp2tillm.cli  [1 funcs]
     main  CC=3  out:5
-  packages.mcp2tillm.src.mcp2tillm.server  [5 funcs]
+  packages.mcp2tillm.src.mcp2tillm.server  [10 funcs]
     __post_init__  CC=1  out:3
-    _register_tools  CC=1  out:17
+    _register_tools  CC=1  out:24
+    _enabled  CC=1  out:3
+    _guard_command  CC=4  out:4
+    _guard_payload  CC=8  out:12
+    _project_root  CC=1  out:4
     _require_fastmcp  CC=2  out:1
+    _require_within_project_root  CC=2  out:6
     create_server  CC=1  out:1
     run_server  CC=1  out:2
   packages.nlp2tillm.src.nlp2tillm.to_dsl  [2 funcs]
@@ -109,43 +116,126 @@ MODULES:
     parse_tillm_uri  CC=5  out:9
     uri_for_client  CC=4  out:6
     uri_for_cmd  CC=4  out:5
-  src.tillm.cli  [10 funcs]
+  src.tillm.cli  [13 funcs]
     _base_drive_request  CC=3  out:9
-    _build_parser  CC=1  out:34
-    _drive  CC=8  out:16
+    _drive  CC=17  out:52
+    _missing_prompt_error  CC=1  out:1
     _nlp  CC=5  out:14
-    _normalize_extra_arg_tokens  CC=5  out:5
-    _print  CC=17  out:29
-    _read_prompt  CC=4  out:4
+    _provider_action  CC=49  out:69
+    _provider_order  CC=11  out:18
+    _providers_list  CC=8  out:10
+    _read_prompt  CC=6  out:7
     _resolve_drive_targets  CC=1  out:3
     _resolve_execute_profile  CC=2  out:2
-    main  CC=6  out:11
+  src.tillm.cli_output  [5 funcs]
+    _output_stats  CC=7  out:7
+    _print  CC=18  out:30
+    _print_summary  CC=16  out:24
+    _summarize_drive_payload  CC=9  out:8
+    _summarize_drive_result  CC=10  out:7
+  src.tillm.cli_parser  [1 funcs]
+    _normalize_extra_arg_tokens  CC=5  out:5
   src.tillm.compat  [9 funcs]
     autopilot_backend_for_client  CC=2  out:1
     detect_koru_agent_rows  CC=5  out:9
-    drive_koru_chat  CC=1  out:3
+    drive_koru_chat  CC=2  out:4
     is_client_available  CC=2  out:3
     is_shell_llm_client  CC=1  out:1
     launch_koru_agent  CC=8  out:17
     shell_client_ids  CC=2  out:2
     shell_process_patterns  CC=2  out:2
     tool_registry_entries  CC=4  out:6
-  src.tillm.controller  [14 funcs]
-    _drive_one_client  CC=2  out:4
+  src.tillm.controller  [2 funcs]
+    _resolve_command  CC=1  out:1
+    drive_shell_llm  CC=10  out:11
+  src.tillm.controller_drive  [5 funcs]
+    _drive_one_client  CC=2  out:5
     _drive_result_from_exception  CC=1  out:3
+    _drive_shell_llm_once  CC=4  out:5
+    drive_shell_llm_many  CC=26  out:25
+    result_from_error  CC=1  out:2
+  src.tillm.controller_plan  [9 funcs]
+    _model_for_plan  CC=5  out:3
+    _normalize_model_for_client  CC=5  out:2
     _prompt_root  CC=2  out:3
-    _resolve_command  CC=2  out:3
-    _resolve_execute_args  CC=3  out:3
+    _resolve_command  CC=1  out:1
+    _resolve_command_impl  CC=2  out:3
     _resolve_spec  CC=2  out:2
-    _timeout_value  CC=3  out:1
     _validate_request  CC=5  out:4
-    build_drive_plan  CC=3  out:15
-    drive_shell_llm  CC=4  out:5
-  src.tillm.nlp  [4 funcs]
+    build_drive_plan  CC=13  out:27
+    save_prompt  CC=2  out:7
+  src.tillm.controller_types  [1 funcs]
+    resolve_backend  CC=5  out:3
+  src.tillm.drive_log  [5 funcs]
+    _now_iso  CC=1  out:2
+    append_log  CC=1  out:10
+    log_dir  CC=1  out:1
+    log_drive_event  CC=10  out:4
+    tillm_dir  CC=2  out:6
+  src.tillm.headless  [3 funcs]
+    headless_client_ids  CC=3  out:2
+    run_headless  CC=6  out:20
+    supports_headless  CC=5  out:3
+  src.tillm.i18n  [8 funcs]
+    _  CC=4  out:4
+    _normalize  CC=4  out:5
+    _stored_language  CC=3  out:5
+    _system_language  CC=3  out:2
+    current_language  CC=5  out:4
+    save_language  CC=3  out:5
+    set_language  CC=1  out:2
+    yes_answers  CC=1  out:2
+  src.tillm.nlp  [5 funcs]
+    to_dsl  CC=1  out:0
     _client_from_text  CC=6  out:6
     _intent_from_nlp2dsl  CC=15  out:25
     _strip_drive_prefix  CC=5  out:5
     intent_from_text  CC=3  out:5
+  src.tillm.project_env  [8 funcs]
+    _ensure_env2llm_map  CC=4  out:2
+    _env2llm_enabled  CC=1  out:3
+    _strip_quotes  CC=5  out:5
+    apply_into_environ  CC=5  out:3
+    apply_llm_bridges  CC=3  out:6
+    bootstrap_project_env  CC=3  out:12
+    load_env_file  CC=6  out:9
+    resolve_env_file  CC=6  out:9
+  src.tillm.providers  [1 funcs]
+    _http_json  CC=1  out:1
+  src.tillm.providers_drive  [8 funcs]
+    client_protocol  CC=2  out:3
+    is_provider_exhaustion  CC=2  out:2
+    provider_compatible_with_client  CC=11  out:9
+    provider_env_overlay  CC=16  out:13
+    resolve_drive_client_id  CC=5  out:3
+    resolve_drive_model  CC=8  out:5
+    resolve_provider_drive_attempts  CC=18  out:20
+    resolve_request_provider  CC=6  out:5
+  src.tillm.providers_probe  [7 funcs]
+    _http_json  CC=1  out:1
+    _http_json_impl  CC=6  out:12
+    _parse_models_payload  CC=9  out:11
+    _probe_anthropic_endpoint  CC=1  out:2
+    diagnose_provider  CC=27  out:40
+    list_provider_models  CC=11  out:13
+    probe_provider  CC=20  out:23
+  src.tillm.providers_registry  [3 funcs]
+    get_provider_spec  CC=4  out:3
+    iter_provider_specs  CC=1  out:0
+    normalize_provider_id  CC=5  out:2
+  src.tillm.providers_store  [11 funcs]
+    _config_path  CC=2  out:4
+    _load_store  CC=2  out:3
+    _write_store  CC=1  out:5
+    get_default_provider  CC=4  out:6
+    get_stored_provider_order  CC=5  out:10
+    provider_default_model  CC=2  out:5
+    resolve_provider_token  CC=3  out:6
+    save_provider_token  CC=3  out:7
+    set_default_provider  CC=1  out:3
+    set_provider_order  CC=8  out:10
+  src.tillm.providers_types  [1 funcs]
+    is_subscription_order_token  CC=2  out:2
   src.tillm.registry  [8 funcs]
     available_client_ids  CC=4  out:2
     detect_clients  CC=4  out:3
@@ -155,17 +245,42 @@ MODULES:
     normalize_execute_profile  CC=4  out:2
     registered_client_ids  CC=2  out:1
     resolve_client_ids  CC=15  out:17
+  src.tillm.surfaces_gui  [1 funcs]
+    read  CC=10  out:11
+  src.tillm.surfaces_io  [5 funcs]
+    as_dict  CC=2  out:1
+    provider_slug  CC=1  out:2
+    read_json  CC=3  out:3
+    same_url  CC=3  out:4
+    write_private_json  CC=1  out:4
+  src.tillm.surfaces_registry  [2 funcs]
+    iter_surfaces  CC=6  out:0
+    normalize_surface_ids  CC=6  out:10
+  src.tillm.surfaces_sync  [3 funcs]
+    apply_sync  CC=12  out:16
+    plan_sync  CC=13  out:21
+    sync_all  CC=8  out:5
+  src.tillm.surfaces_terminal  [9 funcs]
+    read  CC=6  out:17
+    read_token  CC=4  out:9
+    write  CC=2  out:5
+    read  CC=4  out:17
+    write  CC=3  out:7
+    _entry  CC=4  out:10
+    read  CC=3  out:13
+    read_token  CC=4  out:7
+    write  CC=2  out:14
   src.tillm.transports.binary  [1 funcs]
-    run_binary_drive  CC=10  out:9
+    run_binary_drive  CC=10  out:8
   src.tillm.transports.docker  [5 funcs]
     _compose_file  CC=2  out:6
     _docker_argv  CC=1  out:5
     docker_service_name  CC=4  out:1
     docker_service_status  CC=9  out:10
-    run_docker_drive  CC=10  out:10
+    run_docker_drive  CC=10  out:9
   src.tillm.validation  [6 funcs]
     client_status_rows  CC=1  out:1
-    ecosystem_status  CC=5  out:10
+    ecosystem_status  CC=6  out:12
     validate_client_readiness  CC=7  out:11
     validate_intent  CC=5  out:10
     validate_intent_contracts  CC=4  out:6
@@ -176,49 +291,49 @@ EDGES:
   packages.dsl2tillm.src.dsl2tillm.cli._main_legacy → packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl
   packages.dsl2tillm.src.dsl2tillm.cli.main → packages.dsl2tillm.src.dsl2tillm.cli._main_legacy
   packages.dsl2tillm.src.dsl2tillm.cli.main → packages.dsl2tillm.src.dsl2tillm.cli._main_subcommand
-  packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl → src.tillm.nlp.intent_from_text
-  packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl → packages.nlp2tillm.src.nlp2tillm.to_dsl.to_dsl
-  packages.nlp2tillm.src.nlp2tillm.to_dsl.apply_nl → packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  packages.dsl2tillm.src.dsl2tillm.bus.dispatch → packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes
+  packages.dsl2tillm.src.dsl2tillm.bus.dispatch → packages.dsl2tillm.src.dsl2tillm.handlers.run_query
+  packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line → packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl → packages.dsl2tillm.src.dsl2tillm.bus.execute_dsl_line
   packages.mcp2tillm.src.mcp2tillm.cli.main → packages.mcp2tillm.src.mcp2tillm.server.run_server
-  packages.rest2tillm.src.rest2tillm.app.create_app → packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb
-  packages.rest2tillm.src.rest2tillm.app.create_app → packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas
+  packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb → packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
+  packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs → packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
+  packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas → packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
   packages.dsl2tillm.src.dsl2tillm.codec.validate_payload → packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb
   packages.dsl2tillm.src.dsl2tillm.codec.parse_text → packages.dsl2tillm.src.dsl2tillm.grammar.parse_line
   packages.dsl2tillm.src.dsl2tillm.codec.parse_text → packages.dsl2tillm.src.dsl2tillm.codec.validate_payload
   packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes → packages.dsl2tillm.src.dsl2tillm.codec.validate_payload
   packages.dsl2tillm.src.dsl2tillm.codec.envelope_from_bytes → packages.dsl2tillm.src.dsl2tillm.pb_codec.decode_protobuf
-  packages.dsl2tillm.src.dsl2tillm.schema_registry.schema_for_verb → packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
-  packages.dsl2tillm.src.dsl2tillm.schema_registry.all_verbs → packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
-  packages.dsl2tillm.src.dsl2tillm.schema_registry.validate_schemas → packages.dsl2tillm.src.dsl2tillm.schema_registry._load_schemas
-  packages.rest2tillm.src.rest2tillm.cli.main → packages.rest2tillm.src.rest2tillm.app.create_app
-  packages.uri2tillm.src.uri2tillm.decode.uri_to_dsl → packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri
   packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag → packages.dsl2tillm.src.dsl2tillm.grammar._flag
-  packages.dsl2tillm.src.dsl2tillm.grammar.parse_line → packages.dsl2tillm.src.dsl2tillm.grammar._flag
-  packages.dsl2tillm.src.dsl2tillm.grammar.parse_line → packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail
-  packages.dsl2tillm.src.dsl2tillm.grammar.parse_line → packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag
-  packages.cli2tillm.src.cli2tillm.shell.run_shell → packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_validate → packages.dsl2tillm.src.dsl2tillm.grammar._flag
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive → packages.dsl2tillm.src.dsl2tillm.grammar._flag
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive → packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive → packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix → packages.dsl2tillm.src.dsl2tillm.grammar._flag
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix → packages.dsl2tillm.src.dsl2tillm.grammar._bool_flag
+  packages.dsl2tillm.src.dsl2tillm.grammar._parse_drive_matrix → packages.dsl2tillm.src.dsl2tillm.grammar._quoted_or_tail
   packages.uri2tillm.src.uri2tillm.uri.uri_for_cmd → packages.uri2tillm.src.uri2tillm.uri._encode
   packages.uri2tillm.src.uri2tillm.uri.uri_for_client → packages.uri2tillm.src.uri2tillm.uri._encode
   packages.uri2tillm.src.uri2tillm.uri.parse_tillm_uri → packages.uri2tillm.src.uri2tillm.uri._decode
-  src.tillm.cli._resolve_execute_profile → src.tillm.registry.normalize_execute_profile
-  src.tillm.cli._resolve_drive_targets → src.tillm.registry.resolve_client_ids
-  src.tillm.cli._base_drive_request → src.tillm.cli._resolve_drive_targets
-  src.tillm.cli._base_drive_request → src.tillm.cli._resolve_execute_profile
-  src.tillm.cli._drive → src.tillm.cli._read_prompt
-  src.tillm.cli._drive → src.tillm.cli._print
-  src.tillm.cli._drive → src.tillm.controller.drive_shell_llm
-  src.tillm.cli._drive → src.tillm.controller.drive_shell_llm_many
-  src.tillm.cli._drive → src.tillm.controller.result_from_error
-  src.tillm.cli._nlp → src.tillm.nlp.intent_from_text
-  src.tillm.cli._nlp → src.tillm.validation.validate_intent
-  src.tillm.cli._nlp → src.tillm.controller.drive_shell_llm
-  src.tillm.cli._nlp → src.tillm.cli._print
-  src.tillm.cli.main → src.tillm.cli._normalize_extra_arg_tokens
-  src.tillm.cli.main → src.tillm.cli._print
-  src.tillm.cli.main → src.tillm.cli._drive
-  src.tillm.cli.main → src.tillm.cli._nlp
-  src.tillm.cli.main → src.tillm.cli._build_parser
-  src.tillm.cli.main → src.tillm.registry.detect_clients
-  src.tillm.transports.binary.run_binary_drive → src.tillm.controller._timeout_value
-  src.tillm.compat.is_shell_llm_client → src.tillm.registry.get_client_spec
-  src.tillm.compat.is_client_available → src.tillm.registry.get_client_spec
+  packages.cli2tillm.src.cli2tillm.shell.run_shell → packages.dsl2tillm.src.dsl2tillm.bus.dispatch
+  src.tillm.headless.supports_headless → src.tillm.registry.get_client_spec
+  src.tillm.headless.supports_headless → src.tillm.registry.normalize_client_id
+  src.tillm.headless.headless_client_ids → src.tillm.registry.iter_client_specs
+  src.tillm.headless.headless_client_ids → src.tillm.headless.supports_headless
+  src.tillm.headless.run_headless → src.tillm.registry.normalize_client_id
+  src.tillm.headless.run_headless → src.tillm.registry.get_client_spec
+  src.tillm.headless.run_headless → src.tillm.controller.drive_shell_llm
+  src.tillm.headless.run_headless → src.tillm.headless.supports_headless
+  src.tillm.surfaces_gui.JetBrainsOpenAILikeSurface.read → src.tillm.surfaces_io.same_url
+  src.tillm.surfaces_sync.plan_sync → src.tillm.providers_registry.get_provider_spec
+  src.tillm.surfaces_sync.plan_sync → src.tillm.providers_store.resolve_provider_token
+  src.tillm.surfaces_sync.plan_sync → src.tillm.surfaces_registry.iter_surfaces
+  src.tillm.surfaces_sync.sync_all → src.tillm.providers_registry.iter_provider_specs
+  src.tillm.surfaces_sync.sync_all → src.tillm.surfaces_registry.iter_surfaces
+  src.tillm.surfaces_sync.apply_sync → src.tillm.providers_registry.get_provider_spec
+  src.tillm.surfaces_sync.apply_sync → src.tillm.surfaces_sync.plan_sync
+  src.tillm.surfaces_sync.apply_sync → src.tillm.providers_store.resolve_provider_token
+  src.tillm.surfaces_sync.apply_sync → src.tillm.surfaces_terminal.ClaudeSettingsSurface.write
+  src.tillm.surfaces_sync.apply_sync → src.tillm.surfaces_registry.iter_surfaces
+  src.tillm.i18n._stored_language → src.tillm.i18n._normalize
+  src.tillm.i18n._stored_language → src.tillm.providers_store._load_store

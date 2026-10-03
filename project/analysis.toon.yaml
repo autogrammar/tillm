@@ -1,123 +1,177 @@
-# code2llm | 62f 4173L | python:39,json:10,toml:7,shell:2,yaml:2,txt:1,yml:1 | 2026-06-08
-# generated in 0.01s
-# CC̅=4.4 | critical:10/136 | dups:0 | cycles:0
+# code2llm | 122f 8003L | python:63,shell:28,json:10,txt:7,toml:7,yaml:4,dsl:2,yml:1 | 2026-09-08
+# generated in 0.08s
+# CC̅=4.6 | critical:17/264 | dups:0 | cycles:0
 
-HEALTH[10]:
+HEALTH[17]:
   🟡 CC    _main_subcommand CC=17 (limit:15)
-  🟡 CC    uri_to_dsl CC=24 (limit:15)
-  🟡 CC    main CC=16 (limit:15)
-  🟡 CC    parse_line CC=35 (limit:15)
-  🟡 CC    to_text CC=15 (limit:15)
-  🟡 CC    _print CC=17 (limit:15)
   🟡 CC    dispatch CC=15 (limit:15)
-  🟡 CC    _intent_from_nlp2dsl CC=15 (limit:15)
-  🟡 CC    resolve_client_ids CC=15 (limit:15)
+  🟡 CC    _parse_drive_matrix CC=16 (limit:15)
+  🟡 CC    to_text CC=15 (limit:15)
+  🟡 CC    main CC=16 (limit:15)
   🟡 CC    drive_shell_llm_many CC=26 (limit:15)
+  🟡 CC    _print_summary CC=16 (limit:15)
+  🟡 CC    _print CC=18 (limit:15)
+  🟡 CC    _drive CC=17 (limit:15)
+  🟡 CC    _provider_action CC=49 (limit:15)
+  🟡 CC    provider_env_overlay CC=16 (limit:15)
+  🟡 CC    resolve_provider_drive_attempts CC=18 (limit:15)
+  🟡 CC    _intent_from_nlp2dsl CC=15 (limit:15)
+  🟡 CC    probe_provider CC=20 (limit:15)
+  🟡 CC    diagnose_provider CC=27 (limit:15)
+  🟡 CC    uri_to_dsl CC=24 (limit:15)
+  🟡 CC    resolve_client_ids CC=15 (limit:15)
 
 REFACTOR[1]:
-  1. split 10 high-CC methods  (CC>15)
+  1. split 17 high-CC methods  (CC>15)
 
-PIPELINES[38]:
+PIPELINES[82]:
   [1] Src [main]: main → _main_legacy → dispatch → envelope_from_bytes → ...(3 more)
       PURITY: 100% pure
-  [2] Src [main]: main → run_server → create_server
+  [2] Src [encode_protobuf]: encode_protobuf
       PURITY: 100% pure
-  [3] Src [encode_protobuf]: encode_protobuf
+  [3] Src [main]: main → run_server → create_server
       PURITY: 100% pure
   [4] Src [all_verbs]: all_verbs → _load_schemas
       PURITY: 100% pure
-  [5] Src [main]: main → create_app → schema_for_verb → _load_schemas
+  [5] Src [_parse_validate]: _parse_validate → _flag
       PURITY: 100% pure
-  [6] Src [main]: main → run_shell → dispatch → envelope_from_bytes → ...(3 more)
+  [6] Src [_parse_drive]: _parse_drive → _flag
       PURITY: 100% pure
-  [7] Src [to_text]: to_text
+  [7] Src [_parse_drive_matrix]: _parse_drive_matrix → _flag
       PURITY: 100% pure
-  [8] Src [uri_for_cmd]: uri_for_cmd → _encode
+  [8] Src [to_text]: to_text
       PURITY: 100% pure
-  [9] Src [uri_for_client]: uri_for_client → _encode
+  [9] Src [main]: main → run_uri → uri_to_dsl → parse_tillm_uri → ...(1 more)
       PURITY: 100% pure
-  [10] Src [is_tillm_uri]: is_tillm_uri
+  [10] Src [uri_for_cmd]: uri_for_cmd → _encode
       PURITY: 100% pure
-  [11] Src [main]: main → _normalize_extra_arg_tokens
+  [11] Src [uri_for_client]: uri_for_client → _encode
       PURITY: 100% pure
-  [12] Src [main]: main → run_uri → uri_to_dsl → parse_tillm_uri → ...(1 more)
+  [12] Src [is_tillm_uri]: is_tillm_uri
       PURITY: 100% pure
-  [13] Src [main]: main → apply_nl → to_dsl → intent_from_text → ...(2 more)
+  [13] Src [main]: main → run_shell → dispatch → envelope_from_bytes → ...(3 more)
       PURITY: 100% pure
-  [14] Src [is_client_available]: is_client_available → get_client_spec → normalize_client_id
+  [14] Src [to_dict]: to_dict
       PURITY: 100% pure
-  [15] Src [shell_client_ids]: shell_client_ids → iter_client_specs
+  [15] Src [for_workdir]: for_workdir
       PURITY: 100% pure
-  [16] Src [shell_process_patterns]: shell_process_patterns → iter_client_specs
+  [16] Src [append_command]: append_command
       PURITY: 100% pure
-  [17] Src [tool_registry_entries]: tool_registry_entries → iter_client_specs
+  [17] Src [read_all]: read_all
       PURITY: 100% pure
-  [18] Src [autopilot_backend_for_client]: autopilot_backend_for_client → is_shell_llm_client → get_client_spec → normalize_client_id
+  [18] Src [headless_client_ids]: headless_client_ids → iter_client_specs
       PURITY: 100% pure
-  [19] Src [detect_koru_agent_rows]: detect_koru_agent_rows → detect_clients → normalize_client_id
+  [19] Src [run_headless]: run_headless → normalize_client_id
       PURITY: 100% pure
-  [20] Src [drive_koru_chat]: drive_koru_chat → drive_shell_llm → build_drive_plan → _resolve_spec → ...(2 more)
+  [20] Src [_paths]: _paths
       PURITY: 100% pure
-  [21] Src [launch_koru_agent]: launch_koru_agent → normalize_client_id
+  [21] Src [applicable]: applicable
       PURITY: 100% pure
-  [22] Src [to_dict]: to_dict
+  [22] Src [read]: read → same_url
       PURITY: 100% pure
-  [23] Src [for_workdir]: for_workdir
+  [23] Src [_paths]: _paths
       PURITY: 100% pure
-  [24] Src [append_command]: append_command
+  [24] Src [applicable]: applicable
       PURITY: 100% pure
-  [25] Src [read_all]: read_all
+  [25] Src [_markers]: _markers
       PURITY: 100% pure
-  [26] Src [__post_init__]: __post_init__ → _require_fastmcp
+  [26] Src [read]: read
       PURITY: 100% pure
-  [27] Src [_register_tools]: _register_tools → dispatch → envelope_from_bytes → validate_payload → ...(2 more)
+  [27] Src [_configured_text]: _configured_text
       PURITY: 100% pure
-  [28] Src [run]: run
+  [28] Src [apply_sync]: apply_sync → get_provider_spec → normalize_provider_id
       PURITY: 100% pure
-  [29] Src [to_dict]: to_dict
+  [29] Src [set_language]: set_language → _normalize
       PURITY: 100% pure
-  [30] Src [command_path]: command_path
+  [30] Src [save_language]: save_language → _normalize
       PURITY: 100% pure
-  [31] Src [profile_execute_args]: profile_execute_args
+  [31] Src [yes_answers]: yes_answers → current_language → _normalize
       PURITY: 100% pure
-  [32] Src [missing_env_vars]: missing_env_vars
+  [32] Src [_resolve_command]: _resolve_command → _resolve_command_impl
       PURITY: 100% pure
-  [33] Src [to_dict]: to_dict
+  [33] Src [_path]: _path
       PURITY: 100% pure
-  [34] Src [shell_preview]: shell_preview
+  [34] Src [applicable]: applicable
       PURITY: 100% pure
-  [35] Src [to_dict]: to_dict
+  [35] Src [read]: read → read_json
       PURITY: 100% pure
-  [36] Src [to_dict]: to_dict
+  [36] Src [read_token]: read_token → as_dict
       PURITY: 100% pure
-  [37] Src [to_dict]: to_dict
+  [37] Src [_path]: _path
       PURITY: 100% pure
-  [38] Src [_drive_one_client]: _drive_one_client → drive_shell_llm → build_drive_plan → _resolve_spec → ...(2 more)
+  [38] Src [applicable]: applicable
+      PURITY: 100% pure
+  [39] Src [_load]: _load
+      PURITY: 100% pure
+  [40] Src [read]: read → as_dict
+      PURITY: 100% pure
+  [41] Src [read_token]: read_token
+      PURITY: 100% pure
+  [42] Src [write]: write → provider_slug
+      PURITY: 100% pure
+  [43] Src [_candidates]: _candidates
+      PURITY: 100% pure
+  [44] Src [_path]: _path
+      PURITY: 100% pure
+  [45] Src [applicable]: applicable
+      PURITY: 100% pure
+  [46] Src [_entry]: _entry → as_dict
+      PURITY: 100% pure
+  [47] Src [read]: read → as_dict
+      PURITY: 100% pure
+  [48] Src [read_token]: read_token → as_dict
+      PURITY: 100% pure
+  [49] Src [write]: write → read_json
+      PURITY: 100% pure
+  [50] Src [timeout_value]: timeout_value
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=4.5    ←in:0  →out:0
-  │ !! controller                 412L  10C   18m  CC=26     ←5
-  │ !! cli                        314L  0C   12m  CC=17     ←0
-  │ !! registry                   309L  1C   13m  CC=15     ←7
-  │ compat                     205L  0C   11m  CC=8      ←0
-  │ validation                 182L  1C    8m  CC=12     ←3
+  src/                            CC̄=4.9    ←in:0  →out:0
+  │ !! cli                        484L  0C   13m  CC=49     ←0
+  │ !! providers_probe            332L  0C    7m  CC=27     ←2
+  │ !! registry                   328L  1C   14m  CC=15     ←9
+  │ i18n                       284L  0C    8m  CC=5      ←1
+  │ cli_parser                 227L  0C    2m  CC=5      ←1
+  │ compat                     214L  0C   11m  CC=8      ←1
+  │ !! cli_output                 209L  0C    8m  CC=18     ←1
+  │ surfaces_terminal          206L  3C   18m  CC=6      ←1
+  │ providers_registry         188L  0C    3m  CC=5      ←6
+  │ !! providers_drive            187L  0C    8m  CC=18     ←2
+  │ validation                 187L  1C    8m  CC=12     ←3
+  │ controller_plan            168L  0C   10m  CC=13     ←3
+  │ !! controller_drive           166L  0C    6m  CC=26     ←3
+  │ surfaces_sync              148L  0C    4m  CC=13     ←1
   │ docker                     143L  0C    5m  CC=10     ←2
-  │ !! nlp                        104L  1C    5m  CC=15     ←2
+  │ controller_types           141L  5C    5m  CC=5      ←1
+  │ providers_types            129L  6C    5m  CC=5      ←2
+  │ surfaces_gui               125L  2C   10m  CC=10     ←0
+  │ providers_store            121L  0C   11m  CC=8      ←5
+  │ project_env                116L  0C    8m  CC=6      ←3
+  │ controller                 111L  0C    2m  CC=10     ←5
+  │ !! nlp                        104L  1C    5m  CC=15     ←5
+  │ providers                   97L  0C    1m  CC=1      ←0
+  │ drive_log                   82L  0C    5m  CC=10     ←1
   │ binary                      77L  0C    1m  CC=10     ←1
-  │ __init__                    46L  0C    0m  CC=0.0    ←0
+  │ headless                    72L  0C    3m  CC=6      ←0
+  │ surfaces_registry           53L  0C    2m  CC=6      ←2
+  │ __init__                    50L  0C    0m  CC=0.0    ←0
+  │ surfaces_types              38L  3C    2m  CC=1      ←0
+  │ surfaces                    37L  0C    0m  CC=0.0    ←0
+  │ surfaces_io                 36L  0C    5m  CC=3      ←2
+  │ controller_errors           21L  5C    0m  CC=0.0    ←0
   │ __init__                    10L  0C    0m  CC=0.0    ←0
   │ __main__                     7L  0C    0m  CC=0.0    ←0
   │
-  packages/                       CC̄=4.4    ←in:0  →out:0
+  packages/                       CC̄=4.1    ←in:0  →out:0
+  │ !! grammar                    197L  0C    8m  CC=16     ←1
   │ __init__                   176L  1C   12m  CC=8      ←1
-  │ !! grammar                    151L  0C    5m  CC=35     ←1
+  │ server                     125L  1C   11m  CC=8      ←1
   │ !! cli                        112L  0C    3m  CC=17     ←0
   │ !! bus                         88L  0C    3m  CC=15     ←7
   │ app                         78L  0C    1m  CC=1      ←1
   │ !! cli                         70L  0C    1m  CC=16     ←0
-  │ server                      69L  1C    6m  CC=2      ←1
-  │ events                      67L  2C    5m  CC=4      ←0
+  │ events                      70L  2C    5m  CC=4      ←0
   │ !! decode                      60L  0C    1m  CC=24     ←2
   │ uri                         51L  0C    6m  CC=5      ←1
   │ schema_registry             49L  0C    4m  CC=5      ←3
@@ -125,7 +179,7 @@ LAYERS:
   │ cli                         40L  0C    1m  CC=7      ←0
   │ pyproject.toml              33L  0C    0m  CC=0.0    ←0
   │ shell                       32L  0C    1m  CC=8      ←1
-  │ codec                       31L  0C    3m  CC=2      ←1
+  │ codec                       31L  0C    3m  CC=2      ←2
   │ pyproject.toml              31L  0C    0m  CC=0.0    ←0
   │ pb_codec                    28L  0C    3m  CC=3      ←3
   │ result                      28L  1C    1m  CC=1      ←0
@@ -135,18 +189,24 @@ LAYERS:
   │ pyproject.toml              24L  0C    0m  CC=0.0    ←0
   │ pyproject.toml              24L  0C    0m  CC=0.0    ←0
   │ cli                         23L  0C    1m  CC=3      ←0
-  │ to_dsl                      21L  0C    2m  CC=2      ←3
+  │ to_dsl                      21L  0C    2m  CC=2      ←1
+  │ install-dev.sh              20L  0C    0m  CC=0.0    ←0
   │ drive_matrix.schema.json    20L  0C    0m  CC=0.0    ←0
   │ drive.schema.json           16L  0C    0m  CC=0.0    ←0
-  │ install-dev.sh              14L  0C    0m  CC=0.0    ←0
   │ run                         11L  0C    1m  CC=1      ←1
+  │ local.dev.txt               10L  0C    0m  CC=0.0    ←0
+  │ local.dev.txt               10L  0C    0m  CC=0.0    ←0
   │ resolve.schema.json         10L  0C    0m  CC=0.0    ←0
   │ validate.schema.json        10L  0C    0m  CC=0.0    ←0
+  │ local.dev.txt                9L  0C    0m  CC=0.0    ←0
+  │ local.dev.txt                9L  0C    0m  CC=0.0    ←0
+  │ local.dev.txt                9L  0C    0m  CC=0.0    ←0
   │ docker_status.schema.json     9L  0C    0m  CC=0.0    ←0
   │ health.schema.json           9L  0C    0m  CC=0.0    ←0
   │ clients.schema.json          9L  0C    0m  CC=0.0    ←0
-  │ actions.schema.json          9L  0C    0m  CC=0.0    ←0
   │ orient.schema.json           9L  0C    0m  CC=0.0    ←0
+  │ actions.schema.json          9L  0C    0m  CC=0.0    ←0
+  │ local.dev.txt                9L  0C    0m  CC=0.0    ←0
   │ __init__                     6L  0C    0m  CC=0.0    ←0
   │ engine                       5L  0C    0m  CC=0.0    ←0
   │ __init__                     4L  0C    0m  CC=0.0    ←0
@@ -155,32 +215,67 @@ LAYERS:
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │
-  ./                              CC̄=0.0    ←in:0  →out:0
-  │ !! goal.yaml                  511L  0C    0m  CC=0.0    ←0
-  │ pyproject.toml              77L  0C    0m  CC=0.0    ←0
-  │ project.sh                  62L  0C    1m  CC=0.0    ←0
-  │ tree.txt                    58L  0C    0m  CC=0.0    ←0
-  │ coverage.json                1L  0C    0m  CC=0.0    ←0
+  examples/                       CC̄=0.7    ←in:1  →out:0
+  │ run-all-dry-run.sh          31L  0C    1m  CC=0.0    ←1
+  │ load-env.sh                 30L  0C    0m  CC=0.0    ←0
+  │ execute.sh                  18L  0C    0m  CC=0.0    ←0
+  │ execute.sh                  18L  0C    0m  CC=0.0    ←0
+  │ model-switch.sh             17L  0C    0m  CC=0.0    ←0
+  │ execute.sh                  17L  0C    0m  CC=0.0    ←0
+  │ execute.sh                  16L  0C    0m  CC=0.0    ←0
+  │ dry-run.sh                  15L  0C    0m  CC=0.0    ←0
+  │ dry-run.sh                  15L  0C    0m  CC=0.0    ←0
+  │ dry-run.sh                  15L  0C    0m  CC=0.0    ←0
+  │ dry-run.sh                  15L  0C    0m  CC=0.0    ←0
+  │ refactor.sh                 14L  0C    0m  CC=0.0    ←0
+  │ rest-health.sh              14L  0C    0m  CC=0.0    ←0
+  │ dry-run-available.sh        11L  0C    0m  CC=0.0    ←0
+  │ models.sh                   11L  0C    0m  CC=0.0    ←0
+  │ dry-run-all.sh              10L  0C    0m  CC=0.0    ←0
+  │ demo_module                  9L  0C    2m  CC=1      ←0
+  │ dry-run.sh                   9L  0C    0m  CC=0.0    ←0
+  │ dry-run.sh                   9L  0C    0m  CC=0.0    ←0
+  │ dry-run.sh                   9L  0C    0m  CC=0.0    ←0
+  │ dry-run.sh                   9L  0C    0m  CC=0.0    ←0
+  │ uri-decode.sh                6L  0C    0m  CC=0.0    ←0
+  │ smoke.dsl                    6L  0C    0m  CC=0.0    ←0
+  │ dsl-matrix.sh                5L  0C    0m  CC=0.0    ←0
+  │ cli-exec.sh                  5L  0C    0m  CC=0.0    ←0
+  │ nlp-to-dsl.sh                5L  0C    0m  CC=0.0    ←0
+  │ run-smoke.sh                 5L  0C    0m  CC=0.0    ←0
+  │ drive-aider.dsl              2L  0C    0m  CC=0.0    ←0
   │
-  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
-  │ generated-cli-tests.testql.toon.yaml    20L  0C    0m  CC=0.0    ←0
+  ./                              CC̄=0.0    ←in:0  →out:0
+  │ !! goal.yaml                  527L  0C    0m  CC=0.0    ←0
+  │ koru.yaml                  141L  0C    0m  CC=0.0    ←0
+  │ planfile.yaml              110L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml              81L  0C    0m  CC=0.0    ←0
+  │ project.sh                  62L  0C    1m  CC=0.0    ←0
+  │ local.dev.txt               14L  0C    0m  CC=0.0    ←0
+  │ tree.sh                      1L  0C    0m  CC=0.0    ←0
+  │ coverage.json                1L  0C    0m  CC=0.0    ←0
   │
   deploy/                         CC̄=0.0    ←in:0  →out:0
   │ docker-compose.yml          77L  0C    0m  CC=0.0    ←0
   │
+  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
+  │ generated-cli-tests.testql.toon.yaml    20L  0C    0m  CC=0.0    ←0
+  │
 
 COUPLING:
-                        packages.dsl2tillm            src.tillm   packages.mcp2tillm  packages.rest2tillm   packages.nlp2tillm   packages.cli2tillm   packages.uri2tillm
-   packages.dsl2tillm                   ──                   10                   ←6                   ←6                    1                   ←3                   ←1  hub
-            src.tillm                  ←10                   ──                                                             ←1                                            hub
-   packages.mcp2tillm                    6                                        ──                                         1                                          
-  packages.rest2tillm                    6                                                             ──                                                               
-   packages.nlp2tillm                    1                    1                   ←1                                        ──                                          
-   packages.cli2tillm                    3                                                                                                       ──                     
-   packages.uri2tillm                    1                                                                                                                            ──
+                        packages.dsl2tillm            src.tillm   packages.mcp2tillm  packages.rest2tillm   packages.cli2tillm   packages.nlp2tillm             examples   packages.uri2tillm
+   packages.dsl2tillm                   ──                   11                   ←8                   ←6                   ←3                   ←1                                        ←1  hub
+            src.tillm                  ←11                   ──                   ←1                                                             ←2                    1                       hub
+   packages.mcp2tillm                    8                    1                   ──                                                                                                           !! fan-out
+  packages.rest2tillm                    6                                                             ──                                                                                    
+   packages.cli2tillm                    3                                                                                  ──                                                               
+   packages.nlp2tillm                    1                    2                                                                                  ──                                          
+             examples                                        ←1                                                                                                       ──                     
+   packages.uri2tillm                    1                                                                                                                                                 ──
   CYCLES: none
-  HUB: src.tillm/ (fan-in=11)
-  HUB: packages.dsl2tillm/ (fan-in=17)
+  HUB: src.tillm/ (fan-in=14)
+  HUB: packages.dsl2tillm/ (fan-in=19)
+  SMELL: packages.mcp2tillm/ fan-out=9 → split needed
   SMELL: packages.dsl2tillm/ fan-out=11 → split needed
 
 EXTERNAL:
