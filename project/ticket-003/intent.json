@@ -1,0 +1,85 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-003",
+  "summary": "opencode provider drives and codex routing",
+  "workstream": "application",
+  "classification": {
+    "kind": "FEATURE",
+    "priority": "P2",
+    "origin": "health"
+  },
+  "allowedPaths": [
+    "project/ticket-003/**",
+    "TODO.md",
+    "project/TICKETS.md",
+    "src/tillm/**",
+    "tests/**"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "bd43f33946c9a8c672562ea78f6154a56c8b8c18",
+    "targetBranch": "main",
+    "outcome": "Support opencode provider drives, subllm-first z.ai tokens, and codex subscription routing.",
+    "nonGoals": [
+      "No breaking CLI changes."
+    ],
+    "complexity": "L",
+    "estimatedMinutes": 30,
+    "budgets": {
+      "maxImplementationFiles": 15,
+      "maxAffectedComponents": 5,
+      "maxPublicInterfaceChanges": 0,
+      "maxRuntimeDependencies": 0
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "Implement opencode provider drives, codex subscription routing and test coverage",
+      "components": [
+        {
+          "name": "core",
+          "paths": [
+            "src/tillm/**"
+          ]
+        },
+        {
+          "name": "tests",
+          "paths": [
+            "tests/**"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [],
+      "dataChanges": [],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "git revert"
+    },
+    "runtimeDependencies": [],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "pytest -q tests/test_providers.py tests/test_tillm.py"
+        ],
+        "evidence": "118 passed in test suite."
+      },
+      {
+        "criterion": "AC-02",
+        "commands": [
+          "bash project/governance-check.sh --base origin/main --head HEAD"
+        ],
+        "evidence": "governance gate GOV-PASS."
+      }
+    ]
+  }
+}

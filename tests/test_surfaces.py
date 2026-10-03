@@ -21,7 +21,12 @@ def _sandbox(tmp_path, monkeypatch):
     monkeypatch.setenv("TILLM_CONFIG_DIR", str(tmp_path / ".config" / "tillm"))
     for spec in prov.iter_provider_specs():
         monkeypatch.delenv(spec.token_env, raising=False)
+        for alt_env in spec.alt_token_envs:
+            monkeypatch.delenv(alt_env, raising=False)
     monkeypatch.delenv("TILLM_PROVIDER", raising=False)
+    from tillm import providers_store
+
+    monkeypatch.setattr(providers_store, "_subllm_credential", lambda name: None)
     return tmp_path
 
 
@@ -217,13 +222,13 @@ class TestCliSync:
     def test_cli_sync_matrix_no_provider(self, capsys, _sandbox):
         from tillm.cli import main
 
-        _write_claude_settings(_sandbox, token="sk-from-claude")
+        _write_claude_settings(_sandbox, token="test-from-claude")
         prov.save_provider_token("z.ai", "sk-stored")
         code = main(["provider", "sync"])
         out = capsys.readouterr().out
         assert code == 0
         assert "matrix" in out and "z.ai" in out and "minimax" in out
-        assert "sk-stored" not in out and "sk-from-claude" not in out
+        assert "sk-stored" not in out and "test-from-claude" not in out
     def test_cli_sync_dry_run_text(self, capsys):
         from tillm.cli import main
 

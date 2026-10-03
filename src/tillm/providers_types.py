@@ -12,17 +12,26 @@ CLIENT_PROTOCOLS: dict[str, str] = {
     "aider": "openai",
     "codex": "openai",
     "qwen-code": "openai",
+    "crush": "openai",
+    "opencode": "openai",
 }
 
 # Sentinel passed on ShellDriveRequest.provider to force native client auth.
 SUBSCRIPTION_DRIVE_PROVIDER = "__subscription__"
 
 SUBSCRIPTION_ORDER_TOKENS = frozenset(
-    {"subscription", "claude-subscription", "native", "claude-native"}
+    {
+        "subscription",
+        "claude-subscription",
+        "codex-subscription",
+        "chatgpt",
+        "native",
+        "claude-native",
+    }
 )
 
 # Clients that can use the subscription/native attempt (no provider overlay).
-SUBSCRIPTION_CLIENTS = frozenset({"claude-code"})
+SUBSCRIPTION_CLIENTS = frozenset({"claude-code", "codex"})
 
 PROVIDER_EXHAUSTION_MARKERS = (
     "429",
@@ -37,6 +46,10 @@ PROVIDER_EXHAUSTION_MARKERS = (
     "weekly/monthly limit",
     "usage limit",
     "credit balance",
+    "user not found",
+    "insufficient account funds",
+    "account funds",
+    "insufficient balance",
 )
 
 
@@ -55,6 +68,9 @@ class ProviderSpec:
     default_model: str | None = None
     aliases: tuple[str, ...] = ()
     notes: str = ""
+    # Secondary env vars consulted after ``token_env`` when resolving a token
+    # (e.g. ZAI_CODING_API_KEY as a fallback for ZAI_API_KEY).
+    alt_token_envs: tuple[str, ...] = ()
 
     def protocols(self) -> tuple[str, ...]:
         out = []

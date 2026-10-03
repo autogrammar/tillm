@@ -53,7 +53,7 @@ def _strip_drive_prefix(text: str) -> str:
     for sep in separators:
         if sep in stripped:
             head, tail = stripped.split(sep, 1)
-            client_tokens = ("aider", "claude", "codex", "gemini", "devin")
+            client_tokens = ("aider", "claude", "codex", "gemini", "devin", "crush")
             if any(token in head.lower() for token in client_tokens):
                 return tail.strip()
     return stripped

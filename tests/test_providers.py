@@ -15,7 +15,12 @@ def _isolated_store(tmp_path, monkeypatch):
     monkeypatch.setenv("TILLM_CONFIG_DIR", str(tmp_path / "tillm-config"))
     for spec in prov.iter_provider_specs():
         monkeypatch.delenv(spec.token_env, raising=False)
+        for alt_env in spec.alt_token_envs:
+            monkeypatch.delenv(alt_env, raising=False)
     monkeypatch.delenv("TILLM_PROVIDER", raising=False)
+    from tillm import providers_store
+
+    monkeypatch.setattr(providers_store, "_subllm_credential", lambda name: None)
 
 
 class TestRegistry:
@@ -36,6 +41,7 @@ class TestRegistry:
         spec = prov.get_provider_spec("z.ai")
         assert "claude-code" in spec.compatible_clients()
         assert "aider" in spec.compatible_clients()
+        assert "opencode" in spec.compatible_clients()
 
     def test_openrouter_not_compatible_with_claude_code(self):
         spec = prov.get_provider_spec("openrouter")
@@ -69,7 +75,7 @@ class TestEnvOverlay:
         overlay = prov.provider_env_overlay("claude-code", "z.ai")
         assert overlay["ANTHROPIC_BASE_URL"] == "https://api.z.ai/api/anthropic"
         assert overlay["ANTHROPIC_AUTH_TOKEN"] == "sk-zai"
-        assert overlay["ANTHROPIC_MODEL"] == "glm-4.7"
+        assert overlay["ANTHROPIC_MODEL"] == "glm-5.3"
 
     def test_aider_via_zai_uses_openai_protocol(self):
         prov.save_provider_token("z.ai", "sk-zai")
@@ -94,6 +100,49 @@ class TestEnvOverlay:
     def test_unmapped_client_rejected(self):
         with pytest.raises(ValueError, match="no provider protocol"):
             prov.provider_env_overlay("gemini-cli", "z.ai")
+
+    def test_opencode_via_zai_exports_native_token_env(self):
+        prov.save_provider_token("z.ai", "sk-zai")
+        overlay = prov.provider_env_overlay("opencode", "z.ai")
+        assert overlay["OPENAI_API_KEY"] == "sk-zai"
+        assert overlay["OPENAI_BASE_URL"] == "https://api.z.ai/api/coding/paas/v4"
+        assert overlay["ZAI_API_KEY"] == "sk-zai"
+        assert overlay["ZHIPU_API_KEY"] == "sk-zai"
+        assert overlay["ZAI_CODING_API_KEY"] == "sk-zai"
+
+
+class TestTokenResolutionOrder:
+    def test_subllm_beats_stored_token(self, monkeypatch):
+        from tillm import providers_store
+
+        monkeypatch.setattr(
+            providers_store, "_subllm_credential", lambda name: "subllm-token"
+        )
+        prov.save_provider_token("z.ai", "stored-token")
+        assert prov.resolve_provider_token("z.ai") == "subllm-token"
+
+    def test_env_var_beats_subllm(self, monkeypatch):
+        from tillm import providers_store
+
+        monkeypatch.setattr(
+            providers_store, "_subllm_credential", lambda name: "subllm-token"
+        )
+        monkeypatch.setenv("ZAI_API_KEY", "env-token")
+        assert prov.resolve_provider_token("z.ai") == "env-token"
+
+    def test_zai_coding_env_fallback(self, monkeypatch):
+        monkeypatch.setenv("ZAI_CODING_API_KEY", "coding-token")
+        prov.save_provider_token("z.ai", "stored-token")
+        assert prov.resolve_provider_token("z.ai") == "coding-token"
+
+    def test_zai_coding_env_loses_to_subllm(self, monkeypatch):
+        from tillm import providers_store
+
+        monkeypatch.setattr(
+            providers_store, "_subllm_credential", lambda name: "subllm-token"
+        )
+        monkeypatch.setenv("ZAI_CODING_API_KEY", "coding-token")
+        assert prov.resolve_provider_token("z.ai") == "subllm-token"
 
 
 class TestRequestProviderResolution:
@@ -174,7 +223,7 @@ class TestProbe:
         monkeypatch.setattr(prov, "_http_json", fake_http)
         result = prov.probe_provider("z.ai")
         assert result.ok is True
-        assert result.model == "glm-4.7"
+        assert result.model == "glm-5.3"
         assert calls and "api.z.ai/api/anthropic" in calls[0]
 
     def test_probe_auth_rejection_reported(self, monkeypatch):
@@ -190,7 +239,7 @@ class TestProbe:
         monkeypatch.setattr(prov, "_http_json", lambda *a, **k: next(responses))
         result = prov.probe_provider("z.ai")
         assert result.ok is True
-        assert result.model == "glm-4.6"
+        assert result.model == "glm-4.7"
 
 
 class TestImplicitProviderSafety:
@@ -349,7 +398,35 @@ class TestProviderOrder:
             "z.ai",
             "openrouter/deepseek/deepseek-v4-pro",
         )
-        assert model == "glm-4.7"
+        assert model == "glm-5.3"
+
+    def test_resolve_drive_model_prefixes_provider_for_opencode(self):
+        assert prov.resolve_drive_model("opencode", "z.ai", None) == "zai/glm-5.3"
+        assert prov.resolve_drive_model("opencode", "z.ai", "glm-5.3") == "zai/glm-5.3"
+        assert (
+            prov.resolve_drive_model("opencode", "z.ai", "zai/glm-5.3") == "zai/glm-5.3"
+        )
+        assert (
+            prov.resolve_drive_model("opencode", "openrouter", "z-ai/glm-5.3")
+            == "openrouter/z-ai/glm-5.3"
+        )
+
+    def test_resolve_drive_model_opencode_swaps_foreign_provider_prefix(self):
+        # A zai/-qualified request must not leak into an openrouter attempt;
+        # it falls back to the provider's default wire model instead.
+        prov.save_provider_token("openrouter", "tok", model="z-ai/glm-5.3")
+        assert (
+            prov.resolve_drive_model("opencode", "openrouter", "zai/glm-5.2")
+            == "openrouter/z-ai/glm-5.3"
+        )
+        assert (
+            prov.resolve_drive_model("opencode", "openrouter", "glm-5.3")
+            == "openrouter/glm-5.3"
+        )
+        assert (
+            prov.resolve_drive_model("opencode", "z.ai", "openrouter/z-ai/glm-5.3")
+            == "zai/glm-5.3"
+        )
 
 
 class TestProviderOrder:

@@ -198,8 +198,26 @@ _SPECS: tuple[ShellClientSpec, ...] = (
         commands=("opencode",),
         prompt_mode="stdin",
         aliases=("open-code",),
+        model_flag="-m",
         execute_args=("run", "--dangerously-skip-permissions"),
-        notes="Non-interactive via opencode run; prompt is read from stdin when omitted.",
+        notes=(
+            "Non-interactive via opencode run; prompt is read from stdin when "
+            "omitted. Models use opencode's provider/model form (e.g. "
+            "zai/glm-5.3)."
+        ),
+    ),
+    ShellClientSpec(
+        id="crush",
+        label="Crush",
+        commands=("crush",),
+        prompt_mode="arg",
+        argv_prefix=("run", "--quiet"),
+        env_vars_any=("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY"),
+        notes=(
+            "Headless via crush run with the prompt as a trailing arg. Do not add a "
+            "--reasoning-effort flag: crush (v0.94.2) validates it against its built-in "
+            "model catalog and rejects custom/non-catalog models regardless of provider config."
+        ),
     ),
     ShellClientSpec(
         id="devin",

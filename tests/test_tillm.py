@@ -54,6 +54,7 @@ EXPECTED_CLIENT_IDS = (
     "cline",
     "qwen-code",
     "opencode",
+    "crush",
     "devin",
 )
 
@@ -72,6 +73,7 @@ EXPECTED_EXECUTE_ARGS: dict[str, tuple[str, ...]] = {
     "cline": (),
     "qwen-code": ("-p", "--approval-mode", "yolo"),
     "opencode": ("run", "--dangerously-skip-permissions"),
+    "crush": (),
     "devin": ("-p",),
 }
 
@@ -896,6 +898,61 @@ def test_drive_provider_fallback_on_exhaustion(
         )
     )
     assert calls == ["z.ai", "openrouter"]
+    assert result.ok is True
+    assert result.provider == "openrouter"
+    assert result.provider_attempts == ("z.ai", "openrouter")
+
+
+def test_drive_provider_preflight_skips_exhausted(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """An exhausted provider is skipped before the client process starts —
+    clients like opencode retry 429s internally and would otherwise hang."""
+    from tillm.controller import ShellDriveRequest, ShellDriveResult, drive_shell_llm
+    from tillm.providers_types import ProbeResult
+
+    monkeypatch.setenv("TILLM_PROVIDER_ORDER", "z.ai,openrouter")
+    monkeypatch.setenv("ZAI_API_KEY", "sk-zai")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or")
+
+    probes: list[str] = []
+    calls: list[str | None] = []
+
+    def fake_probe(provider_id: str, **kwargs: object) -> ProbeResult:
+        probes.append(provider_id)
+        if provider_id == "z.ai":
+            return ProbeResult(
+                provider_id="z.ai",
+                ok=False,
+                detail='HTTP 429: {"error":{"message":"Usage limit reached for 5 hour"}}',
+            )
+        return ProbeResult(provider_id=provider_id, ok=True, detail="HTTP 200")
+
+    def fake_once(request: ShellDriveRequest) -> ShellDriveResult:
+        calls.append(request.provider)
+        return ShellDriveResult(
+            ok=True,
+            client_id=request.client_id,
+            command=("opencode",),
+            prompt_path=tmp_path / "p.md",
+            executed=True,
+            dry_run=False,
+            message="completed",
+        )
+
+    monkeypatch.setattr("tillm.providers.probe_provider_completion", fake_probe)
+    monkeypatch.setattr("tillm.controller._drive_shell_llm_once", fake_once)
+    result = drive_shell_llm(
+        ShellDriveRequest(
+            client_id="opencode",
+            prompt="ok",
+            project=tmp_path,
+            execute=True,
+        )
+    )
+    assert probes == ["z.ai", "openrouter"]
+    assert calls == ["openrouter"]
     assert result.ok is True
     assert result.provider == "openrouter"
     assert result.provider_attempts == ("z.ai", "openrouter")
