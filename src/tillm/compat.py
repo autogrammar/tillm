@@ -133,6 +133,7 @@ def drive_koru_chat(
     model: str | None = None,
     execute_profile: str = "default",
     timeout_seconds: float | None = None,
+    provider: str | None = None,
 ) -> dict[str, object]:
     request = ShellDriveRequest(
         client_id=client_id,
@@ -142,6 +143,7 @@ def drive_koru_chat(
         dry_run=not execute,
         model=model,
         execute_profile=execute_profile,
+        provider=provider,
     )
     if timeout_seconds is not None:
         # Keep the dataclass default (900s) unless the caller asks otherwise —

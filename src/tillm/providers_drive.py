@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 
 from tillm.providers_registry import get_provider_spec, normalize_provider_id
 from tillm.providers_store import (
@@ -40,7 +41,7 @@ def provider_env_overlay(client_id: str, provider_id: str) -> dict[str, str]:
             f"required by client {client_id!r} "
             f"(compatible clients: {', '.join(spec.compatible_clients()) or 'none'})"
         )
-    token = resolve_provider_token(spec.id)
+    token = (resolve_provider_token(spec.id))
     if not token and spec.kind == "api":
         raise ValueError(
             f"no token for provider {spec.id!r}: export {spec.token_env} "
@@ -65,6 +66,14 @@ def provider_env_overlay(client_id: str, provider_id: str) -> dict[str, str]:
         if spec.openai_base_url:
             overlay["OPENAI_API_BASE"] = spec.openai_base_url
             overlay["OPENAI_BASE_URL"] = spec.openai_base_url
+        if client_id == "opencode":
+            # opencode resolves provider credentials from its own config and
+            # models.dev env names (e.g. ZAI_API_KEY / ZHIPU_API_KEY in
+            # opencode.json), so it needs the provider's native token
+            # variables, not only the OpenAI shims.
+            for name in (spec.token_env, *spec.alt_token_envs):
+                if name not in overlay:
+                    overlay[name] = token or ""
     return overlay
 
 
@@ -91,7 +100,7 @@ def provider_compatible_with_client(client_id: str, provider_id: str) -> bool:
         return False
     if protocol not in spec.protocols():
         if (
-            provider_id == "openrouter"
+            provider_id in {"openrouter", "google"}
             and (client_id or "").strip().lower() == "claude-code"
         ):
             from tillm.compat import is_client_available
@@ -104,9 +113,9 @@ def provider_compatible_with_client(client_id: str, provider_id: str) -> bool:
 
 
 def resolve_drive_client_id(client_id: str, provider_id: str | None) -> str:
-    """Client to spawn for a provider attempt (openrouter may switch claude-code → aider)."""
+    """Client to spawn for a provider attempt (openrouter/google may switch claude-code → aider)."""
     if (
-        provider_id == "openrouter"
+        provider_id in {"openrouter", "google"}
         and (client_id or "").strip().lower() == "claude-code"
     ):
         from tillm.compat import is_client_available
@@ -114,6 +123,29 @@ def resolve_drive_client_id(client_id: str, provider_id: str | None) -> str:
         if is_client_available("aider"):
             return "aider"
     return client_id
+
+
+def _opencode_drive_model(provider_id: str, model: str) -> str | None:
+    """opencode ``-m`` takes ``provider/model``; prefix bare names with the slug."""
+    bare = model
+    prefix = re.sub(r"[^a-z0-9]+", "", provider_id.lower())
+    if provider_id == "openrouter":
+        if bare and "/" in bare and not bare.startswith("openrouter/"):
+            bare = ""  # qualified for another provider; use the default wire id
+        bare = bare or (provider_default_model(provider_id) or "")
+        if not bare:
+            return None
+        return bare if bare.startswith("openrouter/") else f"openrouter/{bare}"
+    if bare.startswith("openrouter/"):
+        bare = ""
+    if bare and "/" in bare and not bare.startswith(f"{prefix}/"):
+        bare = ""  # qualified for a different provider; use the default
+    bare = bare or (provider_default_model(provider_id) or "")
+    if not bare:
+        return None
+    if "/" in bare:
+        return bare
+    return f"{prefix}/{bare}"
 
 
 def resolve_drive_model(
@@ -124,14 +156,31 @@ def resolve_drive_model(
     """Pick a model for a provider attempt (avoid openrouter/ prefixes on z.ai)."""
     model = (requested or "").strip()
     if provider_id in {None, SUBSCRIPTION_DRIVE_PROVIDER}:
+        if (client_id or "").strip().lower() == "codex":
+            if model and not (model.startswith("gpt-") or model.startswith("o") or model.startswith("openai/")):
+                return None
         return model or None
+    if (client_id or "").strip().lower() == "opencode":
+        return _opencode_drive_model(provider_id, model)
+    try:
+        spec = get_provider_spec(provider_id)
+        if model and model not in spec.models:
+            foreign_prefixes = ("glm-", "deepseek-", "claude-", "gpt-", "gemini-", "kimi-", "grok-")
+            if any(model.startswith(p) for p in foreign_prefixes):
+                if not any(model.startswith(p) for p in (spec.id, *spec.aliases)):
+                    model = ""
+    except Exception:
+        pass
     if not model:
-        return provider_default_model(provider_id)
+        model = provider_default_model(provider_id) or ""
     if provider_id == "openrouter":
         return model if model.startswith("openrouter/") else f"openrouter/{model}"
     if model.startswith("openrouter/"):
         return provider_default_model(provider_id)
-    return model
+    if (client_id or "").strip().lower() == "aider":
+        if provider_id == "google" and model and not model.startswith("openai/"):
+            return f"openai/{model}"
+    return model or None
 
 
 def resolve_provider_drive_attempts(
@@ -141,10 +190,10 @@ def resolve_provider_drive_attempts(
 ) -> tuple[str | None, ...]:
     """Ordered provider attempts for a drive (subscription → z.ai → openrouter, …)."""
     if (explicit_provider or "").strip():
-        token = explicit_provider.strip()
-        if is_subscription_order_token(token):
+        item = explicit_provider.strip()
+        if is_subscription_order_token(item):
             return (SUBSCRIPTION_DRIVE_PROVIDER,)
-        return (normalize_provider_id(token),)
+        return (normalize_provider_id(item),)
 
     order_raw = os.environ.get("TILLM_PROVIDER_ORDER", "").strip()
     order_tokens = (
@@ -155,17 +204,17 @@ def resolve_provider_drive_attempts(
     if order_tokens:
         attempts: list[str | None] = []
         for raw in order_tokens:
-            token = raw.strip()
-            if not token:
+            item = raw.strip()
+            if not item:
                 continue
-            if is_subscription_order_token(token):
+            if is_subscription_order_token(item):
                 candidate = SUBSCRIPTION_DRIVE_PROVIDER
             else:
                 try:
-                    get_provider_spec(token)
+                    get_provider_spec(item)
                 except UnknownProviderError:
                     continue
-                candidate = normalize_provider_id(token)
+                candidate = normalize_provider_id(item)
             if not provider_compatible_with_client(client_id, candidate):
                 continue
             if candidate not in attempts:

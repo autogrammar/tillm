@@ -143,6 +143,7 @@ class OpencodeConfigSurface:
     def _candidates(self) -> tuple[Path, ...]:
         return (
             Path.home() / ".config" / "opencode" / "opencode.json",
+            Path.home() / ".config" / "opencode" / "opencode.jsonc",
             Path.home() / ".config" / "opencode" / "config.json",
             Path.home() / ".opencode" / "opencode.json",
         )
