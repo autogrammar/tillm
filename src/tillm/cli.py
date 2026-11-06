@@ -179,13 +179,13 @@ def _providers_list(args: argparse.Namespace) -> int:
 
     rows = []
     for spec in iter_provider_specs():
-        token = resolve_provider_token(spec.id)
+        tok = resolve_provider_token(spec.id)
         rows.append(
             {
                 "id": spec.id,
                 "label": spec.label,
                 "kind": spec.kind,
-                "token": "set" if token else "missing",
+                "token": "set" if tok else "missing",
                 "token_env": spec.token_env,
                 "clients": list(spec.compatible_clients()),
                 "notes": spec.notes,
@@ -309,23 +309,23 @@ def _provider_action(args: argparse.Namespace) -> int:
         return 2
 
     if args.provider_action == "set":
-        token = (args.token or "").strip()
-        if not token:
+        tok = (args.token or "").strip()
+        if not tok:
             import getpass
 
             from tillm.i18n import _
 
             if spec.token_url:
                 print(_("token.get_here", url=spec.token_url))
-            token = getpass.getpass(f"{spec.label} token ({spec.token_env}): ").strip()
-        if not token:
+            tok = getpass.getpass(f"{spec.label} token ({spec.token_env}): ").strip()
+        if not tok:
             from tillm.i18n import _
 
             print(f"tillm: {_('token.empty')}", file=sys.stderr)
             return 2
         from tillm.i18n import _
 
-        path = save_provider_token(spec.id, token, model=args.model)
+        path = save_provider_token(spec.id, tok, model=args.model)
         print(_("token.stored_in", id=spec.id, path=path))
         result = probe_provider(spec.id)
         print(("✓" if result.ok else "✗") + " " + _("probe.result", detail=result.detail))
@@ -460,6 +460,11 @@ def _nlp(args: argparse.Namespace) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    try:
+        from .autoupdate import check_for_updates
+        check_for_updates("tillm")
+    except Exception:
+        pass
     parse_argv = sys.argv[1:] if argv is None else argv
     args = _build_parser().parse_args(_normalize_extra_arg_tokens(list(parse_argv)))
     bootstrap_project_env(getattr(args, "project", None))
