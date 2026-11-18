@@ -78,7 +78,8 @@
           "project/new-ticket.sh",
           "project/governance-check.*",
           "project/TICKETS.md",
-          "project/ticket-*/**"
+          "project/ticket-*/**",
+          "githooks/pre-commit"
         ]
       },
       "infrastructure": {
@@ -212,6 +213,22 @@
     "componentRoots": [],
     "mode": "standalone"
   },
+  "repositoryPolicy": {
+    "delivery": {
+      "checkout": "linked-worktree",
+      "mode": "ticket-branch",
+      "targetBranches": [
+        "main"
+      ]
+    },
+    "enforcement": "enforce",
+    "profile": "ticket-worktree",
+    "tickets": {
+      "backend": "files",
+      "idPattern": "^ticket-[0-9]{3,}$",
+      "referenceRequired": true
+    }
+  },
   "requiredFiles": [
     "README.md",
     "VERSION",
@@ -226,7 +243,7 @@
   "stacks": [],
   "standard": {
     "id": "wellmanifest/new-project",
-    "version": "0.20.35"
+    "version": "0.20.162"
   },
   "ticket": {
     "activeStatuses": [
