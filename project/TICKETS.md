@@ -9,4 +9,5 @@
 | **ticket-004** | [`README.md`](./ticket-004/README.md) | - | - | - | - | - |
 | **ticket-610** | [`README.md`](./ticket-610/README.md) | - | - | - | - | - |
 | **ticket-611** | [`README.md`](./ticket-611/README.md) | - | - | - | - | - |
+| **ticket-612** | [`README.md`](./ticket-612/README.md) | - | - | - | - | - |
 <!-- AUTO:TICKET_INDEX:END -->
