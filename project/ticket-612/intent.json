@@ -1,0 +1,97 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-612",
+  "summary": "Adopt Wellmanifest standard 0.20.165 (projan deps)",
+  "workstream": "governance",
+  "classification": {
+    "kind": "SERVICE",
+    "priority": "P2",
+    "origin": "health"
+  },
+  "allowedPaths": [
+    "project/ticket-612/**",
+    "TODO.md",
+    "project/TICKETS.md",
+    ".governance/governance_check.py",
+    ".governance/manifest.base.json",
+    ".governance/manifest.json",
+    ".governance/manifest.lock.json",
+    ".governance/ticket_activity.py",
+    ".governance/worktree_overlap_check.py",
+    "pyproject.toml"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "cddc92d527c75b48f73248b275f53a68616eda83",
+    "targetBranch": "main",
+    "outcome": "Adopt the published Wellmanifest standard 0.20.165 with goal governance adopt.",
+    "nonGoals": [
+      "No source code, interface or behaviour changes",
+      "No dependency additions or removals"
+    ],
+    "complexity": "L",
+    "estimatedMinutes": 120,
+    "budgets": {
+      "maxAffectedComponents": 1,
+      "maxImplementationFiles": 15,
+      "maxPublicInterfaceChanges": 0,
+      "maxRuntimeDependencies": 0
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "Version declarations are rewritten in place by projan deps with their operators, markers and precision preserved; lockfiles are re-resolved by their own managers.",
+      "components": [
+        {
+          "name": "immutable-standard-adoption",
+          "paths": [
+            ".governance/governance_check.py",
+            ".governance/manifest.base.json",
+            ".governance/manifest.json",
+            ".governance/manifest.lock.json",
+            ".governance/ticket_activity.py",
+            ".governance/worktree_overlap_check.py",
+            "pyproject.toml"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [],
+      "dataChanges": [
+        {
+          "component": "immutable-standard-adoption",
+          "kind": "component-local-state",
+          "description": "Immutable standard package and adoption lock"
+        }
+      ],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "Revert this pull request through protected review."
+    },
+    "runtimeDependencies": [],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "goal governance adopt --source-revision d757476c2df0e8d100ad257b2242dd9bb80c12d1 --target-root . --upgrade",
+          "goal governance adopt --source-revision d757476c2df0e8d100ad257b2242dd9bb80c12d1 --target-root . --check",
+          "./project/governance-check.sh"
+        ],
+        "evidence": "Lockfiles re-resolved and resolution verified by projan deps apply"
+      }
+    ],
+    "standardAdoption": {
+      "sourceRepository": "wellmanifest/new-project",
+      "fromRevision": "8e6b51dc91a2ac7e1e771908e0fac5e12da0b9a0",
+      "toRevision": "d757476c2df0e8d100ad257b2242dd9bb80c12d1"
+    }
+  }
+}

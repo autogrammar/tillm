@@ -864,17 +864,26 @@ def discover_checkouts(
 
     pending = sorted(candidate_paths, key=str)
     inspected: set[Path] = set()
+    # Every linked checkout in one Git repository reports the same registry.
+    # Keep the registry lookup keyed by the canonical common Git directory.
+    # Paths returned by a registry are deliberately re-resolved on their own
+    # visit. A stale registry entry can now point at an independent clone, and
+    # trusting the old directory would hide that clone's own registered paths.
+    registry_by_common: dict[Path, list[Path]] = {}
     while pending:
         candidate = pending.pop(0)
         if candidate in inspected:
             continue
         inspected.add(candidate)
         try:
-            discovered = {
-                worktree
-                for worktree in registered_worktrees(candidate)
-                if worktree not in candidate_paths
-            }
+            common = Path(
+                run_git(candidate, "rev-parse", "--path-format=absolute", "--git-common-dir")
+            ).resolve()
+            registered = registry_by_common.get(common)
+            if registered is None:
+                registered = registered_worktrees(candidate)
+                registry_by_common[common] = registered
+            discovered = {worktree for worktree in registered if worktree not in candidate_paths}
         except AuditError as error:
             raise AuditError(f"Cannot inspect registered worktrees for {candidate}: {error}") from error
         candidate_paths.update(discovered)

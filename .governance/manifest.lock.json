@@ -56,13 +56,13 @@
     ".governance/error/GOV-WORKTREE-OVERLAP.md": "65a2533f13e63d6ebeeb63c07adc0794ea9e04075a91e873eff2d79910239b0e",
     ".governance/error/README.md": "e8486dd29f52ca3fee96ed6881a62c38141864cde5aa1adea2b16d22b2feefaa",
     ".governance/generate_required_checks.py": "d6c188a1628b1e8b9b884b824d566f0a5fa9d02d0e480339e4d46e2cdcc6dc51",
-    ".governance/governance_check.py": "a7bfd191ecfb4f4cd160046530c324a1d0b25bd7521bba164e50ac3a56007510",
+    ".governance/governance_check.py": "8cbdb88c44a8dd1cee1d54cbd90f43c05fa857bdc8db7936780921e9082dd267",
     ".governance/idle_takeover.py": "34314bab61967ae4372385c0437222f7930385d2eace0d4312571c985d407315",
     ".governance/intent.schema.json": "b0a75ee7b580425fd453a0bb93bfbd442930dadec625aef48bebae18e8e963a9",
     ".governance/legacy_terminal_retirement.py": "835473ce9025ae64448f98eeddb7a4ae481fb12cd6ef82f86b4773812c951ce1",
     ".governance/lock.schema.json": "ad80c98f800a4a3310870336dcdaf0aa689cc4988f71084d25d76bea2df1242f",
     ".governance/managed-copies.json": "e2037c92653ae0c7c886c48cd9ffa22034240cd25391732504ee6c8467db19da",
-    ".governance/manifest.base.json": "c7b80e5799107096825e0416cc13fef3aeddaae89f4fd052e5f0916d250e4cd9",
+    ".governance/manifest.base.json": "feb62355eea49c4fc1ca6300738940719b2aa8a7c1ff2defd387fc0e512b0b95",
     ".governance/manifest.schema.json": "2194aa771caa7d84d2f4b5b8bdd5b7c06182ffcd0cb910a86a8228326967a9da",
     ".governance/owner_handoff.py": "3eb6d07b96106e8c6042a815a6133bf24aba510dc7b84cb476f6a453241e31d3",
     ".governance/package-manifest.json": "84ed5427ed167c5f9040ecfb09241a72fdfad66652637af81ea3f64b69600b01",
@@ -96,7 +96,7 @@
     ".governance/ticket-allocation-receipt.schema.json": "c1cf2107a127aa1051e8ea73faa463247fa1e571cb2722d2dbc7c60f6369383c",
     ".governance/ticket-allocation-request.schema.json": "4d38efa172b12411d88c824ba13210a19ecd75b84aa239961c520c3ce5aee2aa",
     ".governance/ticket-allocation.schema.json": "a0e92bb340ea6f6ffc1a292af1c13ab18b734c726cad8a3a28b3bf201630c6ca",
-    ".governance/ticket_activity.py": "114e7e299b0f0ff5f27f75c506fdd8abf3f4f1a03d4c9085f146db64d550c8cd",
+    ".governance/ticket_activity.py": "5ea289841abff469ac5f7ee74cf768862ec9099263d74471ce7e37cdad165d63",
     ".governance/ticket_allocation.py": "06a9e1f2b986a2dddb1be44b769a8b1029f1d0c5f06fedc44a229646370ac0bf",
     ".governance/ticket_index_merge_driver.py": "478a6aa42fa9ef8733756c7adbb2a569dd109c9b79a0c2aa033ba67b083beeac",
     ".governance/ticket_input.py": "cb515f4af5585514c4ece6cf1de495eb74be832c3381914ea0f3faef8470d2c7",
@@ -111,7 +111,7 @@
     ".governance/work_start_check.py": "22c3422dc8e715e71b47e433403ba2f7c4b5e573e61afc5a8100465ab86a364c",
     ".governance/workspace_lifecycle_check.py": "f264154a69c2c00a9218e6dbff87dcf2a3179768d94b4086374f001da6aa411f",
     ".governance/worktree_guard.py": "16408421c577a8c2eedd24800b69c116b3af11a4046d9533a470d67e4e4d0f4a",
-    ".governance/worktree_overlap_check.py": "14fb26def02790454a90fbd776df3a2b5c0551a55e8f2b32a174515f15670169",
+    ".governance/worktree_overlap_check.py": "3b395aae5a6e245282280f352d47e60ef1fe53d63bdcdcbbc1a4099b0b34f4bd",
     ".governance/worktree_path_check.py": "106f91e6398564b96d5487dbd981ebb2078d7d366b327400b7d08467fa04c1fd",
     ".governance/worktrees.lock.json": "da34dceef6573250b03ac471867f95d6cf4a96f2cb729df61efed51283c52f2c",
     ".governance/worktrees.schema.json": "6b57184758bdceda5cd5ea98889427af1a762dd0afe801ac8e1279d26ccb2cb8",
@@ -134,7 +134,7 @@
     "id": "wellmanifest/new-project",
     "publicationStatus": "published",
     "sourceRepository": "wellmanifest/new-project",
-    "sourceRevision": "8e6b51dc91a2ac7e1e771908e0fac5e12da0b9a0",
-    "version": "0.20.162"
+    "sourceRevision": "d757476c2df0e8d100ad257b2242dd9bb80c12d1",
+    "version": "0.20.165"
   }
 }
