@@ -13,6 +13,11 @@
     "signedAttestationPredicateType": "https://wellmanifest.com/attestations/validator/v1"
   },
   "coordination": {
+    "idleTakeover": {
+      "enabled": true,
+      "idleMinutes": 15,
+      "leaseMinutes": 120
+    },
     "integration": {
       "requiredForPaths": [
         "package-lock.json",
