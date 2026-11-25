@@ -1,0 +1,73 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-613",
+  "summary": "Update application dependencies to latest minor versions (projan deps)",
+  "workstream": "application",
+  "classification": {
+    "kind": "SERVICE",
+    "priority": "P2",
+    "origin": "health"
+  },
+  "allowedPaths": [
+    "project/ticket-613/**",
+    "TODO.md",
+    "project/TICKETS.md",
+    "packages/dsl2tillm/pyproject.toml"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "cddc92d527c75b48f73248b275f53a68616eda83",
+    "targetBranch": "main",
+    "outcome": "Projan deps rollout: 3 version declaration(s) updated to the newest published minor-level versions; lockfiles re-resolved.",
+    "nonGoals": [
+      "No source code, interface or behaviour changes",
+      "No dependency additions or removals"
+    ],
+    "complexity": "XS",
+    "estimatedMinutes": 10,
+    "budgets": {
+      "maxAffectedComponents": 1,
+      "maxImplementationFiles": 2,
+      "maxPublicInterfaceChanges": 0,
+      "maxRuntimeDependencies": 0
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "Version declarations are rewritten in place by projan deps with their operators, markers and precision preserved; lockfiles are re-resolved by their own managers.",
+      "components": [
+        {
+          "name": "dependency-manifests",
+          "paths": [
+            "packages/dsl2tillm/pyproject.toml"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [],
+      "dataChanges": [],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "Revert this pull request through protected review."
+    },
+    "runtimeDependencies": [],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "uv pip compile pyproject.toml --quiet --all-extras -o /dev/null",
+          "./project/governance-check.sh"
+        ],
+        "evidence": "Lockfiles re-resolved and resolution verified by projan deps apply"
+      }
+    ]
+  }
+}
