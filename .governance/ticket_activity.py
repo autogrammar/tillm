@@ -65,6 +65,8 @@ class ActivityReadBatch:
         self.files = {}
         self.ancestors = {}
         self.derived = {}
+        self.graphs = {}
+        self.ancestor_probes = {}
         self.branch_heads = None
         self.consulted_ticket_numbers = set()
         self.worktree_registration = ""
@@ -77,6 +79,8 @@ class ActivityReadBatch:
         self.files.clear()
         self.ancestors.clear()
         self.derived.clear()
+        self.graphs.clear()
+        self.ancestor_probes.clear()
         self.branch_heads = None
         self.consulted_ticket_numbers.clear()
         self.context_reset = _READ_BATCH.set(self)
@@ -140,9 +144,8 @@ class ActivityReadBatch:
                     for number in self.consulted_ticket_numbers:
                         if latest_heads.get(number, ()) != self.branch_heads.get(number, ()):
                             raise ActivityError("Git state changed during activity inspection; retry")
-                for (older, newer), expected in self.ancestors.items():
-                    if _run_ancestor(self.root, older, newer) != expected:
-                        raise ActivityError("Git state changed during activity inspection; retry")
+                if _revalidated_ancestors(self.root, self.ancestors, tuple(self.graphs)) != self.ancestors:
+                    raise ActivityError("Git state changed during activity inspection; retry")
                 for (path, operation), expected in self.files.items():
                     if _file_observation(path, operation) != expected:
                         raise ActivityError("activity document changed during inspection; retry")
@@ -153,6 +156,8 @@ class ActivityReadBatch:
             self.files.clear()
             self.ancestors.clear()
             self.derived.clear()
+            self.graphs.clear()
+            self.ancestor_probes.clear()
             self.branch_heads = None
             self.consulted_ticket_numbers.clear()
 
@@ -398,6 +403,104 @@ def _validate_registry(value: Any, expected_repository: str) -> list[dict[str, s
     return receipts
 
 
+def _registry_receipts_by_ticket(root: Path, path: Path) -> dict[str, list[dict[str, str]]]:
+    """Validated receipts grouped by ticket, in registry order.
+
+    A batch reads the registry text once, so every ticket of one inspection
+    shares one parse and one full validation of that exact text. Any invalid
+    receipt still rejects every resolution, as an uncached read would.
+    """
+    try:
+        text = _read_text(path)
+    except OSError as error:
+        raise ActivityError(f"invalid activity document {path}: {error}") from error
+    expected = repository_ref(root)
+    batch = _READ_BATCH.get()
+    key = ("registry_receipts", path.absolute(), expected, text)
+    if batch is not None and key in batch.derived:
+        return batch.derived[key]
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise ActivityError(f"invalid activity document {path}: {error}") from error
+    grouped: dict[str, list[dict[str, str]]] = {}
+    for receipt in _validate_registry(value, expected):
+        grouped.setdefault(receipt["ticket"], []).append(receipt)
+    if batch is not None:
+        batch.derived[key] = grouped
+    return grouped
+
+
+def _run_graph(root: Path, newer: str) -> tuple[dict[str, tuple[str, ...]], dict[str, int]] | None:
+    """The commit graph reachable from `newer` in topological order, or None if unreadable.
+
+    Children precede parents, so every ancestor of a commit has a larger index.
+    """
+    result = subprocess.run(
+        ["git", "-C", str(root), "rev-list", "--topo-order", "--parents", newer, "--"],
+        capture_output=True, check=False, timeout=60,
+        env={key: value for key, value in os.environ.items() if not key.startswith("GIT_")},
+    )
+    if result.returncode:
+        return None
+    parents: dict[str, tuple[str, ...]] = {}
+    order: dict[str, int] = {}
+    for index, line in enumerate(result.stdout.decode("ascii", errors="replace").splitlines()):
+        commit, *rest = line.split()
+        parents[commit] = tuple(rest)
+        order[commit] = index
+    return parents, order
+
+
+def _graph_ancestor(graph, older: str, newer: str) -> bool | None:
+    """Answer `merge-base --is-ancestor older newer` from a graph containing `newer`.
+
+    None means the graph cannot answer because `newer` is outside it. Every
+    ancestor of `newer` is in the graph, so an absent `older` is not one.
+    """
+    if graph is None:
+        return None
+    parents, order = graph
+    if newer not in order:
+        return None
+    limit = order.get(older)
+    if limit is None or order[newer] > limit:
+        return False
+    stack, seen = [newer], {newer}
+    while stack:
+        commit = stack.pop()
+        if commit == older:
+            return True
+        for parent in parents[commit]:
+            # A commit after `older` in topological order cannot reach it.
+            if parent not in seen and order.get(parent, limit + 1) <= limit:
+                seen.add(parent)
+                stack.append(parent)
+    return False
+
+
+def _answer_from_graphs(graphs, older: str, newer: str) -> bool | None:
+    if not (SHA_RE.fullmatch(older) and SHA_RE.fullmatch(newer)):
+        return None
+    if newer in graphs and graphs[newer] is None:
+        return False  # `newer` is unreadable, so merge-base fails as well.
+    for graph in graphs.values():
+        answer = _graph_ancestor(graph, older, newer)
+        if answer is not None:
+            return answer
+    return None
+
+
+def _revalidated_ancestors(root: Path, observed: dict[tuple[str, str], bool], graph_roots) -> dict[tuple[str, str], bool]:
+    """Re-answer every observed relation from freshly read Git state."""
+    graphs = {newer: _run_graph(root, newer) for newer in graph_roots}
+    current: dict[tuple[str, str], bool] = {}
+    for older, newer in observed:
+        answer = _answer_from_graphs(graphs, older, newer)
+        current[(older, newer)] = _run_ancestor(root, older, newer) if answer is None else answer
+    return current
+
+
 def _run_ancestor(root: Path, older: str, newer: str) -> bool:
     result = subprocess.run(
         ["git", "-C", str(root), "merge-base", "--is-ancestor", older, newer],
@@ -415,7 +518,17 @@ def _ancestor(root: Path, older: str, newer: str) -> bool:
         raise ActivityError("activity read batch cannot cross checkouts")
     key = (older, newer)
     if key not in batch.ancestors:
-        batch.ancestors[key] = _run_ancestor(root, older, newer)
+        # One probe stays one merge-base. From the second question about the
+        # same full commit ID, read its history once; any later question
+        # about a commit inside that history is answered from the graph.
+        answer = _answer_from_graphs(batch.graphs, older, newer)
+        if answer is None:
+            probes = batch.ancestor_probes.get(newer, 0) + 1
+            batch.ancestor_probes[newer] = probes
+            if probes > 1 and SHA_RE.fullmatch(newer) and SHA_RE.fullmatch(older):
+                batch.graphs[newer] = _run_graph(root, newer)
+                answer = _answer_from_graphs(batch.graphs, older, newer)
+        batch.ancestors[key] = _run_ancestor(root, older, newer) if answer is None else answer
     return batch.ancestors[key]
 
 
@@ -792,8 +905,7 @@ def resolve(root: Path, ticket_dir: Path, active_statuses: set[str], *, status_o
                 ticket, False, status, "git-ancestry", reason="delivery-on-target",
             )
         return ActivityResolution(ticket, True, status, "status-projection", reason="registry-absent")
-    receipts = _validate_registry(_load(path), repository_ref(root))
-    matching = [item for item in receipts if item["ticket"] == ticket]
+    matching = _registry_receipts_by_ticket(root, path).get(ticket, [])
     for receipt in reversed(matching):
         rule = policy["terminalOutcomes"].get(receipt["outcome"])
         if rule is None:
